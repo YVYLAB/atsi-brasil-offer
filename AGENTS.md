@@ -412,3 +412,12 @@ Fundação, obrigatórias, vídeo e mensalidade não recebem o percentual adicio
 Horas não mudam. O estado personalizado sem um pacote completo não é elegível.
 `pricing-promotion.js` centraliza arredondamento por feature em centavos.
 Consultar `docs/ofertas-24h.md` e executar testes Python e Node.
+
+Copy comercial: `product-copy.js` concentra títulos, descrições, benefícios e
+escopo comercial das 54 funcionalidades, seções e preparação. A interface
+prioriza valor para cliente/aluno e não mostra tarefas técnicas, pendências de
+auditoria ou caminhos do repositório. Especificações internas continuam intactas.
+Limites importantes permanecem em linguagem de composição da entrega; não
+inventar capacidades nem apresentar mockups como produto já implementado.
+Snapshots financeiros mantêm os títulos originais das specs, separados dos títulos
+comerciais, para não invalidar ofertas por edição de copy. Ver `docs/copy-produto.md`.

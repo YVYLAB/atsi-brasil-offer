@@ -170,14 +170,23 @@
     .feature-copy{flex:1;min-width:0}
     .feature-copy strong{display:block;font-size:14px;line-height:1.35}
     .feature-copy p{margin:4px 0 0;color:var(--muted);font-size:12px}
-    .feature-price-offer del{display:block;color:var(--muted);font-size:11px}
-    .feature-price-offer small{display:block;color:#a9d9b3;font-size:11px}
+    .feature.has-feature-discount{margin-top:28px;border-color:#ffe03388}
+    .feature-discount-banner{position:relative;z-index:1;margin:-32px -2px 16px;padding:16px;border:2px solid #ffe033;border-radius:16px;background:linear-gradient(120deg,#173850,#123d3b);box-shadow:0 8px 24px #0006,0 0 18px #ffe03315;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;pointer-events:none;overflow-wrap:anywhere}
+    .feature-discount-banner small{display:block;color:#d5e7e9;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+    .feature-discount-banner del{display:block;color:#c5d4d9;font-size:14px;margin-top:6px}
+    .feature-discount-banner strong{display:block;color:#ffe033;font-size:clamp(24px,2.1vw,32px);line-height:1.3;letter-spacing:-.5px}
+    .feature-discount-saving{display:block;margin-top:4px;color:#c7f4d6;font-size:12px;font-weight:700}
+    .feature-discount-rate{padding:10px;border:1px solid #ffe03388;border-radius:12px;background:#ffe03314;text-align:center;color:#ffe033}
+    .feature-discount-rate b{display:block;font-size:clamp(26px,2.4vw,36px);line-height:1.2;letter-spacing:-1px}
+    .feature-discount-rate span{display:block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+    @media(max-width:760px){.feature-discount-banner{padding:12px;gap:8px}.feature-discount-rate{padding:8px}.feature-discount-banner small{font-size:10px}}
+    @media(max-width:480px){.feature-discount-banner{grid-template-columns:minmax(0,1fr)}.feature-discount-rate{display:flex;align-items:center;justify-content:center;gap:8px}}
     .feature-info{flex:none;padding:7px 9px;border:1px solid #56816b;border-radius:10px;background:#173629;color:#e0f6e8;font-size:11px;font-weight:700;cursor:pointer}
     .feature-info:hover,.feature-info:focus-visible{border-color:#a6e9bd;outline:2px solid #a6e9bd;outline-offset:2px}
     .info-dialog{width:min(620px,calc(100% - 28px));max-height:85vh;overflow:auto;border:1px solid #56816b;border-radius:20px;background:#11281e;color:var(--text);padding:22px}
     .info-dialog::backdrop{background:rgba(0,0,0,.75)}
     .info-dialog header{display:flex;align-items:start;justify-content:space-between;gap:12px}
-    .info-dialog h2{margin:0;font-size:20px}
+    .info-dialog h2{margin:0;font-size:20px;min-width:0;overflow-wrap:anywhere}
     .info-dialog h3{margin:18px 0 5px;color:#b9e9c9;font-size:13px}
     .info-dialog p,.info-dialog li{font-size:13px;line-height:1.55;color:#d1e5d8}
     .info-dialog ul{padding-left:20px}
@@ -472,13 +481,13 @@
         <div>
           <div class="eyebrow">ATSI Brasil · desenvolvido por YvyLab</div>
            <h1>Plataforma ATSI+</h1>
-          <p>Monte o escopo por funcionalidades. À esquerda, escolha as features; à direita, acompanhe um mockup do aplicativo e o investimento estimado em tempo real.</p>
+           <p>Conhecimento que aproxima a ATSI dos seus clientes. Escolha a experiência que faz sentido para o seu negócio e acompanhe o investimento em cada etapa.</p>
         </div>
       </div>
       <div class="hero-actions">
         <div class="chip">Desde o Essencial: Android · iOS · Web</div>
-        <div class="chip">Presets Essencial, Plus e Premium</div>
-        <div class="chip">Mockup dinâmico por feature</div>
+        <div class="chip">Seu próximo passo: Essencial, Plus ou Premium</div>
+        <div class="chip">Explore cada experiência no celular</div>
       </div>
     </section>
 
@@ -493,36 +502,36 @@
         </section>
         <div class="left-head">
           <div>
-            <h2>Features da plataforma</h2>
-            <p>Obrigatórias, opcionais e escolhas únicas de implementação.</p>
+            <h2>Construa a experiência da sua marca</h2>
+            <p>Comece com o essencial e acrescente novas formas de ensinar, conectar e crescer.</p>
           </div>
         </div>
 
         <section class="spec-catalog" aria-labelledby="predevelopmentTitle">
-          <h2 id="predevelopmentTitle">Entregas obrigatórias antes do desenvolvimento</h2>
-          <p>Incluídas em todos os planos, sem opção de remoção. O início do desenvolvimento depende da revisão e aprovação destes entregáveis pela ATSI e pela YvyLab. Aprovação pendente.</p>
+          <h2 id="predevelopmentTitle">Uma boa plataforma começa com um bom plano</h2>
+          <p>Todos os planos incluem planejamento, design e estrutura tecnológica. Antes de desenvolver, construímos com a ATSI uma visão compartilhada da experiência e das prioridades de entrega.</p>
           <article class="feature selected">
-            <div class="badges"><span class="badge req">Obrigatória · F01</span></div>
-            <h3>Análise e especificação de requisitos</h3>
+            <div class="badges"><span class="badge req">Incluído em todos os planos</span></div>
+            <h3>Do objetivo ao caminho de entrega</h3>
             <ul>
-              <li><strong>Análise de requisitos:</strong> objetivos, jornadas, regras de negócio, requisitos funcionais e não funcionais, premissas e pendências.</li>
-              <li><strong>Épicos:</strong> agrupamento das funcionalidades por objetivo, escopo e prioridade.</li>
-              <li><strong>Specs por feature:</strong> descrição, dependências, exclusões e critérios de aceite.</li>
-              <li><strong>Tarefas:</strong> implementação, testes e homologação, com estimativas revisadas.</li>
+              <li><strong>Objetivos claros:</strong> conectamos o produto ao negócio e ao público da ATSI.</li>
+              <li><strong>Jornadas bem pensadas:</strong> organizamos os momentos de acesso, aprendizado e relacionamento.</li>
+              <li><strong>Prioridades compartilhadas:</strong> damos forma ao que será entregue em cada etapa.</li>
+              <li><strong>Um plano para avançar:</strong> detalhamos desenvolvimento e conferência das experiências com sua equipe.</li>
             </ul>
             <p id="requirementsEstimate"></p>
           </article>
           <article class="feature selected">
-            <div class="badges"><span class="badge req">Obrigatória · F02</span></div>
-            <h3>Design e arquitetura</h3>
+            <div class="badges"><span class="badge req">Incluído em todos os planos</span></div>
+            <h3>Uma experiência com a identidade da ATSI</h3>
             <ul>
-              <li><strong>Telas e mockups:</strong> fluxos, interfaces essenciais e estados para validação da experiência.</li>
-              <li><strong>Diagrama de classes e domínio:</strong> entidades, relacionamentos e responsabilidades, com decisões de arquitetura e autorização.</li>
+              <li><strong>Design que orienta:</strong> telas e fluxos pensados para facilitar a vida de alunos e gestores.</li>
+              <li><strong>Estrutura que conecta:</strong> conteúdo, contas e permissões organizados para sustentar as jornadas do produto.</li>
             </ul>
             <p id="designEstimate"></p>
           </article>
           <p id="foundationExplanation"></p>
-          <details><summary>Composição das atividades obrigatórias de fundação</summary><div id="foundationBreakdown"></div></details>
+          <details><summary>Conheça a preparação incluída no seu plano</summary><div id="foundationBreakdown"></div></details>
         </section>
         <div class="sections" id="sections"></div>
       </section>
@@ -530,8 +539,8 @@
       <aside class="panel right-pane">
         <div class="right-top">
           <div>
-            <h2>Visualização da feature</h2>
-            <p>O celular abaixo muda conforme a funcionalidade selecionada.</p>
+            <h2>Veja a experiência ganhar forma</h2>
+            <p>Toque em um recurso e explore como ele pode fazer parte da ATSI+.</p>
           </div>
           <div class="live-pill" id="liveMode">Preview ao vivo</div>
         </div>
@@ -545,7 +554,7 @@
         <div class="preview-caption">
           <h3 id="previewTitle">Mural inicial</h3>
           <p id="previewDescription">Destaques de cursos, e-books, eventos presenciais e promoções logo na entrada do aplicativo.</p>
-          <small>Mockup conceitual ATSI+ · dados ilustrativos, sem operações reais.</small>
+          <small>Prévia conceitual ATSI+ · telas e dados de exemplo para apresentar a experiência.</small>
         </div>
 
         <div class="total-box" id="investmentSummary" tabindex="-1">
@@ -554,7 +563,7 @@
           <div class="sub" id="totalSub">0 features selecionadas · 0 horas estimadas</div>
 
           <div class="kpis">
-            <div class="kpi"><small>Horas</small><strong id="totalHours">0 h</strong></div>
+            <div class="kpi"><small>Esforço estimado</small><strong id="totalHours">0 h</strong></div>
             <div class="kpi"><small>Prazo estimado</small><strong id="estimatedMonths">—</strong></div>
             <div class="kpi"><small id="foundationLabel">Fundação obrigatória</small><strong id="internalCost">—</strong></div>
             <div class="kpi"><small id="complexityMetricLabel">Complexidade do plano</small><strong id="avgComplexity" aria-describedby="complexityExplanation">—</strong></div>
@@ -565,14 +574,14 @@
             <div class="summary-line"><span>Entrega para alunos</span><span data-delivery-students></span></div>
             <div class="summary-line"><span>Gestão da plataforma</span><span data-delivery-administration></span></div>
             <div class="summary-line"><span>Implantação sem oferta</span><span id="regularImplementation">—</span></div>
-            <div class="summary-line"><span>Base elegível</span><span id="eligibleImplementation">—</span></div>
+            <div class="summary-line"><span>Investimento participante da oferta</span><span id="eligibleImplementation">—</span></div>
             <div class="summary-line"><span>Desconto de implantação</span><span id="discountImplementation">—</span></div>
             <div class="summary-line"><span>Desconto do plano</span><span id="planDiscount">—</span></div>
             <div class="summary-line"><span>Desconto dos opcionais adicionais</span><span id="additionalDiscount">—</span></div>
             <div class="summary-line"><span>Implantação final</span><span id="finalImplementation">—</span></div>
-            <div class="summary-line"><span>Base obrigatória</span><span id="mandatoryValue">R$ 0</span></div>
-            <div class="summary-line"><span>Features além da base obrigatória · tabela</span><span id="optionalValue">R$ 0</span></div>
-            <div class="summary-line"><span>Estratégia dos cursos</span><span id="courseStrategy">Não definida</span></div>
+            <div class="summary-line"><span>Recursos essenciais</span><span id="mandatoryValue">R$ 0</span></div>
+            <div class="summary-line"><span>Complementos e vídeo · valor de tabela</span><span id="optionalValue">R$ 0</span></div>
+            <div class="summary-line"><span>Experiência de vídeo</span><span id="courseStrategy">Escolha uma opção</span></div>
           </div>
           <p class="footer-note" id="pricingContext"></p>
           <p class="footer-note" data-delivery-estimate></p>
@@ -587,16 +596,16 @@
           <ul>
             <li>Inclui os custos operacionais da plataforma.</li>
             <li>Inclui até <strong id="maintenanceHours">10 horas por mês</strong>, compartilhadas entre desenvolvimento, alterações do software e correções de bugs.</li>
-            <li><strong>Tokens de IA não estão incluídos.</strong></li>
-            <li>Demandas que ultrapassem as horas mensais incluídas exigem <strong>contrato à parte</strong>, antes da execução do excedente.</li>
+            <li><strong>Consumo de IA contratado separadamente.</strong></li>
+            <li>Para ampliar as horas mensais, sua equipe pode contratar <strong>um pacote adicional</strong>, combinado antes da execução.</li>
           </ul>
           <details>
-            <summary>Condições a formalizar no contrato</summary>
-            <p>Início da cobrança, vencimento, vigência, reajuste, cancelamento, prazos de atendimento e eventual acúmulo de horas ainda serão definidos. A arquitetura e o dimensionamento deverão validar os custos operacionais cobertos, sem presumir limites ou cobranças adicionais.</p>
+            <summary>Um acompanhamento alinhado à sua operação</summary>
+            <p>Início, vigência, atendimento e demais condições são combinados no contrato. O planejamento dimensiona a operação e os serviços cobertos para a realidade da ATSI.</p>
           </details>
         </section>
 
-        <div class="footer-note">Prazo estimado para duas pessoas dedicadas, considerando média de 22 dias úteis por mês e 8 horas por dia por pessoa (352 horas de capacidade mensal). A divisão pressupõe trabalho paralelizável; dependências, coordenação, feriados, disponibilidade parcial e atrasos podem ampliar o prazo real. O investimento de implantação inclui fundação uma vez, base obrigatória e escolhas selecionadas. A mensalidade de manutenção varia por plano, inclui operação exceto tokens de IA e não é somada ao investimento único. O detalhamento técnico das tarefas ainda precisa de validação. Identidade visual provisória baseada no material de branding, não homologada pela ATSI.</div>
+        <details class="footer-note"><summary>Como organizamos o investimento e o prazo</summary><p>A implantação reúne preparação, recursos essenciais e suas escolhas de funcionalidades. A manutenção mensal é apresentada separadamente. O prazo considera duas pessoas dedicadas, 22 dias úteis por mês e 8 horas por dia, com 352 horas mensais de capacidade. O cronograma é detalhado no planejamento, considerando a sequência das entregas e a disponibilidade das equipes.</p></details>
       </aside>
     </div>
   </div>
@@ -628,6 +637,7 @@
   </dialog>
   <script src="branding/product-config.js"></script>
   <script src="pricing-promotion.js"></script>
+  <script src="product-copy.js"></script>
   <script>
     // Escopo comum a todos os planos, sem alterar o catálogo ou snapshots financeiros.
     const deliveryScope = {
@@ -635,7 +645,7 @@
       studentLabel:'Aplicativos Android e iOS + versão web para alunos',
       administration:'Painel administrativo web',
       estimateStatus:'pending_web_review',
-      estimateNote:'Versão web dos alunos incluída no escopo. Detalhamento técnico e impacto em horas e prazo pendentes de revisão.'
+      estimateNote:'A versão web dos alunos faz parte da entrega. O planejamento detalha essa experiência e revisa as estimativas de esforço e prazo.'
     };
     const presets = {
       essencial: {
@@ -732,10 +742,11 @@
     features.splice(0, features.length, ...Object.entries(specCatalog).map(([id, spec]) => {
       if (!sectionMeta[spec.module]) {
         const index = Object.keys(sectionMeta).length;
-        sectionMeta[spec.module] = {title:spec.module, icon:'◈', desc:'Estimativas preliminares', color:groupColors[index % groupColors.length]};
+        const sectionCopy=ATSIProductCopy.sections[spec.module];
+        sectionMeta[spec.module] = {title:sectionCopy.title, icon:'◈', desc:sectionCopy.description, color:groupColors[index % groupColors.length]};
       }
       return {
-        id, section:spec.module, title:spec.title, desc:spec.description,
+        id, section:spec.module, title:ATSIProductCopy.features[id].title, desc:ATSIProductCopy.features[id].description,
         type:spec.kind === 'Obrigatória' ? 'required' : spec.kind === 'Escolha única' ? 'unique' : 'optional',
         group:['C01','C02','C03'].includes(id) ? 'curso_entrega' : undefined,
         hours:spec.hours, price:spec.hours === null ? null : spec.hours * 200,
@@ -743,9 +754,9 @@
         conditionalIntegration:id === 'G02'
       };
     }));
-    Object.assign(presets.essencial, {desc:'Fundação, base obrigatória e YouTube.', features:['C01']});
-    Object.assign(presets.plus, {desc:'Vídeo privado, certificados, quizzes, e-books e push.', features:['C02','C04','C05','E01','N01','M01']});
-    Object.assign(presets.premium, {desc:'Vídeo offline, cursos, notificações, comunidade e eventos.', features:['C03','A01','C04','C05','C06','C07','C08','C09','E01','M01','M02','M03','N01','N02','G03','EV01','EV02','EV03','EV04']});
+    Object.assign(presets.essencial, {subtitle:'O começo da sua plataforma',desc:'Acesso, cursos e gestão para conectar a ATSI aos alunos, com vídeos via YouTube.', features:['C01']});
+    Object.assign(presets.plus, {subtitle:'Mais valor para o aprendizado',desc:'Vídeos privados, certificados, avaliações, e-books e notificações para enriquecer cada curso.', features:['C02','C04','C05','E01','N01','M01']});
+    Object.assign(presets.premium, {subtitle:'Conexões que vão além do curso',desc:'Aprendizado offline, apoio de IA, comunidade e eventos para ampliar o relacionamento.', features:['C03','A01','C04','C05','C06','C07','C08','C09','E01','M01','M02','M03','N01','N02','G03','EV01','EV02','EV03','EV04']});
     const prerequisites = {
       C04:['B07'], C06:['C05'], N02:['N01'], N03:['N01'], G06:['G05'],
       EV02:['EV01'], EV03:['EV01'], EV04:['EV01','EV02'],
@@ -794,39 +805,22 @@
     featureDialog.addEventListener('close', () => { if (dialogOpener && dialogOpener.isConnected) dialogOpener.focus(); });
 
     function openFeatureDetails(feature, opener, explicitSpecId = null){
-      const detail = explicitSpecId ? null : featureDetails[feature.id];
-      const specId = explicitSpecId || legacySpecIds[feature.id] || (specCatalog[feature.id] ? feature.id : null);
-      const spec = specId ? specCatalog[specId] : null;
+      const id=explicitSpecId || legacySpecIds[feature.id] || feature.id;
+      const current=getFeature(id) || feature;
+      const copy=ATSIProductCopy.features[id];
       dialogOpener = opener;
-      dialogTitle.textContent = feature.title;
-      const additionalPricing=explicitSpecId?null:featureAdditionalPricing(feature);
+      dialogTitle.textContent = current.title;
+      const additionalPricing=featureAdditionalPricing(current);
       dialogContent.innerHTML = `
-        <h3>Descrição e funcionamento</h3>
-        <p>${detail ? detail.scope : (spec ? spec.description : feature.desc)}</p>
-        ${explicitSpecId ? '' : `<h3>Estimativa do configurador atual</h3>
-        <p>${feature.hours === null ? 'Sob cotação' : `${feature.hours} h · implantação ${brl(feature.price)}`}.</p>
-        ${additionalPricing.discountCents>0 ? `<p>Opcional adicional ao ${presets[state.basePreset].name}: ${additionalPricing.percentage.toLocaleString('pt-BR')}% de desconto · ${brl(additionalPricing.finalCents/100)}.</p>` : ''}`}
-        ${detail ? `
-          <h3>Especificação ${detail.code} — pendente de validação</h3>
-          <ul>${detail.tasks.map(task => `<li>${task}</li>`).join('')}</ul>
-          <p>Total proposto: ${detail.hours} h. A especificação não altera o orçamento atual.</p>
-          <h3>Dependências e exclusões</h3><p>${detail.deps}</p>
-          <h3>Custos operacionais esperados</h3><p>${detail.costs} Valores sob avaliação, sem preço mensal confirmado.</p>
-          ${detail.note ? `<h3>Atenção à diferença de escopo</h3><p>${detail.note}</p>` : ''}
-          <p>Detalhamento: <code>specs/${detail.code}*.md</code>.</p>
-        ` : spec ? `
-          <h3>Especificação ${specId} — pendente de validação</h3>
-          <p>${spec.description}</p>
-          <ul>${spec.tasks.map(task => `<li>${task}</li>`).join('')}</ul>
-          <p>Esforço estimado: ${spec.hours === null ? 'sob cotação' : `${spec.hours} h`}. As horas acima compõem o orçamento quando esta feature está selecionada. Detalhamento técnico sujeito a revisão.</p>
-          <h3>Dependências e exclusões</h3><p>${spec.dependencies}. Detalhamento sujeito a revisão.</p>
-          <h3>Cenário mínimo de aceite</h3><p>${spec.acceptance}</p>
-          <h3>Custos operacionais esperados</h3><p>${spec.operation} Valores e condições sujeitos a confirmação.</p>
-          <p>Detalhamento: <code>specs/${spec.file}</code>.</p>
-        ` : `
-          <h3>Tarefas, dependências e custos operacionais</h3>
-          <p>Detalhamento ainda pendente de especificação e validação. Custos externos não estimados.</p>
-        `}
+        <p class="product-intro">${copy.description}</p>
+        <h3>Mais valor para a sua plataforma</h3>
+        <ul>${copy.benefits.map(benefit=>`<li>${benefit}</li>`).join('')}</ul>
+        <h3>Como essa experiência entra no seu projeto</h3>
+        <p>${copy.scope}</p>
+        <h3>Investimento de implantação</h3>
+        <p>${current.price===null?'Vamos dimensionar essa experiência com você.':`<strong>${brl(additionalPricing.finalCents/100)}</strong> · ${current.hours} h de esforço estimado.`}</p>
+        ${additionalPricing.discountCents>0?`<p>Condição para adicionar ao ${presets[state.basePreset].name}: ${additionalPricing.percentage.toLocaleString('pt-BR')}% de desconto, com economia de ${brl(additionalPricing.discountCents/100)}.</p>`:''}
+        <p>${current.type==='required'?'Esta experiência já faz parte de todos os planos.':current.type==='unique'?'Escolha a forma de entrega de vídeo que combina com a sua estratégia.':'Combine este recurso com o seu plano para ampliar a experiência ATSI+.'}</p>
       `;
       featureDialog.showModal();
       document.getElementById('dialogClose').focus();
@@ -848,7 +842,7 @@
           const button = document.createElement('button');
           button.type = 'button';
           button.className = 'feature-info';
-          button.textContent = `${id} · ${spec.title}`;
+          button.textContent = ATSIProductCopy.features[id].title;
           button.addEventListener('click', () => openFeatureDetails(
             {title:spec.title, desc:spec.description}, button, id
           ));
@@ -865,13 +859,13 @@
       if(state.activePreset!=='custom'){
         return {metric:'Complexidade do plano',label:planComplexityLabels[state.activePreset],
           basis:'relative_plan',
-          explanation:'Classificação relativa entre os planos: Essencial baixa, Plus média e Premium alta. Não é a média técnica das funcionalidades nem ausência de riscos.'};
+          explanation:'Classificação relativa entre os planos: do Essencial ao Premium, a experiência se amplia com novas jornadas e integrações.'};
       }
       const chosen=selectedFeatures();
       const average=chosen.length ? chosen.reduce((sum,f)=>sum+Number(f.complexity),0)/chosen.length : null;
       return {metric:'Complexidade média',label:average===null?'—':complexityLabel(average),
         basis:'feature_average',average,
-        explanation:'Personalizado: média técnica das funcionalidades selecionadas na escala de 1 a 5, sem a fundação. Não utiliza a classificação relativa dos planos.'};
+        explanation:'Personalizado: média técnica dos recursos escolhidos, na escala de 1 a 5, para acompanhar a composição da sua experiência.'};
     }
     function getFeature(id){ return features.find(f=>f.id===id); }
 
@@ -885,7 +879,7 @@
       for(const key of ['essencial','plus','premium']){
         const ids=new Set([...features.filter(f=>f.type==='required').map(f=>f.id),...presets[key].features]);
         packages[key]={foundationCents:foundationHours*state.hourRate*100,
-          items:features.filter(f=>ids.has(f.id)).map(f=>({id:f.id,title:f.title,type:f.type,priceCents:Math.round(f.price*100)}))};
+          items:features.filter(f=>ids.has(f.id)).map(f=>({id:f.id,title:specCatalog[f.id].title,type:f.type,priceCents:Math.round(f.price*100)}))};
       }
       return {schemaVersion:1,priceListVersion:'specs-reviewed-v1',packages};
     }
@@ -920,14 +914,14 @@
         selectedIds:selectedFeatures().map(f=>f.id),pricing,
         monthlyMaintenanceBRL:{essencial:3000,plus:4000,premium:5000}[state.maintenancePlan],
         monthlyHours:{essencial:10,plus:15,premium:20}[state.maintenancePlan],
-        operationalCoverage:'Incluída na manutenção, exceto tokens de IA. Dimensionamento pendente.',
+        operationalCoverage:'Operação incluída na manutenção; consumo de IA contratado separadamente. Estrutura dimensionada no planejamento.',
         campaign:campaignConfig,
         offer:currentOffer,offerStatus:campaignConfig?ATSIPromotion.campaignStatus(campaignConfig):ATSIPromotion.status(currentOffer,pricingSnapshot())};
     }
     function quoteRows(){
       const q=quoteData();
       return [['Projeto',`${ATSIProduct.name} — Plataforma Digital`],['Cliente',ATSIProduct.client],
-        ['Desenvolvedora',ATSIProduct.developer],['Simulação','Sem validação de servidor'],['Cotação',q.offer?.quoteId||'Não emitida'],
+        ['Desenvolvedora',ATSIProduct.developer],['Apresentação','Configuração da experiência ATSI+'],['Cotação',q.offer?.quoteId||'A combinar'],
         ['Oferta',q.campaign?'Campanha local':q.offer?.id||'Não emitida'],['Status',q.offerStatus],
         ['Início UTC',q.campaign?.startsAt||q.offer?.issuedAt||'Não definido'],
         ['Vencimento UTC',q.campaign?.endsAt||q.offer?.expiresAt||'Não definido'],['Pacote',q.packageId],
@@ -1103,7 +1097,7 @@
             });
           }
           collect(featureId);
-          if (needed.size && !confirm(`Esta opção requer: ${[...needed].map(id => getFeature(id).title).join(', ')}. Incluir também?`)) { render(); return; }
+          if (needed.size && !confirm(`Para completar essa experiência, vamos incluir também: ${[...needed].map(id => getFeature(id).title).join(', ')}. Adicionar ao seu plano?`)) { render(); return; }
           needed.forEach(id => state.selected.add(id));
           state.selected.add(feature.id);
         } else {
@@ -1117,7 +1111,7 @@
               }
             });
           }
-          if (removed.size > 1 && !confirm(`Remover também as dependentes: ${[...removed].filter(id => id !== featureId).map(id => getFeature(id).title).join(', ')}?`)) { render(); return; }
+          if (removed.size > 1 && !confirm(`Estes recursos trabalham juntos: ${[...removed].filter(id => id !== featureId).map(id => getFeature(id).title).join(', ')}. Retirar também da sua configuração?`)) { render(); return; }
           removed.forEach(id => state.selected.delete(id));
         }
       }
@@ -1155,7 +1149,7 @@
                 <strong>${meta.title}</strong>
                 <span>${meta.desc}</span>
               </div>
-              <span class="section-tag">${items.length} features</span>
+              <span class="section-tag">${items.length} recursos</span>
             </button>
             <div class="section-content">
               ${items.map(feature => renderFeatureCard(feature,pricing)).join('')}
@@ -1209,21 +1203,31 @@
       const selected = isSelected(feature);
       const itemPricing=featureAdditionalPricing(feature,pricing);
       const badges = [
-        feature.type === 'required' ? '<span class="badge req">Obrigatória</span>' : '',
-        feature.type === 'unique' ? '<span class="badge unique">Escolha única</span>' : '',
-        feature.type === 'optional' ? '<span class="badge optional">Opcional</span>' : '',
+        feature.type === 'required' ? '<span class="badge req">Incluído em todos os planos</span>' : '',
+        feature.type === 'unique' ? '<span class="badge unique">Sua escolha de vídeo</span>' : '',
+        feature.type === 'optional' ? '<span class="badge optional">Amplie seu plano</span>' : '',
         feature.unavailable ? '<span class="badge unique">Sob cotação · indisponível</span>' : '',
-        feature.conditionalIntegration ? '<span class="badge unique">Validar integração por rede</span>' : ''
+        feature.conditionalIntegration ? '<span class="badge unique">Redes definidas no planejamento</span>' : ''
       ].join('');
       return `
-        <article class="feature ${selected ? 'selected':''}" data-feature="${feature.id}">
+        <article class="feature ${selected ? 'selected':''} ${itemPricing.discountCents>0?'has-feature-discount':''}" data-feature="${feature.id}">
+          ${itemPricing.discountCents>0 ? `
+            <div class="feature-price-offer feature-discount-banner">
+              <div>
+                <small>Opcional em oferta</small>
+                <del>${brl(feature.price)}</del>
+                <strong>${brl(itemPricing.finalCents/100)}</strong>
+                <span class="feature-discount-saving">Economize ${brl(itemPricing.discountCents/100)}</span>
+              </div>
+              <div class="feature-discount-rate"><b>−${itemPricing.percentage.toLocaleString('pt-BR')}%</b><span>de desconto</span></div>
+            </div>` : ''}
           <div class="feature-head">
             ${feature.type === 'required'
               ? '<div class="feature-lock">🔒</div>'
               : `<input class="feature-check feature-toggle" type="${feature.type==='unique' ? 'radio':'checkbox'}" name="${feature.group || feature.id}" aria-label="Selecionar ${feature.title}" ${selected ? 'checked':''} ${feature.unavailable ? 'disabled' : ''} />`
             }
             <div class="feature-copy">
-              <strong>${feature.id} · ${feature.title}</strong>
+              <strong>${feature.title}</strong>
               <p>${feature.desc}</p>
               <div class="badges">${badges}</div>
             </div>
@@ -1236,9 +1240,7 @@
             </div>
             <div class="field">
               <label>Preço de implantação</label>
-              ${itemPricing.discountCents>0 ?
-                `<div class="feature-price-offer"><del>${brl(feature.price)}</del><strong>${brl(itemPricing.finalCents/100)}</strong><small>−${itemPricing.percentage.toLocaleString('pt-BR')}% · adicional ao ${presets[state.basePreset].name}</small></div>` :
-                `<strong>${feature.price === null ? 'Sob cotação' : brl(feature.price)}</strong>`}
+              <strong>${feature.price === null ? 'Sob cotação' : brl(itemPricing.finalCents/100)}</strong>
             </div>
             <div class="field">
               <label>Complexidade</label>
@@ -1259,7 +1261,7 @@
       document.getElementById('maintenancePrice').textContent = brl(maintenance.price);
       document.getElementById('maintenanceHours').textContent = `${maintenance.hours} horas por mês`;
       document.getElementById('maintenancePlanLabel').textContent =
-        `Manutenção ${presets[state.maintenancePlan].name}${state.activePreset === 'custom' ? ' · mantida do plano de origem; confirmar no contrato' : ''}`;
+        `Manutenção ${presets[state.maintenancePlan].name}${state.activePreset === 'custom' ? ' · acompanhando o plano escolhido' : ''}`;
       const chosen = selectedFeatures();
       const totalHours = foundationHours + chosen.reduce((sum, f) => sum + (Number(f.hours) || 0), 0);
       const totalPrice = foundationHours * state.hourRate + chosen.reduce((sum, f) => sum + (Number(f.price) || 0), 0);
@@ -1267,11 +1269,11 @@
       const optional = totalPrice - mandatory - foundationHours * state.hourRate;
       const strategy = chosen.find(f => f.group === 'curso_entrega');
       const warnings = [];
-      if (state.selected.has('C07') || state.selected.has('C06')) warnings.push('IA exige fontes autorizadas; operação e privacidade pendentes.');
-      if (strategy?.id === 'C01') warnings.push('YouTube: confirmar políticas antes de oferecer acesso pago ou recompensas por visualizações.');
-      if (['P01','P02','P03','P04'].some(id => state.selected.has(id))) warnings.push('Pagamentos exigem validação das regras das lojas e custos do provedor.');
-      if (state.selected.has('R01') || state.selected.has('R04') || state.selected.has('R05')) warnings.push('Relatórios exigem definir telemetria e métricas de uso.');
-      if (state.selected.has('G02')) warnings.push('G02: estimativa conservadora de 250 h para até três conectores oficiais viáveis. Validar APIs e permissões por rede antes da execução.');
+      if (state.selected.has('C07') || state.selected.has('C06')) warnings.push('A IA trabalha com materiais autorizados da ATSI; o consumo é contratado separadamente.');
+      if (strategy?.id === 'C01') warnings.push('YouTube oferece reprodução online com o player oficial. Para conteúdos de acesso privado, conheça as alternativas de vídeo privado.');
+      if (['P01','P02','P03','P04'].some(id => state.selected.has(id))) warnings.push('A jornada de pagamento é desenhada para o seu modelo comercial e as regras de cada canal.');
+      if (state.selected.has('R01') || state.selected.has('R04') || state.selected.has('R05')) warnings.push('Os indicadores são definidos com a ATSI para acompanhar o uso da plataforma.');
+      if (state.selected.has('G02')) warnings.push('A comunicação multicanal contempla até três conectores oficiais viáveis, definidos conforme as permissões de cada rede.');
 
       const pricing=configurationPricing();
       updateTotal(pricing.finalCents/100);
@@ -1284,10 +1286,10 @@
         (ATSIPromotion.campaignStatus(campaignConfig)!=='active' ?
           'Campanha fora da vigência: valores de tabela, sem descontos do plano ou dos adicionais.' : pricing.baseIntact ?
           `Plano ${presets[state.basePreset].name} preservado. Opcionais que não estejam em nenhum plano: ${pricing.additionalPercentage.toLocaleString('pt-BR')}% de desconto durante a vigência, sem desconto duplicado. Horas e manutenção não mudam.` :
-          `Composição do ${presets[state.basePreset].name} alterada: descontos do plano e dos adicionais não se aplicam. Restaure seus itens para recuperar as condições da campanha.`) : '';
+          `Sua configuração está personalizada. Para aproveitar a oferta do ${presets[state.basePreset].name} e dos adicionais elegíveis, mantenha todos os recursos do plano.`) : '';
       document.getElementById('finalImplementation').textContent=brl(pricing.finalCents/100);
       updateOfferDisplay();
-      el.totalSub.textContent = `${chosen.length} features selecionadas · ${totalHours} horas estimadas`;
+      el.totalSub.textContent = `${chosen.length} recursos na sua experiência · ${totalHours} horas estimadas`;
       el.totalHours.textContent = `${totalHours} h`;
       const months = totalHours / (22 * 8 * 2);
       const duration = `${new Intl.NumberFormat('pt-BR', {maximumFractionDigits:2}).format(months)} meses`;
@@ -1351,7 +1353,7 @@
       P05:['access','Acesso ao curso','Direitos de acesso','Gestão no agro|Disponível para seu perfil'],
       P06:['access','Acesso ao evento','Participação autorizada','Encontro exclusivo|Disponível para convidados'],
       P07:['access','Acesso ao e-book','Material autorizado','Guia de boas práticas|Disponível para seu perfil'],
-      L01:['admin','Histórico de ações','Auditoria administrativa','Maria atualizou um curso|João publicou uma aula|Filtro por período'],
+      L01:['admin','Histórico de ações','Acompanhe as mudanças da equipe','Maria atualizou um curso|João publicou uma aula|Filtro por período'],
       R01:['chart','Visualizações','Relatório de cursos','Aulas visualizadas|Últimos 30 dias'],
       R02:['chart','Conclusões','Relatório de aprendizagem','Cursos concluídos|Últimos 30 dias'],
       R03:['chart','Satisfação','Feedback dos alunos','Avaliações recebidas|Últimos 30 dias'],
@@ -1385,7 +1387,7 @@
         case 'B03': return card('<span class="app-label">Mensagem transacional · exemplo</span>'+title('Redefinição de senha')+
           muted('Para: maria@exemplo.com')+row('Remetente','ATSI+')+muted('Recebemos sua solicitação de recuperação de acesso.'))+
           action('Redefinir minha senha')+card(muted('O link tem validade limitada. Se você não solicitou, ignore esta mensagem.'))+
-          alert('Exemplo da mensagem entregue pelo serviço; não é uma caixa de e-mail implementada no aplicativo.');
+          card(muted('E-mail de serviço para ajudar o aluno a retomar sua jornada.'));
         case 'B04': return card(title('Maria Silva')+muted('Perfil privado')+row('Nome','Maria Silva')+
           row('E-mail','Verificado ✓')+row('Foto','Alterar')+row('Senha','Redefinir'))+
           card(muted('Alterar o e-mail exige verificação do novo endereço.')+
@@ -1410,23 +1412,23 @@
           const provider=id==='A02'?'Google':'Microsoft';
           return card(title('Acesso com '+provider)+muted('Você será direcionado para autenticar sua conta no provedor.'))+
             action('Continuar com '+provider)+card(row('Vínculo seguro','Conta ATSI+')+muted('Se já houver uma conta, a vinculação seguirá as regras de identidade.'))+
-            alert('Identificação do provedor apenas para demonstração; nenhum login real é iniciado.');
+            card(muted('Uma forma familiar de entrar e continuar aprendendo.'));
         }
         case 'M01': return card('<span class="app-label">Destaque no mural</span><div class="app-cover">Guia de boas práticas</div>'+
           title('E-book para sua rotina')+muted('Capa, resumo e link para conhecer o material.'))+action('Conhecer material')+
-          card(muted('Este destaque não inclui, por si só, biblioteca, leitor ou controle de download.'));
+          card(muted('Uma chamada para despertar o interesse pela leitura. Combine com a biblioteca para reunir os arquivos na plataforma.'));
         case 'M02': return card('<span class="app-label">Destaque no mural</span>'+title('Dia de campo')+
           row('Data','24 de setembro')+row('Formato','Presencial')+muted('Um encontro para trocar experiências.'))+
-          action('Ver detalhes do evento')+card(muted('O card pode abrir um destino externo. Gestão de inscrições é uma entrega separada.'));
+          action('Ver detalhes do evento')+card(muted('Leve o público à página do encontro. Inscrições na plataforma podem completar essa jornada.'));
         case 'M03': return card('<span class="app-label">Banner promocional no mural</span><div class="app-cover">Benefícios para você</div>'+
           title('Conheça a campanha em destaque')+muted('Descrição e condições da promoção.'))+
-          action('Saiba mais')+card(muted('Exibição conforme vigência configurada; não inclui checkout ou motor de cupons.'));
+          action('Saiba mais')+card(muted('Destaques com período de exibição para levar a campanha certa ao seu público.'));
         case 'C01': case 'C02': case 'C03': {
           const offline=id==='C03',youtube=id==='C01';
           return card(`<span class="app-label">${youtube?'Player YouTube incorporado':offline?'Vídeo privado · online e offline':'Streaming privado online'}</span>`+
             '<div class="app-video">▶</div>'+title('Planejamento da safra')+muted('Aula 4 · Gestão no agro')+progress)+
             (offline?card(row('Download da aula','68%')+progress+row('Gerenciar arquivo','Pausar / remover')+muted('Disponível sem rede após concluir o download, sujeito à política de expiração.')):card(muted(youtube?'Depende de internet e das políticas do player oficial.':'A reprodução exige internet e autorização de acesso.')))+
-            alert(youtube?'Não oferece proteção privada equivalente a streaming autorizado.':offline?'Offline não significa proteção anticópia inviolável.':'Conteúdo privado não implica DRM avançado.');
+            card(muted(youtube?'Player oficial para aulas online. Para distribuir conteúdo com autorização de acesso, escolha vídeo privado.':offline?'Disponibilidade offline no aplicativo mobile, com regras de validade e sincronização.':'Reprodução online com autorização de acesso. Proteção e distribuição são dimensionadas para o seu projeto.'));
         }
         case 'C04': return card('<span class="app-label">Certificado de conclusão</span>'+title('Maria Silva')+
           muted('Gestão no agro · Conclusão registrada')+row('Código de verificação','ATSI-EXEMPLO'))+
@@ -1437,16 +1439,16 @@
         case 'C06': return card(title('Gerar sugestões de questões')+input('Fonte autorizada','Texto do módulo 1')+
           input('Quantidade de questões','5 questões'))+action('Gerar sugestões')+
           card('<span class="app-label">Revisão humana</span>'+title('Sugestão de pergunta')+muted('Confira enunciado, alternativas e gabarito antes de publicar.')+row('Status','Rascunho · não publicado'))+
-          card(muted('Editar → aprovar → publicar no quiz. A IA não publica automaticamente.'));
+          card(muted('Sua equipe revisa, ajusta e escolhe o momento de publicar cada questão.'));
         case 'C07': return card('<div class="app-bubble mine">Como iniciar o planejamento?</div>'+
           '<div class="app-bubble">A aula orienta analisar o cenário antes de definir as ações.</div>'+
           muted('Fonte ilustrativa: módulo 1, aula 2')+input('Pergunta','Escreva uma dúvida sobre esta aula…'))+
-          card(muted('Respostas limitadas ao conteúdo autorizado. Sem fonte suficiente, o assistente sinaliza a limitação.'));
+          card(muted('Apoio ao aprendizado com base nos materiais autorizados. Quando precisa de mais contexto, o assistente orienta o aluno.'));
         case 'C08': return card(title('Comentários da aula')+
           row('Maria · aluna','Há 2 min')+muted('Como vocês aplicam esta prática?')+
           '<div class="app-bubble">Resposta de João: começamos avaliando o cenário local.</div>'+
           input('Seu comentário','Escreva sua dúvida…'))+action('Publicar comentário')+
-          card(muted('Respostas por aula e moderação básica. Não é uma conversa privada.'));
+          card(muted('Uma conversa coletiva ligada ao tema da aula, com moderação para apoiar a participação.'));
         case 'C09': return card(title('Como foi sua experiência?')+'<p style="font-size:24px;color:#a47719">★ ★ ★ ★ ☆</p>'+
           input('Comentário sobre o curso','Conte o que achou…'))+action('Enviar avaliação')+
           card(muted('Avaliação de satisfação do curso, diferente do quiz de aprendizagem.'));
@@ -1456,7 +1458,7 @@
         case 'N01': return card('<span class="app-label">Exemplo de notificação push</span>'+title('ATSI+ · Novo curso disponível')+
           muted('Conheça a nova trilha de aprendizado.'))+
           card(row('Permissão do dispositivo','Notificações autorizadas')+
-            muted('Ao tocar no aviso, você abre o destino autorizado. Não pressupõe uma caixa de notificações persistente no app.'));
+            muted('Do aviso ao conteúdo: um toque aproxima o aluno das novidades.'));
         case 'N02': return card(title('Criar campanha push')+input('Segmento','Alunos do curso Gestão no agro')+
           input('Mensagem','Nova aula disponível!')+row('Prévia de destinatários','Exemplo: 48'))+
           action('Revisar envio segmentado')+card(muted('Segmentação e envio em lotes reutilizam a infraestrutura de push básico.'));
@@ -1465,17 +1467,17 @@
           row('Estado do fluxo','Rascunho'))+action('Revisar automação')+card(muted('Regras, agendamento, histórico e prevenção de disparos repetidos.'));
         case 'G01': return card(input('Grupos disponíveis','Escolha um grupo…')+title('Produtores da região')+
           muted('Troca de experiências no WhatsApp'))+action('Abrir convite do WhatsApp')+
-          card(muted('Somente diretório de links oficiais. Não envia mensagens automaticamente.'));
-        case 'G02': return alert('Configuração ilustrativa · nenhuma conta conectada. APIs e permissões a validar por rede.')+
+          card(muted('Convites oficiais organizados para facilitar a chegada à comunidade.'));
+        case 'G02': return card(muted('Prévia da central de comunicação · organize sua mensagem e escolha os destinos.'))+
           card(title('Preparar mensagem')+input('Origem do conteúdo','Conteúdo ATSI+ ou mensagem manual')+
             input('Mensagem','Nova aula disponível! Confira o curso Gestão no agro.')+input('Link do conteúdo','Link autorizado do curso'))+
-          card(title('Redes e destinos')+muted('Seleção múltipla · exemplos sujeitos à viabilidade')+
+          card(title('Redes e destinos')+muted('Seleção múltipla · destinos de exemplo')+
             row('☑ WhatsApp','Grupo Produtores')+row('☑ Telegram','Canal Novidades')+row('☑ Discord','Canal Cursos')+
-            muted('Outras redes conforme API oficial e permissões. Grupos e canais não são suportados igualmente por todas as redes.'))+
+            muted('Conectores e destinos definidos de acordo com as APIs oficiais e permissões de cada rede.'))+
           card(title('Configurar distribuição')+row('Envio','Mesmo agendamento')+input('Data e horário','Escolher data e horário')+
             row('Destinos de exemplo','3 selecionados')+muted('Prévia e status por destino; falhas tratadas separadamente.'))+
-          action('Revisar distribuição · demonstração')+
-          card(muted('Sem envios reais. Um agendamento comum não garante entrega no mesmo instante em todas as redes.'));
+          action('Revisar distribuição')+
+          card(muted('Até três conectores oficiais viáveis. O mesmo agendamento organiza envios independentes, com acompanhamento por rede.'));
         case 'G03': return card(title('Comunidade ATSI+')+row('Grupo interno','Membros')+
           muted('Notícias e conteúdos da comunidade.'))+card(title('Nova publicação da ATSI')+
           muted('Compartilhamos orientações para a próxima semana.')+row('Publicação','Ver conteúdo'))+
@@ -1497,8 +1499,8 @@
             (included('EV03')?row('Convite por e-mail','Disponível'):'')+
             (included('EV04')?row('Entrada no evento','Check-in por QR'):''));
         case 'EV02': return card(title('Minha inscrição · Dia de campo')+
-          '<div class="app-qr"></div>'+muted('QR ilustrativo, não utilizável · inscrição individual')+row('Situação','Confirmada'))+
-          card(muted('A imagem identifica a inscrição; a leitura para check-in é uma feature separada.'));
+          '<div class="app-qr"></div>'+muted('Prévia do QR · identificação individual da inscrição')+row('Situação','Confirmada'))+
+          card(muted('Identificação pronta para acompanhar a inscrição. O check-in por leitura pode completar a recepção.'));
         case 'EV03': return card('<span class="app-label">Exemplo de convite recebido por e-mail</span>'+title('Você está convidado!')+
           muted('Dia de campo · 24 de setembro')+row('Para','maria@exemplo.com'))+action('Ver detalhes do evento')+
           card(muted('Modelo de convite e rastreio de envio no serviço transacional compartilhado.'));
@@ -1507,8 +1509,8 @@
           action('Confirmar presença')+card(muted('Inscrição inválida ou já utilizada gera aviso; o registro de entrada não é duplicado.'));
         case 'P01': return card(title('Resumo do pedido')+row('Identificador','PED-EXEMPLO')+
           row('Valor','A definir')+row('Status','Aguardando pagamento'))+action('Continuar no provedor de pagamento')+
-          card(muted('Confirmação por evento validado do provedor, não apenas pelo retorno à tela.'))+
-          alert('Estratégia por canal e regras das lojas ainda precisam de aprovação.');
+          card(muted('Pedido atualizado a partir da confirmação do provedor de pagamento.'))+
+          card(muted('A jornada de compra acompanha o modelo comercial da ATSI e as regras de cada canal.'));
         case 'P02': return card(title('Assinatura da plataforma')+row('Plano','Mensal · exemplo')+
           row('Valor e vigência','A definir')+row('Estado','Exemplo de assinatura ativa')+row('Renovação','Conforme contrato'))+
           action('Gerenciar assinatura')+card(row('Cancelamento','Consultar condições')+muted('Renovação, cancelamento e falhas de cobrança respeitam as condições aprovadas.'));
@@ -1525,33 +1527,33 @@
             row('Direito de acesso','Disponível para seu perfil'))+
             card('<span class="app-label">Exemplo sem direito de acesso</span>'+title('Acesso restrito')+
               muted('Seu perfil ainda não possui autorização para este conteúdo.'))+
-            alert(id==='P07'?'Download autorizado não impede cópia de arquivo já baixado.':'Autorização validada no servidor conforme perfil, convite ou direito adquirido.');
+            card(muted(id==='P07'?'Biblioteca e download para públicos elegíveis. Após baixar, o arquivo fica com o participante.':'Acesso conforme perfil, convite ou direito adquirido: uma experiência alinhada à sua oferta.'));
         }
         case 'L01': return card(input('Filtro','Últimos 7 dias · todos os administradores')+
           title('Alteração de curso')+row('Responsável','Maria · administradora')+row('Momento','16/11 · 10:35')+
           row('Registro','Curso Gestão no agro')+muted('Ação: título atualizado'))+
-          card(muted('Histórico de ações administrativas, com retenção e acesso controlado.'));
+          card(muted('Contexto para sua equipe acompanhar as mudanças, com consulta por permissão.'));
         case 'R01': case 'R02': case 'R03': case 'R04': case 'R05': {
           const metrics={
-            R01:['Visualizações de aulas','128','Curso e aula','Eventos de visualização, não conclusões.'],
+            R01:['Visualizações de aulas','128','Curso e aula','Acompanhe quais aulas despertam o interesse do público.'],
             R02:['Conclusões de cursos','32','Curso e aluno','Fonte: progresso registrado. Inclui exportação.'],
             R03:['Satisfação do curso','4,6 / 5','Curso','18 avaliações · amostra ilustrativa.'],
-            R04:['Usuários ativos','84','Dia / mês','Deduplicação por usuário na janela definida.'],
-            R05:['Pessoas online agora','12','Presença simultânea','Heartbeat e tolerância; não equivale a usuários ativos mensais.']
+            R04:['Usuários ativos','84','Dia / mês','Cada usuário é contado uma vez por período.'],
+            R05:['Pessoas online agora','12','Presença simultânea','Atualização periódica da presença para acompanhar a comunidade.']
           };
           const [metric,value,filter,explanation]=metrics[id];
           return card(input('Filtros',id==='R05'?'Presença atual':filter+' · últimos 30 dias')+
-            '<span class="app-label">Dados fictícios para demonstração</span>'+title(metric)+
+            '<span class="app-label">Prévia de indicadores · dados de exemplo</span>'+title(metric)+
             `<div class="app-stat">${value}</div>`+
-            (id==='R03'?muted('Sem respostas: exibir “Sem avaliações”, não nota zero.'):'<div class="app-chart"><i style="height:35%"></i><i style="height:62%"></i><i style="height:80%"></i><i style="height:54%"></i></div>'))+
+            (id==='R03'?muted('A opinião de quem participa ajuda a orientar os próximos passos.'):'<div class="app-chart"><i style="height:35%"></i><i style="height:62%"></i><i style="height:80%"></i><i style="height:54%"></i></div>'))+
             card(muted(explanation))+(id==='R02'?action('Exportar conclusões'):'');
         }
         case 'GM01': return card(title('Extrato de pontos')+row('Aula concluída','+10 pts')+row('Curso concluído','+30 pts')+
           muted('Exemplos de regras; pontuação final a definir.'))+
-          card(muted('Cada evento pontua uma vez. Pontos por conclusão não podem contrariar políticas do provedor de vídeo.'));
+          card(muted('Cada conquista reconhecida uma vez, com regras alinhadas à experiência de aprendizagem e à plataforma de vídeo.'));
         case 'GM02': return card(title('Presença reconhecida')+row('Evento','Dia de campo')+row('Check-in','Confirmado')+
           row('Pontos do evento','+20 pts · exemplo'))+
-          card(muted('O crédito depende de presença confirmada e não é repetido ao reler o QR.'));
+          card(muted('Presença confirmada e pontos no perfil: cada participação reconhecida uma vez.'));
         case 'GM03': return card(input('Período do ranking','Mês atual · exemplo')+row('1º · Ana','150 pts')+
           row('2º · Maria','120 pts')+row('3º · João','100 pts'))+
           card(muted('Exposição pública mediante consentimento; empate segue critério definido.'));
@@ -1759,13 +1761,13 @@
       const f01 = foundationCatalog.find(f => f.id === 'F01');
       const f02 = foundationCatalog.find(f => f.id === 'F02');
       document.getElementById('requirementsEstimate').textContent =
-        `${f01.hours} h · implantação ${brl(f01.hours * state.hourRate)}. Planejamento do catálogo completo; entregáveis sujeitos a validação técnica.`;
+        `${f01.hours} h · ${brl(f01.hours * state.hourRate)}. Uma visão compartilhada para orientar a construção da plataforma.`;
       document.getElementById('designEstimate').textContent =
-        `${f02.hours} h · implantação ${brl(f02.hours * state.hourRate)}. Os mockups comerciais do configurador não substituem o design de produto aprovado.`;
+        `${f02.hours} h · ${brl(f02.hours * state.hourRate)}. Jornadas, telas e estrutura desenhadas com a ATSI.`;
       document.getElementById('foundationExplanation').textContent =
-        `As ${f01.hours + f02.hours} h de planejamento são obrigatórias e cobradas na fundação de ${foundationHours} h, incluída uma vez em todos os planos. Detalhamento técnico sujeito a validação.`;
+        `Planejamento e design fazem parte da preparação de ${foundationHours} h, incluída uma única vez no investimento de qualquer plano.`;
       document.getElementById('foundationBreakdown').innerHTML = foundationCatalog.map(f =>
-        `<h3>${f.title} · ${f.hours} h</h3><ul>${f.tasks.map(t => `<li>${t}</li>`).join('')}</ul>`
+        `<h3>${ATSIProductCopy.foundation[f.id].title} · ${f.hours} h</h3><p>${ATSIProductCopy.foundation[f.id].description}</p>`
       ).join('');
     }
 

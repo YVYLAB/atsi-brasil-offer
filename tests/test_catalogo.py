@@ -50,7 +50,7 @@ class CatalogoTest(unittest.TestCase):
           check(name+' plataformas incluídas',quote.delivery.studentPlatforms.join(',')==='Android,iOS,Web (navegador)' &&
             quote.delivery.administration==='Painel administrativo web');
           check(name+' revisão web pendente',quote.delivery.estimateStatus==='pending_web_review' &&
-            quoteRows().some(row=>row[0]==='Revisão das estimativas'&&row[1].includes('pendente')));
+            quoteRows().some(row=>row[0]==='Revisão das estimativas'&&row[1].includes('revisa as estimativas')));
           const expectedComplexity={essencial:'Baixa',plus:'Média',premium:'Alta'}[name];
           check(name+' complexidade relativa',el.avgComplexity.textContent===expectedComplexity &&
             document.getElementById('complexityMetricLabel').textContent==='Complexidade do plano' &&
@@ -63,6 +63,24 @@ class CatalogoTest(unittest.TestCase):
           'Complexidade baixa|Complexidade média|Complexidade alta');
         check('escala técnica preservada',complexityLabel(3)==='Média-alta' && complexityLabel(5)==='Muito alta' &&
           features.every(f=>f.complexity===specCatalog[f.id].complexity));
+        check('copy comercial cobre as 54 features',Object.keys(ATSIProductCopy.features).length===54 &&
+          features.every(f=>{
+            const copy=ATSIProductCopy.features[f.id];
+            return copy && f.title===copy.title && f.desc===copy.description &&
+              copy.benefits.length>=2 && copy.scope.length>30;
+          }));
+        check('snapshots financeiros preservam títulos originais',Object.values(pricingSnapshot().packages).every(pack=>
+          pack.items.every(item=>item.title===specCatalog[item.id].title)));
+        const internalCopy=/specs\\/|docs\\/|\\.md\\b|repositório|pendente de validação|aprovação pendente|cenário mínimo|revisão técnica preliminar|Supabase|Next.js|RBAC|auditoria/i;
+        check('página com linguagem de produto',!internalCopy.test(document.querySelector('.page').textContent));
+        check('popups vendem benefícios sem expor documentos',features.every(f=>{
+          openFeatureDetails(f,null);
+          const text=document.getElementById('dialogContent').textContent;
+          const valid=!internalCopy.test(text) && text.includes('Mais valor para a sua plataforma') &&
+            text.includes(ATSIProductCopy.features[f.id].scope);
+          featureDialog.close();
+          return valid;
+        }));
         const invalidPriceNotice=/Preço de venda:\\s*Não aprovado|não é preço aprovado|não proposta aprovada|não preços comerciais aprovados|Valores não validados/i;
         check('tela sem aviso de preço não aprovado',!invalidPriceNotice.test(document.querySelector('.split').textContent) &&
           !invalidPriceNotice.test(document.getElementById('floatingTotal').textContent));
@@ -93,16 +111,17 @@ class CatalogoTest(unittest.TestCase):
         check('G02 selecionável com estimativa',state.selected.has('G02') && targetTotal===264000);
         check('G02 catálogo multicanal',getFeature('G02').title==='Encaminhamento multicanal para redes sociais' &&
           getFeature('G02').hours===250 && getFeature('G02').price===50000 &&
-          getFeature('G02').desc.includes('múltiplos grupos e canais'));
+          getFeature('G02').desc.includes('grupos e canais de diferentes redes'));
         check('G02 ressalva técnica',document.getElementById('scopeWarnings').textContent.includes('até três conectores oficiais viáveis') &&
-          document.querySelector('[data-feature="G02"]').textContent.includes('Validar integração por rede'));
+          document.querySelector('[data-feature="G02"]').textContent.includes('Redes definidas no planejamento'));
         const beforeG02Preview=targetTotal;
         state.activePreview='G02';renderPreview();
         check('G02 configuração administrativa',el.phoneScreen.querySelector('.app-screen').dataset.mockContext==='admin');
         check('G02 múltiplas redes e mensagem',['Preparar mensagem','WhatsApp','Telegram','Discord','Mesmo agendamento','status por destino'].every(text=>
           el.phoneScreen.textContent.includes(text)));
-        check('G02 limites explícitos',el.phoneScreen.textContent.includes('nenhuma conta conectada') &&
-          el.phoneScreen.textContent.includes('não garante entrega no mesmo instante') && targetTotal===beforeG02Preview);
+        check('G02 limites explícitos',el.phoneScreen.textContent.includes('Prévia da central') &&
+          el.phoneScreen.textContent.includes('três conectores oficiais viáveis') &&
+          el.phoneScreen.textContent.includes('envios independentes') && targetTotal===beforeG02Preview);
         toggleFeature('N02',true);
         check('incluir dependência',state.selected.has('N01'));
         toggleFeature('N01',false);
@@ -114,11 +133,11 @@ class CatalogoTest(unittest.TestCase):
           C01:'Player YouTube',C02:'Streaming privado',C03:'Download da aula',
           C06:'Revisão humana',C07:'Fonte ilustrativa',C08:'Comentários da aula',
           C09:'satisfação',G01:'Abrir convite do WhatsApp',G02:'Redes e destinos',G05:'Publicar meu perfil',
-          EV02:'QR ilustrativo',EV04:'Enquadre o QR',P01:'Aguardando pagamento',
+          EV02:'Prévia do QR',EV04:'Enquadre o QR',P01:'Aguardando pagamento',
           P02:'Renovação',P03:'Comprar curso',P04:'Reserva temporária',
           P05:'Acesso restrito',P06:'Acesso restrito',P07:'Acesso restrito',
           L01:'Responsável',R01:'Visualizações de aulas',R02:'Exportar conclusões',
-          R03:'18 avaliações',R04:'Deduplicação',R05:'Heartbeat',GM02:'Check-in'
+          R03:'18 avaliações',R04:'Cada usuário é contado uma vez',R05:'Atualização periódica',GM02:'Check-in'
         };
         check('conteúdo condiz com feature',Object.entries(semanticExamples).every(([id,text])=>{
           state.activePreview=id;renderPreview();return el.phoneScreen.textContent.includes(text);
@@ -206,11 +225,19 @@ class CatalogoTest(unittest.TestCase):
         check('campanha persistida',JSON.parse(localStorage.getItem(campaignStorageKey)).endsAt===campaignConfig.endsAt);
         check('horas e mensalidades preservadas',quoteData().monthlyMaintenanceBRL===4000 && el.totalHours.textContent==='1150 h');
         check('desconto adicional persistido',JSON.parse(localStorage.getItem(campaignStorageKey)).additionalOptionalPercentage===25);
+        const beforeBannerClick=targetTotal;
+        document.querySelector('[data-feature="G02"] .feature-discount-banner').click();
+        check('painel de desconto visualiza sem contratar',state.activePreview==='G02' && !state.selected.has('G02') && targetTotal===beforeBannerClick);
         toggleFeature('G02',true);
         check('plus com G02 descontada',targetTotal===233000 && state.basePreset==='plus' && state.activePreset==='custom' &&
           quoteData().pricing.planDiscountCents===3450000 && quoteData().pricing.additionalDiscountCents===1250000);
         check('preço adicional riscado no card',document.querySelector('[data-feature="G02"] .feature-price-offer del').textContent===brl(50000) &&
           document.querySelector('[data-feature="G02"] .feature-price-offer strong').textContent===brl(37500));
+        check('painel grande informa percentual e economia',document.querySelector('[data-feature="G02"] .feature-discount-rate b').textContent==='−25%' &&
+          document.querySelector('[data-feature="G02"] .feature-discount-saving').textContent==='Economize '+brl(12500) &&
+          document.querySelector('[data-feature="G02"]').classList.contains('has-feature-discount'));
+        check('painel apenas nas features com desconto',features.every(f=>
+          !!document.querySelector(`[data-feature="${f.id}"] .feature-discount-banner`) === (featureAdditionalPricing(f).discountCents>0)));
         check('item incluído no plano não recebe desconto adicional',!document.querySelector('[data-feature="C04"] .feature-price-offer'));
         check('resumo e dados concordam',document.getElementById('additionalDiscount').textContent===brl(12500) &&
           quoteRows().some(row=>row[0].startsWith('G02 ·')&&row[1]===brl(37500)) &&
@@ -219,7 +246,7 @@ class CatalogoTest(unittest.TestCase):
         toggleFeature('C04',false);
         check('remover item do plano suspende os descontos',quoteData().pricing.discountCents===0 &&
           !document.querySelector('[data-feature="G02"] .feature-price-offer') &&
-          document.getElementById('pricingContext').textContent.includes('Composição do Plus alterada'));
+          document.getElementById('pricingContext').textContent.includes('Sua configuração está personalizada'));
         toggleFeature('C04',true);
         check('restaurar plano recupera descontos',targetTotal===233000);
         toggleFeature('C03',true);
@@ -293,6 +320,84 @@ class CatalogoTest(unittest.TestCase):
         for result in results:
             self.assertTrue(result["ok"], result["name"])
         print(f"Chrome: {len(results)} verificações de catálogo/seleção/preview aprovadas")
+
+    def test_discount_panel_layout(self):
+        chrome = shutil.which("google-chrome")
+        if not chrome:
+            self.skipTest("Chrome não disponível")
+        script = """
+        (async()=>{
+          await document.fonts.ready;
+          campaignConfig={schemaVersion:2,startsAt:new Date(Date.now()-3600000).toISOString(),
+            endsAt:new Date(Date.now()+3600000).toISOString(),
+            percentages:{essencial:10,plus:15,premium:20},additionalOptionalPercentage:25};
+          applyPreset('plus');toggleFeature('G02',true);
+          const results=[];
+          for(const card of document.querySelectorAll('.has-feature-discount')){
+            const banner=card.querySelector('.feature-discount-banner');
+            const rect=banner.getBoundingClientRect(),parent=card.getBoundingClientRect();
+            const header=card.querySelector('.feature-head').getBoundingClientRect();
+            results.push({id:card.dataset.feature,
+              overlapsTop:rect.top<parent.top,
+              controlsClear:rect.bottom<=header.top,
+              fits:banner.scrollWidth<=banner.clientWidth && card.scrollWidth<=card.clientWidth &&
+                rect.left>=parent.left && rect.right<=parent.right,
+              clicksPassThrough:getComputedStyle(banner).pointerEvents==='none'});
+          }
+          results.push({id:'page',fits:document.documentElement.scrollWidth<=innerWidth});
+          results.push({id:'mockups',fits:features.every(f=>{
+            state.activePreview=f.id;renderPreview();
+            const screen=el.phoneScreen.querySelector('.app-screen');
+            return screen.scrollWidth<=screen.clientWidth;
+          })});
+          results.push({id:'dialogs',fits:features.every(f=>{
+            openFeatureDetails(f,null);
+            const rect=featureDialog.getBoundingClientRect();
+            const fits=rect.left>=0 && rect.right<=innerWidth && featureDialog.scrollWidth<=featureDialog.clientWidth;
+            featureDialog.close();
+            return fits;
+          })});
+          return {width:innerWidth,checks:results};
+        })();
+        """
+        page = HTML.replace("<head>", f'<head><base href="{ROOT.as_uri()}/">', 1)
+        wrapper = """<!doctype html><body><script>
+        (async()=>{
+          const results=[];
+          for(const width of [320,390,768,1121,1440]){
+            const frame=document.createElement('iframe');
+            frame.style.width=width+'px';frame.style.height='1000px';
+            frame.src='test.html';
+            const loaded=new Promise(resolve=>frame.onload=resolve);
+            document.body.appendChild(frame);await loaded;
+            results.push(await frame.contentWindow.eval(CHECK_SCRIPT));
+            frame.remove();
+          }
+          document.body.insertAdjacentHTML('beforeend','<pre id="panel-layout">'+JSON.stringify(results)+'</pre>');
+        })();
+        </script></body>""".replace("CHECK_SCRIPT", json.dumps(script))
+        with tempfile.TemporaryDirectory(prefix="atsi-discount-layout-", dir="/tmp/opencode") as directory:
+            file = Path(directory) / "test.html"
+            file.write_text(page)
+            layout = Path(directory) / "layout.html"
+            layout.write_text(wrapper)
+            run = subprocess.run([
+                chrome, "--headless", "--no-sandbox", "--disable-gpu",
+                "--disable-dev-shm-usage", "--allow-file-access-from-files",
+                "--virtual-time-budget=5000", "--dump-dom", layout.as_uri()
+            ], capture_output=True, text=True, timeout=30)
+        match = re.search(r'<pre id="panel-layout">(\[.*?\])</pre>', run.stdout)
+        self.assertIsNotNone(match, "Layout dos descontos não completou")
+        layouts = json.loads(match.group(1))
+        self.assertEqual([layout["width"] for layout in layouts], [320, 390, 768, 1121, 1440])
+        for layout in layouts:
+            with self.subTest(width=layout["width"]):
+                results = layout["checks"]
+                self.assertTrue(any(row["id"] == "G02" for row in results))
+                for row in results:
+                    for name, ok in row.items():
+                        if name != "id":
+                            self.assertTrue(ok, f'{row["id"]}: {name}')
 
     def test_campaign_restore(self):
         chrome = shutil.which("google-chrome")

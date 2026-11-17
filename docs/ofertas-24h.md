@@ -45,7 +45,9 @@ O fluxo detalhado abaixo é histórico; não é mais a interface atual do config
 - Cada desconto de extra é calculado e arredondado em centavos por feature.
   O desconto do pacote é arredondado separadamente sobre seu total. O total
   final subtrai as duas parcelas disjuntas.
-- Cards dos extras mostram tabela riscada, percentual e preço final. O resumo
+- Cards dos extras elegíveis mostram um painel grande sobreposto ao topo, com
+  preço de tabela riscado, percentual, preço final e economia em reais, sem
+  cobrir seleção ou informações. O resumo
   separa as duas parcelas; dados de proposta usam o mesmo núcleo de cálculo.
 - Campanha v2 ganha o campo opcional `additionalOptionalPercentage`. Dados v2
   anteriores sem esse campo continuam válidos com percentual adicional zero.
