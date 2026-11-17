@@ -65,6 +65,26 @@
       throw new Error('A soma das entregas não fecha com o total da oferta.');
     if(!money(data.support.priceCents)||!Number.isFinite(data.support.hours)||data.support.hours<0)
       throw new Error('Confira a manutenção mensal da oferta.');
+    const operations=data.support.operations;
+    if(operations){
+      if(operations.schemaVersion!==1||!operations.inputs ||
+        !Number.isSafeInteger(operations.inputs.activeUsers)||operations.inputs.activeUsers<100||
+        operations.inputs.activeUsers>10000 ||
+        !money(operations.totalCents)||!Array.isArray(operations.lines)||!operations.lines.length ||
+        operations.lines.some(line=>!line.label||!line.basis||!money(line.priceCents)||!money(line.amountCentsUSD)||
+          !money(line.estimatedCents)) ||
+        new Set(operations.lines.map(line=>line.id)).size!==operations.lines.length ||
+        sum(operations.lines,'priceCents')!==operations.totalCents ||
+        sum(operations.lines,'amountCentsUSD')!==operations.totalCentsUSD ||
+        sum(operations.lines,'estimatedCents')!==operations.totalEstimatedCents ||
+        !operations.explanation ||
+        !Array.isArray(operations.assumptions)||!operations.assumptions.length ||
+        !Array.isArray(operations.exclusions)||!Array.isArray(operations.sources) ||
+        data.support.totalCents!==data.support.priceCents+operations.totalCents)
+        throw new Error('Confira a composição operacional mensal da oferta.');
+    }else{
+      data.support.totalCents=data.support.priceCents;
+    }
     if(data.benefits.some(benefit=>benefit.priceCents!==0))throw new Error('Confira os benefícios de cortesia.');
     data.foundation=rows.slice(0,data.foundation.length);
     data.features=rows.slice(data.foundation.length);
@@ -226,9 +246,30 @@
     }
     heading('Manutenção e operação mensal',true);
     keyValue('Plano de manutenção',model.support.planName);
-    keyValue('Mensalidade',`${brl(model.support.priceCents)} / mês`,true);
+    if(model.support.operations)paragraph(model.support.operations.explanation);
+    keyValue('Mensalidade base',`${brl(model.support.priceCents)} / mês`);
+    if(model.support.operations){
+      keyValue('Adicional operacional estimado',`${brl(model.support.operations.totalCents)} / mês`);
+      keyValue('Total mensal estimado',`${brl(model.support.totalCents)} / mês`,true);
+    }
     keyValue('Horas mensais incluídas',`${number(model.support.hours)} h`);
-    paragraph('Inclui os custos operacionais da plataforma e as horas compartilhadas entre desenvolvimento, alterações do software e correções. Consumo de IA é contratado separadamente. Horas excedentes exigem contratação à parte antes da execução. A mensalidade não recebe desconto da implantação e não integra seu pagamento único.');
+    paragraph('A mensalidade base cobre as horas compartilhadas entre desenvolvimento, alterações do software e correções. Com YouTube, o adicional operacional é zerado e a infraestrutura compartilhada do cenário fica coberta pela base. Com streaming privado ou offline, o adicional é somado conforme usuários ativos e consumo. IA é contratada separadamente. Horas excedentes exigem contratação à parte antes da execução. Base e adicional não recebem desconto da implantação e não integram seu pagamento único.');
+    if(model.support.operations){
+      const ops=model.support.operations;
+      heading('Cenário de operação mensal');
+      keyValue('Modelo e data das tarifas',`${ops.version} | ${ops.rateDate}`);
+      for(const text of ops.assumptions)paragraph(`- ${text}`);
+      for(const line of ops.lines){
+        keyValue(`${line.label} (${line.provider})`,`${brl(line.priceCents)} / mês`,true);
+        paragraph(`${line.basis} Custo de referência: US$ ${number(line.amountCentsUSD/100)} / mês.${line.coveredByBase?' Incluído na base de manutenção, sem cobrança adicional.':''}`);
+      }
+      keyValue('Total dos fornecedores em USD',`US$ ${number(ops.totalCentsUSD/100)} / mês`);
+      keyValue('Custo estimado convertido (não somar novamente)',brl(ops.totalEstimatedCents));
+      paragraph('Conversão e soma por serviço em centavos, congeladas no momento de gerar este documento.');
+      for(const text of ops.exclusions)paragraph(`- ${text}`);
+      heading('Fontes das tarifas de referência');
+      for(const source of ops.sources)paragraph(`${source.title}: ${source.url}`,{size:8.5});
+    }
     heading('Planejamento da contratação');
     paragraph('Forma de pagamento, início das entregas, cronograma e condições de manutenção são combinados na contratação. Plataformas, integrações e permissões seguem o escopo de cada funcionalidade detalhada neste documento.');
     paragraph(model.delivery.estimateNote);

@@ -321,6 +321,21 @@
     .total-box small{display:block;color:#90bca1;text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:800}
     .total-box .value{font-size:34px;font-weight:900;letter-spacing:-1.2px;margin:6px 0 4px}
     .total-box .sub{color:var(--muted);font-size:12px}
+    .operation-controls{margin:20px 0;padding:16px;border:1px solid var(--line);border-radius:16px;background:rgba(0,0,0,.14)}
+    .operation-controls label{display:block;font-size:13px;font-weight:700;margin-bottom:8px}
+    .operation-controls output{display:block;color:var(--green);font-size:22px;font-weight:800;margin-bottom:10px}
+    .operation-controls input[type="range"]{width:100%;min-height:32px;accent-color:#68c884}
+    .operation-range-labels,.monthly-breakdown>div{display:flex;justify-content:space-between;gap:12px}
+    .operation-range-labels{color:var(--muted);font-size:12px}
+    .monthly-breakdown{margin:16px 0;font-size:14px}
+    .monthly-breakdown>div{padding:9px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+    .monthly-breakdown strong{white-space:nowrap}
+    .operation-inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+    .operation-inputs input{box-sizing:border-box;width:100%;min-width:0;padding:10px;border-radius:8px;border:1px solid #638279;background:#102b32;color:#fff;font:inherit}
+    .operation-inputs input:focus-visible,.operation-controls input:focus-visible{outline:2px solid #8fe2aa;outline-offset:3px}
+    .operation-controls p,.operation-assumptions{font-size:13px;line-height:1.65}
+    #operationalInputStatus{color:#ffd18e}
+    @media(max-width:480px){.operation-inputs{grid-template-columns:1fr}}
     .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
     .kpi{padding:12px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
     .kpi small{display:block;color:#94b3a4;font-size:10px;text-transform:uppercase;letter-spacing:.09em;font-weight:800}
@@ -620,10 +635,45 @@
         <section class="total-box" aria-labelledby="maintenanceTitle">
           <h3 id="maintenanceTitle">Manutenção e operação mensal</h3>
           <div class="value"><span id="maintenancePrice">R$ 3.000,00</span><span style="font-size:16px;font-weight:600"> / mês</span></div>
+          <p id="maintenanceExplanation" class="operation-assumptions"></p>
           <p id="maintenancePlanLabel">Manutenção Essencial</p>
-          <div class="sub">Mensalidade separada do investimento de implantação.</div>
+          <div class="sub">Total mensal estimado, separado da implantação e sem desconto promocional.</div>
+          <div class="operation-controls">
+            <label for="monthlyActiveUsers">Quantos usuários devem usar a plataforma por mês?</label>
+            <output id="monthlyActiveUsersValue" for="monthlyActiveUsers">100 usuários ativos/mês</output>
+            <input id="monthlyActiveUsers" type="range" min="100" max="10000" step="100" value="100" aria-describedby="monthlyUsersHelp">
+            <div class="operation-range-labels"><span>100</span><span>10.000</span></div>
+            <p id="monthlyUsersHelp">Conte pessoas que usam a plataforma no mês, não apenas cadastros. Ajuste o volume para acompanhar o crescimento.</p>
+            <p id="operationalPeak"></p>
+            <details>
+              <summary>Ajustar premissas de consumo e câmbio</summary>
+              <div class="operation-inputs">
+                <div><label for="operationalExchange">Câmbio de simulação (R$/US$)</label><input id="operationalExchange" type="number" min="0.01" max="100" step="0.01" value="6" data-operational="exchangeRate"></div>
+                <div><label for="operationalPeakPercentage">Pico simultâneo hipotético (%)</label><input id="operationalPeakPercentage" type="number" min="1" max="100" step="1" value="10" data-operational="peakPercentage"></div>
+                <div><label for="operationalVideoMinutes">Minutos online por usuário/mês</label><input id="operationalVideoMinutes" type="number" min="0" max="6000" step="1" value="180" data-operational="videoMinutesPerUser"></div>
+                <div><label for="operationalLibraryHours">Acervo privado (horas)</label><input id="operationalLibraryHours" type="number" min="0" max="10000" step="1" value="100" data-operational="libraryHours"></div>
+                <div><label for="operationalOfflineMinutes">Downloads adicionais (min/usuário/mês)</label><input id="operationalOfflineMinutes" type="number" min="0" max="6000" step="1" value="60" data-operational="offlineMinutesPerUser"></div>
+              </div>
+              <p>O câmbio é uma hipótese editável, não uma cotação atualizada. Os downloads são minutos adicionais ao online; assistir novamente ao arquivo local não gera nova entrega.</p>
+              <div id="operationalAssumptions" class="operation-assumptions"></div>
+            </details>
+            <p id="operationalInputStatus" role="status" aria-live="polite"></p>
+          </div>
+          <div class="monthly-breakdown" aria-live="polite" aria-atomic="true">
+            <div><span>Mensalidade base do plano</span><strong id="maintenanceBasePrice"></strong></div>
+            <div><span>Adicional operacional estimado</span><strong id="operationalPrice"></strong></div>
+            <div><span>Total mensal estimado</span><strong id="monthlyTotalPrice"></strong></div>
+          </div>
+          <details>
+            <summary>Como o adicional é composto</summary>
+            <div id="operationalLines" class="monthly-breakdown"></div>
+            <p id="operationalConversion" class="operation-assumptions"></p>
+            <p class="operation-assumptions">Infraestrutura compartilhada contabilizada uma vez, mais o consumo da estratégia de vídeo escolhida. Valores de referência dos fornecedores convertidos pelo câmbio informado, sem margem ou reserva adicional. Tarifas consultadas em 17/11/2026.</p>
+            <ul id="operationalExclusions" class="operation-assumptions"></ul>
+            <p id="operationalSources" class="operation-assumptions"></p>
+          </details>
           <ul>
-            <li>Inclui os custos operacionais da plataforma.</li>
+            <li>Operação estimada somada à base conforme o volume e as premissas acima. Ampliações e excedentes são combinados antes da cobrança.</li>
             <li>Inclui até <strong id="maintenanceHours">10 horas por mês</strong>, compartilhadas entre desenvolvimento, alterações do software e correções de bugs.</li>
             <li><strong>Consumo de IA contratado separadamente.</strong></li>
             <li>Para ampliar as horas mensais, sua equipe pode contratar <strong>um pacote adicional</strong>, combinado antes da execução.</li>
@@ -697,6 +747,7 @@
   <script src="pricing-promotion.js"></script>
   <script src="campaign-settings.js"></script>
   <script src="product-copy.js"></script>
+  <script src="operational-pricing.js"></script>
   <script src="vendor/jspdf/jspdf.umd.min.js"></script>
   <script src="offer-pdf.js"></script>
   <script>
@@ -839,6 +890,7 @@
       activePreset:'essencial',
       basePreset:'essencial',
       maintenancePlan:'essencial',
+      operations:{...ATSIOperations.defaults},
       selected:new Set(),
       autoSelected:new Set(),
       openSections:new Set(Object.keys(sectionMeta)),
@@ -975,6 +1027,8 @@
     }
     function quoteData(now=Date.now()){
       const pricing=configurationPricing(now);
+      const operations=operationalPricing();
+      const maintenance=ATSIOperations.plans[state.maintenancePlan];
       return {schemaVersion:1,exportedAt:new Date(now).toISOString(),simulation:true,
         project:{product:ATSIProduct.name,client:ATSIProduct.client,developer:ATSIProduct.developer},
         delivery:{...deliveryScope,studentPlatforms:[...deliveryScope.studentPlatforms]},
@@ -982,9 +1036,11 @@
         complexity:scopeComplexity(),
         packageId:state.activePreset,basePackageId:state.basePreset,priceListSnapshot:pricingSnapshot(),
         selectedIds:selectedFeatures().map(f=>f.id),pricing,
-        monthlyMaintenanceBRL:{essencial:3000,plus:4000,premium:5000}[state.maintenancePlan],
-        monthlyHours:{essencial:10,plus:15,premium:20}[state.maintenancePlan],
-        operationalCoverage:'Operação incluída na manutenção; consumo de IA contratado separadamente. Estrutura dimensionada no planejamento.',
+        monthlyMaintenanceBRL:maintenance.priceCents/100,
+        monthlyOperationalBRL:operations.totalCents/100,
+        monthlyTotalBRL:(maintenance.priceCents+operations.totalCents)/100,
+        monthlyHours:maintenance.hours,operations,
+        operationalCoverage:operations.explanation+' IA separada. Ampliações e excedentes mediante acordo prévio.',
         campaign:campaignConfig,
         offer:currentOffer,offerStatus:campaignConfig?ATSIPromotion.campaignStatus(campaignConfig,now):ATSIPromotion.status(currentOffer,pricingSnapshot(),now)};
     }
@@ -1005,7 +1061,17 @@
         ['Desconto do plano',brl((q.pricing.planDiscountCents??q.pricing.discountCents)/100)],
         ['Desconto dos opcionais adicionais',brl((q.pricing.additionalDiscountCents||0)/100)],
         ['Implantação final',brl(q.pricing.finalCents/100)],
-        ['Manutenção mensal',brl(q.monthlyMaintenanceBRL)],['Horas mensais',String(q.monthlyHours)],
+        ['Manutenção mensal base',brl(q.monthlyMaintenanceBRL)],
+        ['Adicional operacional estimado',brl(q.monthlyOperationalBRL)],
+        ['Total mensal estimado',brl(q.monthlyTotalBRL)],['Horas mensais',String(q.monthlyHours)],
+        ['Usuários ativos/mês',String(q.operations.inputs.activeUsers)],
+        ['Pico simultâneo hipotético',String(q.operations.peakUsers)],
+        ['Modelo operacional',q.operations.version],['Data das tarifas',q.operations.rateDate],
+        ['Custo estimado dos fornecedores (não somar novamente)',brl(q.operations.totalEstimatedCents/100)],
+        ...q.operations.assumptions.map(text=>['Premissa operacional',text]),
+        ...q.operations.lines.map(line=>[line.label,`${brl(line.priceCents/100)} · ${line.basis}`]),
+        ...q.operations.exclusions.map(text=>['Condição operacional',text]),
+        ...q.operations.sources.map(source=>['Fonte de tarifa',source.url]),
         ['Operação',q.operationalCoverage],['Excedentes','Contrato à parte'],
         ['Fundação',brl(foundationHours*state.hourRate)],
         ...selectedFeatures().map(f=>[`${f.id} · ${f.title}`,brl(featureAdditionalPricing(f,q.pricing).finalCents/100)])];
@@ -1044,7 +1110,8 @@
         packageId:q.packageId,packageName:q.packageId==='custom'?'Personalizado':presets[q.packageId].name,
         basePackageName:presets[q.basePackageId].name,pricing:q.pricing,foundation,features:featuresForPDF,
         benefits:q.includedBenefits,
-        support:{planName:presets[state.maintenancePlan].name,priceCents:Math.round(q.monthlyMaintenanceBRL*100),hours:q.monthlyHours},
+        support:{planName:presets[state.maintenancePlan].name,priceCents:Math.round(q.monthlyMaintenanceBRL*100),
+          operations:q.operations,totalCents:Math.round(q.monthlyMaintenanceBRL*100)+q.operations.totalCents,hours:q.monthlyHours},
         promotion:{planDiscountCents:planDiscount,planTargetIds,additionalItems:q.pricing.additionalItems||[],
           startsAt:q.campaign?.startsAt||q.offer?.issuedAt||null,endsAt:q.campaign?.endsAt||q.offer?.expiresAt||null,
           status:q.offerStatus,statusLabel:q.pricing.blocked?'Valores de tabela':statusLabels[q.offerStatus]}
@@ -1467,12 +1534,76 @@
 
     function selectedFeatures(){ return features.filter(f => isSelected(f)); }
 
+    function operationalPricing(){
+      return ATSIOperations.calculate({...state.operations,
+        videoStrategy:selectedFeatures().find(f=>f.group==='curso_entrega').id,
+        realtimeEnabled:state.selected.has('G04')});
+    }
+    function renderOperations(){
+      const operations=operationalPricing(),base=ATSIOperations.plans[state.maintenancePlan].priceCents;
+      const fmt=n=>n.toLocaleString('pt-BR');
+      document.getElementById('monthlyActiveUsersValue').textContent=`${fmt(operations.inputs.activeUsers)} usuários ativos/mês`;
+      document.getElementById('monthlyActiveUsers').setAttribute('aria-valuetext',`${fmt(operations.inputs.activeUsers)} usuários ativos por mês`);
+      document.getElementById('operationalPeak').textContent=
+        `Pico hipotético: ${fmt(operations.peakUsers)} usuários simultâneos (${operations.inputs.peakPercentage}%). Cenário de planejamento, não capacidade garantida.`;
+      document.getElementById('maintenanceBasePrice').textContent=brl(base/100);
+      document.getElementById('operationalPrice').textContent=brl(operations.totalCents/100);
+      document.getElementById('monthlyTotalPrice').textContent=brl((base+operations.totalCents)/100);
+      document.getElementById('maintenancePrice').textContent=brl((base+operations.totalCents)/100);
+      document.getElementById('maintenanceExplanation').textContent=operations.explanation;
+      const list=document.getElementById('operationalAssumptions');
+      list.replaceChildren(...operations.assumptions.map(text=>{const p=document.createElement('p');p.textContent=text;return p;}));
+      const breakdown=document.getElementById('operationalLines');
+      breakdown.replaceChildren(...operations.lines.map(line=>{
+        const row=document.createElement('div'),label=document.createElement('span'),price=document.createElement('strong');
+        label.textContent=line.label+(line.coveredByBase?' · incluído na base':'');price.textContent=brl(line.priceCents/100);
+        row.append(label,price);return row;
+      }));
+      document.getElementById('operationalConversion').textContent=
+        `${operations.videoLabel} · Custo estimado dos fornecedores: US$ ${(operations.totalCentsUSD/100).toLocaleString('pt-BR',{minimumFractionDigits:2})}/mês, convertidos a R$ ${operations.inputs.exchangeRate.toFixed(2).replace('.',',')}/US$. ${operations.billingPolicy==='youtube_included_in_base'?'Coberto pela mensalidade base; adicional operacional R$ 0,00.':'Repassado como adicional operacional.'} Arredondamento por serviço em centavos.`;
+      document.getElementById('operationalExclusions').replaceChildren(...operations.exclusions.map(text=>{
+        const li=document.createElement('li');li.textContent=text;return li;
+      }));
+      const sources=document.getElementById('operationalSources');
+      sources.replaceChildren(document.createTextNode('Tarifas de referência: '));
+      operations.sources.forEach((source,index)=>{
+        if(index)sources.append(document.createTextNode(' · '));
+        const a=document.createElement('a');a.textContent=source.title;a.href=source.url;
+        a.target='_blank';a.rel='noopener noreferrer';sources.append(a);
+      });
+      for(const key of ['videoMinutesPerUser','libraryHours','offlineMinutesPerUser']){
+        const input=document.querySelector(`[data-operational="${key}"]`);
+        input.disabled=operations.inputs.videoStrategy==='C01'||(key==='offlineMinutesPerUser'&&operations.inputs.videoStrategy!=='C03');
+      }
+    }
+    document.getElementById('monthlyActiveUsers').addEventListener('input',event=>{
+      state.operations.activeUsers=Number(event.target.value);
+      renderOperations();
+    });
+    document.querySelectorAll('[data-operational]').forEach(input=>input.addEventListener('input',()=>{
+      input.setCustomValidity('');
+      const candidate={...state.operations,[input.dataset.operational]:input.valueAsNumber};
+      try{
+        if(!input.validity.valid)throw new Error('Valor fora do intervalo.');
+        ATSIOperations.calculate({...candidate,videoStrategy:'C03'});
+        state.operations=candidate;
+        document.getElementById('operationalInputStatus').textContent='';
+        renderOperations();
+      }catch{
+        input.setCustomValidity('Informe um valor válido dentro do intervalo indicado.');
+        document.getElementById('operationalInputStatus').textContent='Premissa inválida. O cálculo e a proposta mantêm o último valor válido.';
+      }
+    }));
+    // Ao sair de um campo inválido, restaurar o valor usado no resumo e na proposta.
+    document.querySelectorAll('[data-operational]').forEach(input=>input.addEventListener('change',()=>{
+      if(!input.validity.valid){
+        input.value=state.operations[input.dataset.operational];input.setCustomValidity('');
+        document.getElementById('operationalInputStatus').textContent='Restauramos a última premissa válida.';
+      }
+    }));
     function renderSummaryOnly(now=Date.now()){
-      const maintenancePlans = {
-        essencial:{price:3000,hours:10}, plus:{price:4000,hours:15}, premium:{price:5000,hours:20}
-      };
-      const maintenance = maintenancePlans[state.maintenancePlan];
-      document.getElementById('maintenancePrice').textContent = brl(maintenance.price);
+      const maintenance = ATSIOperations.plans[state.maintenancePlan];
+      renderOperations();
       document.getElementById('maintenanceHours').textContent = `${maintenance.hours} horas por mês`;
       document.getElementById('maintenancePlanLabel').textContent =
         `Manutenção ${presets[state.maintenancePlan].name}${state.activePreset === 'custom' ? ' · acompanhando o plano escolhido' : ''}`;

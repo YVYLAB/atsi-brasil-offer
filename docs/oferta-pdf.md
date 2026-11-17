@@ -18,6 +18,13 @@ jsPDF 4.2.1 (MIT) acompanha o projeto em `vendor/jspdf/`.
 - Curso administrativo de cortesia, sem inventar carga horária.
 - Manutenção mensal e franquia, separadas da implantação; consumo de IA e horas
   excedentes seguem as condições já apresentadas na página.
+- Base do plano, adicional operacional e total mensal, sem desconto promocional.
+  Snapshot dos usuários ativos, pico hipotético, consumo de vídeo/downloads,
+  câmbio de simulação, tarifas por serviço, fontes e exclusões. Ver
+  [custos operacionais](custos-operacionais.md).
+- Explicação do impacto dos serviços de streaming abaixo da mensalidade.
+  Com YouTube, adicional zerado e infraestrutura compartilhada coberta pela
+  base; custos de referência identificados separadamente, sem dupla cobrança.
 
 Horas são esforço de uma pessoa por tarefa, não prazos corridos individuais.
 O prazo equivalente mantém a capacidade vigente de 352 h/mês para duas pessoas.
@@ -34,6 +41,10 @@ mesmo instante. Inclui também os requisitos acrescentados automaticamente.
 Antes da geração, verifica a estratégia única de vídeo, dependências, somas
 das tarefas, preços e descontos. A interface é atualizada com esse mesmo instante.
 Não muda seleção, estimativas, manutenção, preços ou validade da campanha.
+O adicional operacional é calculado com os mesmos parâmetros válidos do resumo;
+`support.priceCents` mantém a base, `support.operations` congela o cenário e
+`support.totalCents` deve fechar com base + parcelas operacionais. O documento
+não promove hipóteses de dimensionamento a garantias de capacidade.
 
 O desconto de pacote é rateado proporcionalmente entre as entregas do plano,
 inclusive a preparação quando participante da campanha v2. O arredondamento

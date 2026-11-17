@@ -465,3 +465,28 @@ de vitrine independente para esse recurso. Requisito em uso fica bloqueado para
 remoção; `autoSelected` permite retirar somente inclusões automáticas sem uso,
 preservando escolhas manuais e itens do preset. Requisitos já presentes não
 geram custos duplicados nem novo popup. Ver `docs/dependencias.md`.
+
+Adicional operacional — decisão posterior de 17/11/2026: operação passa a ser
+somada à base de manutenção (R$ 3/4/5 mil; 10/15/20 h preservadas), substituindo
+a política anterior de operação incluída. `operational-pricing.js` centraliza
+o modelo versionado, com slider de 100–10.000 usuários ativos/mês. Câmbio e
+consumo são hipóteses explícitas/editáveis; pico simultâneo não é benchmark nem
+capacidade garantida. Fornecedores são referências, não decisões de F02.
+Não duplicar infraestrutura, vídeo/acervo ou tráfego já incluído no Stream.
+Base e adicional nunca recebem descontos de implantação. IA, tributos,
+serviços/consumos fora do cenário e excedentes seguem separados e exigem acordo.
+`monthlyMaintenanceBRL` continua sendo só base; `monthlyOperationalBRL`,
+`monthlyTotalBRL` e `operations` compõem exports e PDF. Não há persistência local
+de premissas operacionais. Ver `docs/custos-operacionais.md` e
+`docs/condicoes-manutencao.md`. Teste adicional:
+`node tests/test_operational_pricing.js`, além dos testes anteriores.
+
+Regra comercial posterior: com YouTube (C01), **todo o adicional operacional
+é zerado**, mantendo a manutenção base de origem. Não apenas a parcela de vídeo.
+`atsi-operations-v2` separa custo de referência (`estimatedCents`,
+`totalEstimatedCents`) do adicional cobrado (`priceCents`, `totalCents`).
+Infraestrutura compartilhada do cenário fica coberta pela base com YouTube;
+não afirmar que os serviços deixam de ter custo. Streaming privado/offline
+mantém os adicionais anteriores. A explicação logo abaixo da mensalidade,
+PDF e exports destaca o impacto de transmissão, armazenamento e downloads
+no crescimento do adicional. Preservar coerência entre esses canais.

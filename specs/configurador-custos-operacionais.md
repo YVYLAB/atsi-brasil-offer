@@ -1,6 +1,10 @@
 # Evolução do configurador — custos operacionais
 
-**Status:** especificação preliminar, não implementada. **Horas: a estimar** após
+**Status:** especificação ampla preliminar, parcialmente implementada pelo
+recorte de usuários ativos e adicional mensal de 17/11/2026.
+Ver `../docs/custos-operacionais.md` para o que realmente funciona e seus limites.
+Comparação de fornecedores, importação/persistência e demais entregas desta
+spec continuam fora desse recorte. **Horas: a estimar** após
 detalhamento da interface e da base de dimensionamento. Não pertence às 54 features
 da plataforma ATSI nem deve ser somada automaticamente ao orçamento do aplicativo.
 

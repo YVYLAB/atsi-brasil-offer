@@ -1,5 +1,6 @@
 const assert=require('node:assert/strict');
 const pdf=require('../offer-pdf.js');
+const operations=require('../operational-pricing.js');
 const {jsPDF}=require('../vendor/jspdf/jspdf.umd.min.js');
 const row=(id,hours,regularCents,type='optional')=>({
   id,technicalTitle:`Entrega ${id}`,hours,regularCents,type,
@@ -31,6 +32,32 @@ assert.equal(model.features[2].additionalDiscountCents,250);
 assert.equal(model.foundationTotals.finalCents,360);
 assert.equal([...model.foundation,...model.features].reduce((n,item)=>n+item.finalCents,0),1380);
 assert.equal(model.support.priceCents,300000);
+const monthly=fixture();
+monthly.support.operations=operations.calculate({videoStrategy:'C03',activeUsers:1000});
+monthly.support.totalCents=monthly.support.priceCents+monthly.support.operations.totalCents;
+const monthlyModel=pdf.buildModel(monthly);
+assert.equal(monthlyModel.support.totalCents,507000);
+assert.equal(monthlyModel.pricing.finalCents,model.pricing.finalCents);
+const youtube=fixture();
+youtube.support.operations=operations.calculate({videoStrategy:'C01',activeUsers:10000,realtimeEnabled:true});
+youtube.support.totalCents=youtube.support.priceCents;
+const youtubeModel=pdf.buildModel(youtube);
+assert.equal(youtubeModel.support.operations.totalCents,0);
+assert(youtubeModel.support.operations.totalEstimatedCents>0);
+assert.equal(youtubeModel.support.totalCents,youtubeModel.support.priceCents);
+for(const mutate of [
+  data=>data.support.totalCents++,
+  data=>data.support.operations.totalCents++,
+  data=>data.support.operations.totalCentsUSD++,
+  data=>data.support.operations.totalEstimatedCents++,
+  data=>data.support.operations.lines[0].priceCents++,
+  data=>data.support.operations.lines[0].priceCents=-1,
+  data=>data.support.operations.lines[0].id=data.support.operations.lines[1].id,
+  data=>data.support.operations.inputs.activeUsers=10001
+]){
+  const broken=JSON.parse(JSON.stringify(monthly));mutate(broken);
+  assert.throws(()=>pdf.buildModel(broken),/operacional/);
+}
 assert.equal(pdf.fileName(model),'ATSI-Oferta-20261117T130000.pdf');
 const tied=[row('A',1,1),row('B',1,1),row('C',1,1)];
 assert.deepEqual([...pdf.allocateDiscount(tied,1).values()],[1,0,0]);
@@ -60,4 +87,5 @@ const document=pdf.createDocument(model,jsPDF);
 const bytes=Buffer.from(document.output('arraybuffer'));
 assert(bytes.subarray(0,5).equals(Buffer.from('%PDF-')));
 assert(document.getNumberOfPages()>=3);
+assert(Buffer.from(pdf.createDocument(monthlyModel,jsPDF).output('arraybuffer')).subarray(0,5).equals(Buffer.from('%PDF-')));
 console.log('PDF: rateio, tarefas, composição e geração binária aprovados.');

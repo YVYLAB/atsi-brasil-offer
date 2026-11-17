@@ -43,6 +43,8 @@ class OfferPDFTest(unittest.TestCase):
           if(dependencyDialog.open)document.getElementById('confirmDependencies').click();
           capture('escopo-completo');
           campaignConfig=null;applyPreset('plus');
+          document.getElementById('monthlyActiveUsers').value='10000';
+          document.getElementById('monthlyActiveUsers').dispatchEvent(new Event('input'));
           const issued=Date.now();
           const rule=(ids,pct)=>({enabled:true,percentage:pct,eligibleFeatureIds:ids,
             maxDiscountCents:10000000,priceApproval:true,marginApproval:true});
@@ -107,6 +109,15 @@ class OfferPDFTest(unittest.TestCase):
                     self.assertEqual(sum(row["finalCents"] for row in rows), model["pricing"]["finalCents"])
                     self.assertEqual(sum(row["hours"] for row in rows), model["totalHours"])
                     self.assertEqual(len(model["foundation"]), 7)
+                    support = model["support"]
+                    operations = support["operations"]
+                    self.assertEqual(sum(line["priceCents"] for line in operations["lines"]), operations["totalCents"])
+                    self.assertEqual(support["priceCents"] + operations["totalCents"], support["totalCents"])
+                    self.assertEqual(sum(line["estimatedCents"] for line in operations["lines"]), operations["totalEstimatedCents"])
+                    if operations["inputs"]["videoStrategy"] == "C01":
+                        self.assertEqual(operations["totalCents"], 0)
+                        self.assertGreater(operations["totalEstimatedCents"], 0)
+                        self.assertEqual(support["totalCents"], support["priceCents"])
                     self.assertEqual(model["benefits"][0]["priceCents"], 0)
                     self.assertGreater(item["pages"], 1)
                     pdf = base64.b64decode(item["pdf"])
@@ -123,6 +134,14 @@ class OfferPDFTest(unittest.TestCase):
                     self.assertIn("Oferta técnica e comercial", flat)
                     self.assertIn("Curso de capacitação para administradores", flat)
                     self.assertIn("Manutenção e operação mensal", flat)
+                    self.assertIn("Adicional operacional estimado", flat)
+                    self.assertIn("Total mensal estimado", flat)
+                    self.assertIn("Cenário de operação mensal", flat)
+                    self.assertIn("não é capacidade garantida", flat)
+                    self.assertIn("Câmbio de simulação", flat)
+                    self.assertIn("adicional operacional é zerado", flat)
+                    self.assertIn("streaming privado", flat)
+                    self.assertNotIn("Inclui os custos operacionais da plataforma", flat)
                     self.assertNotIn(hash_value, text)
                     for row in rows:
                         self.assertIn(normalized(row["technicalTitle"]), flat)

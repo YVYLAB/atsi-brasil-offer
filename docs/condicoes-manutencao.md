@@ -6,7 +6,7 @@ registra o escopo comercial, não representa contrato assinado.
 ## Mensalidade
 Valores separados da implantação da plataforma:
 
-| Plano | Mensalidade | Horas mensais incluídas |
+| Plano | Mensalidade base | Horas mensais incluídas |
 |---|---:|---:|
 | Essencial | R$ 3.000,00 | 10 h |
 | Plus (intermediário) | R$ 4.000,00 | 15 h |
@@ -14,9 +14,23 @@ Valores separados da implantação da plataforma:
 
 No configurador, a troca de preset atualiza a manutenção. Alterações manuais
 mantêm o plano de manutenção de origem, sinalizado para confirmação contratual.
+Os valores acima são a **base de manutenção**. Por decisão posterior do vendedor,
+o custo operacional estimado passa a ser **acrescido**, substituindo a política
+anterior de operação incluída sem dimensionamento:
+
+**Total mensal estimado = base do plano + adicional operacional por volume e consumo.**
+
+**Com vídeos via YouTube, o adicional operacional fica zerado.** A manutenção
+base permanece e cobre a infraestrutura compartilhada do cenário. O custo dos
+fornecedores não desaparece: apenas não é cobrado novamente como adicional.
+Streaming privado/offline mantém o adicional; seu crescimento está ligado
+principalmente à transmissão, armazenamento e downloads de vídeo conforme uso.
+
+O slider considera de 100 a 10.000 usuários ativos mensais, não contas cadastradas.
+Nenhum desconto de implantação incide sobre a base ou o adicional.
 
 ## Cobertura
-- Custos operacionais da plataforma, **exceto tokens de IA**.
+- Operação calculada separadamente e somada à base, nas premissas visíveis.
 - Horas mensais do plano compartilhadas entre desenvolvimento, correções de bugs
   e alterações do software; não são franquias separadas por categoria.
 - Demanda superior à franquia mensal do plano depende de **contrato à parte**.
@@ -24,9 +38,14 @@ mantêm o plano de manutenção de origem, sinalizado para confirmação contrat
   a tarifa de referência de implantação como tarifa de manutenção excedente.
 
 ## Composição e apresentação
-Custos operacionais incluídos na mensalidade não devem ser somados novamente
-como cobrança mensal adicional à ATSI. O dimensionamento pode demonstrar o custo
-interno dos fornecedores, separado do valor contratado.
+Para vídeo privado/offline, o adicional reúne os fornecedores compartilhados uma única vez, mais o consumo
+da estratégia de vídeo selecionada. A base cobre a franquia de trabalho e não
+volta a embutir as mesmas assinaturas. Com YouTube, essas assinaturas estão
+cobertas pela base, sem adicional. A simulação converte preços públicos pelo
+câmbio informado, sem margem, tributos ou reserva inventados.
+Consultar [o modelo operacional](custos-operacionais.md) para tarifas,
+franquias, consumo hipotético, exclusões e cenários. Não é fatura real nem garantia
+de capacidade. Fornecedores continuam sujeitos à decisão de arquitetura em F02.
 Tokens de IA permanecem excluídos; provedor, volumes e forma de contratação ou
 repasse serão definidos separadamente. Não estimar cobrança fictícia.
 Não multiplicar a mensalidade pelo prazo estimado do desenvolvimento, pois a
@@ -41,7 +60,7 @@ data de início da manutenção ainda não foi definida.
 - Relação entre manutenção e garantias de correção previstas na implantação.
 - Fornecedores e dimensionamento operacional, definidos em arquitetura.
 
-Não foram definidos limites de alunos, armazenamento, tráfego ou consumo,
-nem cláusulas automáticas de repasse de excedentes de fornecedores.
-Validar a sustentabilidade do valor na arquitetura e acordar expressamente
-qualquer alteração das condições, sem criar cobranças escondidas.
+Os volumes do simulador são premissas de orçamento, não limites contratuais
+aprovados nem cláusulas de repasse automático. Validar sustentabilidade, carga
+real e cobertura das franquias; combinar expressamente mudanças e excedentes
+antes da cobrança. O slider não cria cobranças ou upgrades automáticos.
