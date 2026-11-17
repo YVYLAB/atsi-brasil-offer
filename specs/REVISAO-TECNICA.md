@@ -1,5 +1,10 @@
 # Revisão técnica preliminar — 16/11/2026
 
+> Inclusão posterior: A04 — Entrar com Facebook acrescenta um opcional de
+> **32 h / R$ 6.400**, com jornadas Android/iOS/web. Catálogo atual: 55 features
+> e sete atividades de fundação. A04 não integra os presets; seus totais,
+> fundação e base permanecem iguais. Detalhamento em `A04-entrar-com-facebook.md`.
+
 > Escopo confirmado em 17/11/2026: aplicativos Android/iOS e versão web para
 > alunos, além do painel administrativo web, desde o Essencial. O impacto da
 > web dos alunos nas estimativas abaixo ainda precisa de revisão técnica e

@@ -10,6 +10,10 @@ Card de e-book em destaque na home com capa, resumo e link.
 ## Escopo e exclusões
 Implementar somente a entrega descrita acima, sem contabilizar novamente a fundação
 ou assinaturas compartilhadas. Escopo detalhado e integrações adicionais: a validar.
+Regra de composição solicitada pelo usuário: selecionar M01 exige E01, biblioteca
+de e-books. O configurador inclui E01 automaticamente e apresenta os dois valores
+separadamente. M01 continua sendo o destaque; armazenamento, acervo e downloads
+pertencem a E01, sem contabilizar novamente o esforço da biblioteca neste item.
 
 ## Tarefas para validação
 | ID | Tarefa e entrega verificável | Horas propostas | Status |
@@ -22,6 +26,9 @@ ou assinaturas compartilhadas. Escopo detalhado e integrações adicionais: a va
 
 ## Dependências e riscos
 fundação e base aplicáveis; detalhes a validar. Validar regras de negócio, privacidade, plataformas e limites do fornecedor.
+Requer E01 na configuração. Enquanto M01 estiver selecionado, E01 permanece
+incluído. Se a biblioteca já estiver no plano ou tiver sido escolhida manualmente,
+não é adicionada nem cobrada novamente.
 
 
 ## Custos esperados

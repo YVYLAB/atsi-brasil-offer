@@ -442,3 +442,26 @@ Teste adicional: `node tests/test_campaign_settings.js`.
 O atalho de preço alterna para "Voltar ao início" ao se aproximar do investimento,
 mantém essa ação até chegar ao topo e então volta a "Ver preço". Preservar
 animação interrompível, preferência por movimento reduzido e layout sticky.
+
+Catálogo atual: 55 features e sete atividades de fundação. A04 — Entrar com
+Facebook é opcional independente, com estimativa inicial de 32 h / R$ 6.400
+para Android/iOS/web. Não está nos presets e não mostra tag de plano; segue as
+regras de desconto de opcionais fora de todos os planos. IDs anteriores, preços
+e horas dos presets não mudam. O mockup não executa autenticação. A integração
+real dependerá das credenciais, permissões e políticas oficiais da Meta.
+
+PDF: botão "Gerar PDF Oferta" ao final da página. `offer-pdf.js` gera o documento
+com jsPDF local em `vendor/jspdf/`, usando o estado escolhido e preços congelados
+no instante da geração. Os nomes técnicos vêm de `technicalTitle` e as tarefas
+tipadas de `taskDetails`, gerados a partir das specs. Incluir preparação uma vez,
+cortesia e manutenção separada. Rateio proporcional do desconto de pacote com
+centavos compensados; desconto adicional separado, sem duplicidade. Somar cada
+entrega deve fechar com o total. Nunca incluir hash ou senha no PDF.
+Ver `docs/oferta-pdf.md`; teste adicional `node tests/test_offer_pdf.js`.
+
+Dependências agora são incluídas automaticamente, com popup explicativo e OK.
+M01 exige E01 por decisão explícita do usuário, substituindo a política anterior
+de vitrine independente para esse recurso. Requisito em uso fica bloqueado para
+remoção; `autoSelected` permite retirar somente inclusões automáticas sem uso,
+preservando escolhas manuais e itens do preset. Requisitos já presentes não
+geram custos duplicados nem novo popup. Ver `docs/dependencias.md`.

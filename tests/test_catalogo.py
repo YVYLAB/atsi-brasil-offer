@@ -14,8 +14,10 @@ SETTINGS_HASH = re.search(r"const releaseHash='([a-f0-9]{64})'", (ROOT / "campai
 
 class CatalogoTest(unittest.TestCase):
     def test_specs_e_somas(self):
+        catalog = json.loads(re.search(r"const specCatalog = (.*?);\n", HTML).group(1))
+        foundation = {item["id"]: item for item in json.loads(re.search(r"const foundationCatalog = (.*?);\n", HTML).group(1))}
         specs = [p for p in (ROOT / "specs").glob("*.md") if re.match(r"^[A-Z]+\d+-", p.name)]
-        self.assertEqual(len(specs), 61)
+        self.assertEqual(len(specs), 62)
         reviewed = 0
         for path in specs:
             text = path.read_text()
@@ -23,9 +25,21 @@ class CatalogoTest(unittest.TestCase):
             declared = re.search(r"\| \*\*Total\*\* \| \| \*\*(\d+) h\*\*", text)
             self.assertTrue(rows, path.name)
             self.assertEqual(sum(map(int, rows)), int(declared.group(1)), path.name)
+            code = path.name.split("-")[0]
+            generated = foundation[code] if code.startswith("F") else catalog[code]
+            tasks = re.findall(r"^\| ([A-Z]+\d+-T\d+[A-Z]?) \| ([^|\n]+) \| (\d+) \| Revisão técnica preliminar \|$", text, re.M)
+            self.assertEqual(generated["taskDetails"], [
+                {"id": task_id, "title": title, "hours": int(hours)} for task_id, title, hours in tasks
+            ], path.name)
+            self.assertTrue(generated["scope"], path.name)
+            self.assertTrue(generated["risks"], path.name)
+            self.assertTrue(generated["acceptance"], path.name)
+            if not code.startswith("F"):
+                title = re.sub(r"^#\s+[A-Z]+\d+\s+[—–-]\s*", "", text.splitlines()[0])
+                self.assertEqual(generated["technicalTitle"], title, path.name)
             self.assertIn("## Cenário mínimo específico de aceite", text)
             reviewed += 1
-        self.assertEqual(reviewed, 61)
+        self.assertEqual(reviewed, 62)
 
     def test_browser(self):
         chrome = shutil.which("google-chrome")
@@ -35,7 +49,7 @@ class CatalogoTest(unittest.TestCase):
         window.confirm = () => true;
         const results = [];
         function check(name, ok) { results.push({name, ok}); }
-        check('54 features', features.length === 54);
+        check('55 features', features.length === 55);
         check('fundação', foundationHours === 522);
         check('preparação sem detalhamento repetido',!document.getElementById('foundationBreakdown') &&
           !document.querySelector('[aria-labelledby="predevelopmentTitle"] details') &&
@@ -72,7 +86,7 @@ class CatalogoTest(unittest.TestCase):
           'Complexidade baixa|Complexidade média|Complexidade alta');
         check('escala técnica preservada',complexityLabel(3)==='Média-alta' && complexityLabel(5)==='Muito alta' &&
           features.every(f=>f.complexity===specCatalog[f.id].complexity));
-        check('copy comercial cobre as 54 features',Object.keys(ATSIProductCopy.features).length===54 &&
+        check('copy comercial cobre as 55 features',Object.keys(ATSIProductCopy.features).length===55 &&
           features.every(f=>{
             const copy=ATSIProductCopy.features[f.id];
             return copy && f.title===copy.title && f.desc===copy.description &&
@@ -93,6 +107,19 @@ class CatalogoTest(unittest.TestCase):
         check('certificados pertencem ao plus e premium',featurePlanKeys(getFeature('C04')).join(',')==='plus,premium');
         check('base essencial presente nos três planos',featurePlanKeys(getFeature('B01')).join(',')==='essencial,plus,premium');
         check('tag genérica removida',!el.sections.textContent.includes('Amplie seu plano'));
+        applyPreset('essencial');
+        check('Facebook opcional fora dos planos',getFeature('A04').type==='optional' &&
+          getFeature('A04').hours===32 && getFeature('A04').price===6400 &&
+          featurePlanKeys(getFeature('A04')).length===0 && !document.querySelector('[data-feature="A04"] .badges'));
+        toggleFeature('A04',true);
+        check('Facebook soma preço e esforço sem mudar manutenção',targetTotal===184400 &&
+          el.totalHours.textContent==='922 h' && quoteData().monthlyMaintenanceBRL===3000 &&
+          quoteData().selectedIds.includes('A04'));
+        state.activePreview='A04';renderPreview();
+        check('Facebook tem preview específico',el.phoneScreen.textContent.includes('Continuar com Facebook') &&
+          !!el.phoneScreen.querySelector('[data-mock-feature="A04"]'));
+        toggleFeature('A04',false);
+        check('remover Facebook restaura essencial',targetTotal===178000 && !quoteData().selectedIds.includes('A04'));
         check('curso de cortesia visível e sem seleção',document.getElementById('adminTrainingCard').textContent.includes('Cortesia · sem custo adicional') &&
           !document.getElementById('adminTrainingCard').querySelector('input') &&
           document.getElementById('adminTrainingPlans').querySelectorAll('.badge').length===3 &&
@@ -157,11 +184,14 @@ class CatalogoTest(unittest.TestCase):
         toggleFeature('N02',true);
         check('incluir dependência',state.selected.has('N01'));
         toggleFeature('N01',false);
-        check('remover dependentes',!state.selected.has('N02'));
+        check('requisito em uso não pode ser removido',state.selected.has('N02') && state.selected.has('N01') &&
+          document.querySelector('[data-feature="N01"] .feature-toggle').disabled);
+        toggleFeature('N02',false);
+        check('requisito automático sem uso é retirado',!state.selected.has('N02') && !state.selected.has('N01'));
         check('mockups',features.every(f=>{state.activePreview=f.id;renderPreview();return !!el.phoneScreen.querySelector('.app-screen');}));
-        check('54 composições específicas',features.every(f=>specificMockContent(f)!==null));
+        check('55 composições específicas',features.every(f=>specificMockContent(f)!==null));
         const semanticExamples={
-          B05:'Receber promoções',A02:'Continuar com Google',A03:'Continuar com Microsoft',
+          B05:'Receber promoções',A02:'Continuar com Google',A03:'Continuar com Microsoft',A04:'Continuar com Facebook',
           C01:'Player YouTube',C02:'Streaming privado',C03:'Download da aula',
           C06:'Revisão humana',C07:'Fonte ilustrativa',C08:'Comentários da aula',
           C09:'satisfação',G01:'Abrir convite do WhatsApp',G02:'Redes e destinos',G05:'Publicar meu perfil',
@@ -189,7 +219,7 @@ class CatalogoTest(unittest.TestCase):
         check('mural com opcionais contratados',el.phoneScreen.textContent.includes('E-book em destaque')&&el.phoneScreen.textContent.includes('Próximo evento'));
         state.activePreview='EV01';renderPreview();
         check('evento mostra complementos contratados',el.phoneScreen.textContent.includes('QR individual')&&el.phoneScreen.textContent.includes('Convite por e-mail'));
-        check('marca nos 54 mockups',features.every(f=>{
+        check('marca nos 55 mockups',features.every(f=>{
           state.activePreview=f.id;renderPreview();
           return el.phoneScreen.querySelector('.app-brand img')?.alt==='ATSI+';
         }));
@@ -330,6 +360,11 @@ class CatalogoTest(unittest.TestCase):
         toggleFeature('G06',true);
         check('dependências adicionais recebem desconto uma vez',quoteData().pricing.additionalItems.filter(i=>['G05','G06'].includes(i.id)).length===2 &&
           new Set(quoteData().pricing.additionalItems.map(i=>i.id)).size===quoteData().pricing.additionalItems.length);
+        applyPreset('essencial');toggleFeature('A04',true);
+        check('Facebook recebe desconto de opcional adicional',targetTotal===165000 &&
+          quoteData().pricing.additionalDiscountCents===160000 &&
+          document.querySelector('[data-feature="A04"] .feature-discount-banner strong').textContent===brl(4800) &&
+          quoteRows().some(row=>row[0].startsWith('A04 ·')&&row[1]===brl(4800)));
         applyPreset('plus');toggleFeature('G02',true);
         window.scrollTo({top:0,behavior:'instant'});
         const nativeRAF=window.requestAnimationFrame;

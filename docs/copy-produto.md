@@ -1,6 +1,6 @@
 # Copy de produto da apresentação ATSI+
 
-`product-copy.js` concentra a apresentação das 54 funcionalidades, das seções
+`product-copy.js` concentra a apresentação das 55 funcionalidades, das seções
 e das sete atividades de preparação. É carregado localmente pelo `home.html`,
 sem servidor ou dependências adicionais.
 
@@ -37,7 +37,7 @@ Os snapshots financeiros mantêm os títulos técnicos originais para não inval
 ofertas históricas por uma alteração apenas editorial. A interface apresenta
 os títulos comerciais.
 
-Os testes verificam cobertura dos 54 recursos, conteúdo comercial dos popups,
+Os testes verificam cobertura dos 55 recursos, conteúdo comercial dos popups,
 ausência de referências internas na apresentação, cálculos e responsividade.
 Painéis de desconto se sobrepõem ao topo dos cards elegíveis sem cobrir os
 controles, com preço de tabela, preço final, percentual e economia em reais.

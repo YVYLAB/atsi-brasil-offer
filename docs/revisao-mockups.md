@@ -1,7 +1,7 @@
 # Correspondência dos mockups com as features
 
 ## Escopo da revisão
-54 composições específicas em `specificMockContent()` no `home.html`, mantendo
+55 composições específicas em `specificMockContent()` no `home.html`, mantendo
 os nomes e IDs do catálogo. São ilustrações com dados fictícios, não telas
 funcionais ou promessa de implementação idêntica.
 Nenhuma alteração de horas, preços, seleção ou dependências.
@@ -16,7 +16,7 @@ Nenhuma alteração de horas, preços, seleção ou dependências.
 | B05 | Controle de consentimento e revogação, separado de comunicações essenciais |
 | B06/B07 | Catálogo, estrutura de módulos/aulas e progresso individual |
 | B08 | Gestão administrativa com publicação e rascunho |
-| A01/A02/A03 | Segundo fator e acesso por provedor, com fluxos distintos |
+| A01/A02/A03/A04 | Segundo fator e acesso com Google, Microsoft ou Facebook, com identificação de cada provedor |
 | M01/M02/M03 | Cards de vitrine, sem confundir com biblioteca, inscrições ou checkout |
 | C01/C02/C03 | YouTube, privado online e offline, com limitações explícitas |
 | C04/C05 | PDF/verificação de certificado e quiz com alternativas |
@@ -42,7 +42,7 @@ arquitetural de painel web. QR é padrão decorativo não utilizável. Números 
 relatórios/pontos são demonstrativos e não métricas reais.
 
 ## Validação
-Testes verificam cobertura dos 54 IDs por composição específica, marcadores de
+Testes verificam cobertura dos 55 IDs por composição específica, marcadores de
 conteúdo de exemplos, contexto administrativo, seleção versus visualização,
 mural e eventos condicionais e preservação do orçamento.
 `python3 -m unittest discover -s tests -v`

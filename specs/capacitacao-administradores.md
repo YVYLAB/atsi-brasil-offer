@@ -21,7 +21,8 @@ Identificador comercial `admin_training`, em `includedBenefits`. Card permanente
 com identificação dos três planos, descrição e indicação de cortesia. O resumo
 e os dados da proposta apresentam o mesmo benefício, com valor adicional zero.
 
-Não é uma nova feature de software: o catálogo continua com 54 funcionalidades.
+Não é uma nova feature de software: o catálogo contém 55 funcionalidades,
+incluindo o login com Facebook acrescentado posteriormente.
 Não integra `selectedIds`, não pode ser desmarcado, não recebe descontos e não
 altera presets, snapshots financeiros, implantação, mensalidade ou prazo.
 O preço adicional zero é a cortesia autorizada, não uma estimativa de esforço zero.

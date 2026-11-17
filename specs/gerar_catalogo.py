@@ -17,6 +17,8 @@ pattern = re.compile(
     r"([^|]+) \| ([^|]+) \| ([^|]+) \| (.*?) \|$", re.M
 )
 dependencies = {
+    "A04": "B02 (login de base), fundação de identidade e configuração oficial Meta",
+    "M01": "E01 (biblioteca de e-books), incluída automaticamente na configuração",
     "C04": "B07 (progresso)", "C06": "C05 (quizzes) e fonte autorizada",
     "C07": "fonte textual ou transcrição autorizada e serviço de IA",
     "N02": "N01 (push básico)", "N03": "N01 (push básico)",
@@ -51,8 +53,8 @@ def slug(text):
 
 
 rows = pattern.findall(SOURCE.read_text(encoding="utf-8"))
-if len(rows) != 54 or len({row[0] for row in rows}) != 54:
-    raise SystemExit("Catálogo inválido: esperados 54 IDs únicos.")
+if len(rows) != 55 or len({row[0] for row in rows}) != 55:
+    raise SystemExit("Catálogo inválido: esperados 55 IDs únicos.")
 catalog = {}
 created = 0
 for code, module, title, description, kind, hours, price, complexity, operation in rows:
@@ -117,7 +119,8 @@ Fonte: `docs/features-iniciais-custo.md`, data-base 16/11/2026.
         files = [path]
     spec_text = files[0].read_text(encoding="utf-8")
     tasks = re.findall(r"^\| (?!\*\*Total)([^|\n]+) \| ([^|\n]+) \| Pendente \|$", spec_text, re.M)
-    reviewed = re.findall(r"^\| [A-Z]+\d+-T\d+[A-Z]? \| ([^|\n]+) \| (\d+) \| Revisão técnica preliminar \|$", spec_text, re.M)
+    task_details = re.findall(r"^\| ([A-Z]+\d+-T\d+[A-Z]?) \| ([^|\n]+) \| (\d+) \| Revisão técnica preliminar \|$", spec_text, re.M)
+    reviewed = [(title, hours) for _, title, hours in task_details]
     if reviewed:
         n = sum(int(estimate) for _, estimate in reviewed)
         tasks = reviewed
@@ -125,17 +128,29 @@ Fonte: `docs/features-iniciais-custo.md`, data-base 16/11/2026.
         if not declared or int(declared.group(1)) != n:
             raise SystemExit(f"Soma de tarefas divergente em {code}")
     criterion = re.search(r"## Cenário mínimo específico de aceite\n(.*?)(?=\n## |\Z)", spec_text, re.S)
+    scope = re.search(r"## Escopo e (?:exclusões|funcionamento)\n(.*?)(?=\n## |\Z)", spec_text, re.S)
+    risks = re.search(r"## Dependências(?: e riscos|, custos e riscos)\n(.*?)(?=\n## |\Z)", spec_text, re.S)
+    technical_title = re.sub(r"^#\s+[A-Z]+\d+\s+[—–-]\s*", "", spec_text.splitlines()[0])
     catalog[code] = {"title": title, "module": module.strip(), "description": description, "hours": n,
+                     "technicalTitle": technical_title,
                      "kind": kind.strip(), "complexity": int(complexity.strip()),
                      "dependencies": dep, "operation": operation.strip(),
-                     "tasks": [f"{task.strip()} — {estimate.strip()}" for task, estimate in tasks],
+                      "tasks": [f"{task.strip()} — {estimate.strip()}" for task, estimate in tasks],
+                      "taskDetails": [{"id": task_id, "title": task.strip(), "hours": int(hours)}
+                                      for task_id, task, hours in task_details],
+                      "scope": scope.group(1).strip() if scope else "",
+                      "risks": risks.group(1).strip() if risks else "",
                      "acceptance": criterion.group(1).strip() if criterion else "A definir",
                      "file": files[0].name}
 
 foundation = []
 for path in sorted(SPECS.glob("F[0-9][0-9]-*.md")):
     text = path.read_text()
-    tasks = re.findall(r"^\| F\d+-T\d+ \| ([^|\n]+) \| (\d+) \| Revisão técnica preliminar \|$", text, re.M)
+    task_details = re.findall(r"^\| (F\d+-T\d+[A-Z]?) \| ([^|\n]+) \| (\d+) \| Revisão técnica preliminar \|$", text, re.M)
+    tasks = [(title, hours) for _, title, hours in task_details]
+    scope = re.search(r"## Escopo e premissas\n(.*?)(?=\n## |\Z)", text, re.S)
+    risks = re.search(r"## Dependências e riscos\n(.*?)(?=\n## |\Z)", text, re.S)
+    criterion = re.search(r"## Cenário mínimo específico de aceite\n(.*?)(?=\n## |\Z)", text, re.S)
     if not tasks:
         raise SystemExit(f"Fundação sem revisão de tarefas: {path.name}")
     foundation.append({
@@ -143,6 +158,11 @@ for path in sorted(SPECS.glob("F[0-9][0-9]-*.md")):
         "title": text.splitlines()[0].removeprefix("# "),
         "hours": sum(int(hours) for _, hours in tasks),
         "tasks": [f"{task} — {hours} h" for task, hours in tasks],
+        "taskDetails": [{"id": task_id, "title": task, "hours": int(hours)}
+                        for task_id, task, hours in task_details],
+        "scope": scope.group(1).strip() if scope else "",
+        "risks": risks.group(1).strip() if risks else "",
+        "acceptance": criterion.group(1).strip() if criterion else "",
     })
 
 html = HTML.read_text(encoding="utf-8")

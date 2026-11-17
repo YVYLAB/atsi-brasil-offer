@@ -1,6 +1,6 @@
 # PROMPT ÚNICO PARA OPENCODE — ATSI BRASIL × YVYLAB
 
-**Missão:** atualizar o configurador comercial interativo existente, e não construir a plataforma real. Implementar a matriz atualizada de 54 features + 7 atividades compartilhadas, comparação dos custos da infraestrutura e das escolhas de vídeo (YouTube/Cloudflare Stream/offline/Google Drive experimental), com precificação coerente, descrições claras, testes e documentação. Não entregar apenas um plano: executar as alterações possíveis no repositório atual, testar e relatar o resultado.
+**Missão:** atualizar o configurador comercial interativo existente, e não construir a plataforma real. Implementar a matriz atualizada de 55 features + 7 atividades compartilhadas, comparação dos custos da infraestrutura e das escolhas de vídeo (YouTube/Cloudflare Stream/offline/Google Drive experimental), com precificação coerente, descrições claras, testes e documentação. Não entregar apenas um plano: executar as alterações possíveis no repositório atual, testar e relatar o resultado.
 
 **Data-base dos preços e premissas:** 16/11/2026. **Moeda da implantação:** BRL. **Referência:** R$ 200/h (tarifa comercial da YvyLab). **Fornecedores:** USD, sem conversão automática fictícia. Valores de desenvolvimento são estimativas preliminares, não proposta assinada.
 
@@ -30,7 +30,7 @@ YvyLab apresentará à **ATSI Brasil** uma proposta modular de plataforma de cur
 
 - A fundação compartilhada é obrigatória **uma vez**. Oito features `B01..B08` são obrigatórias. **B01 exibe somente cursos em destaque**; e-book/evento/promoção no mural são opcionais independentes (`M01..M03`).
 - Login + recuperação, integração de e-mail transacional, perfil privado, registro de preferência de marketing, catálogo + módulos + aulas, progresso e painel administrativo são obrigatórios.
-- `A01..A03` (MFA, Google, Microsoft) são opcionais independentes.
+- `A01..A04` (MFA, Google, Microsoft e Facebook) são opcionais independentes.
 - Curso requer **exatamente uma** opção apta à implantação: `C01` YouTube incorporado **OU** `C02` Cloudflare Stream privado **OU** `C03` privado com download offline. `C03` **já inclui `C02`**, portanto não somar seus preços ou horas.
 - Progresso `B07` é obrigatório; certificados, quizzes, geração de testes por IA, chat de IA sobre vídeo, comentários e avaliação de satisfação são opcionais separados. 'Avaliação de aprendizagem' (`C05`) não é 'avaliação do curso' (`C09`). Chat IA demanda base textual autorizada/transcrição/indexação, limites de uso e análise de privacidade, não depende necessariamente de quizzes.
 - Grupos são multisseleção: diretório de WhatsApp, automação WhatsApp **sob validação**, grupos internos/notícias, chat entre usuários, perfis públicos opt-in, busca global por perfis públicos.
@@ -54,7 +54,7 @@ Criar uma seção/aba **'Comparar vídeo e custos'** com quatro opções visuais
 1. **C01 — YouTube embedado — 20 h, R$ 4.000 de referência.** Sem tarifa direta à ATSI para hospedagem/distribuição via player padrão; depende de internet, controle de acesso limitado, possível exposição/compartilhamento de URL, integração e experiência dependentes das políticas. **Não vender como streaming privado nem garantir cursos pagos com acesso bloqueado.** As políticas da API YouTube vedam cobrar pelo ato de assistir no player incorporado, downloads/offline fora dos mecanismos autorizados e incentivação/recompensa por visualizações. Verificar caso de uso antes de habilitar pagamento de acesso ao vídeo ou gamificação baseada em assistir vídeos. Não ocultar marca/anúncios nem contornar player.
 2. **C02 — Cloudflare Stream privado — 68 h, R$ 13.600 de referência.** Upload/ingestão, player, autorização compatível, URLs/tokens assinados conforme arquitetura, tratamento de erros e testes. Custo operacional específico: armazenamento e minutos entregues, distinto do custo compartilhado do backend. Não prometer DRM forte.
 3. **C03 — Cloudflare Stream + offline — 166 h, R$ 33.200 de referência.** Substitui C02; inclui sua capacidade online mais downloads autorizados no app, retomada, armazenamento local, revogação/expiração quando possível, sincronização, falhas e QA Android/iOS. Downloads MP4 entregues são contabilizados pelo Stream. Offline não significa proteção anticópia inviolável nem DRM comercial avançado.
-4. **DRIVE-PILOT — Google Drive preview/link — alternativa experimental, FORA das 54 features canônicas.** É tecnicamente possível usar links de visualização conforme permissões, mas Drive não é CDN nem provedor de vídeo privado para muitos assinantes. Sujeito a cotas, permissões, bloqueios, disponibilidade e possível mudança contratual. **Não atribuir preço de produção 'R$ 0' nem mensalidade 'US$ 0 garantido'.** Mostrar preço de implantação e operação como **'a validar / sob cotação'**, permitir explorar mockup e advertências, mas **bloquear exportação como proposta comercial fechada** até validação técnica/documental. Não recorrer a scraping, extração de URL temporária, bypass de quotas ou mecanismos não oficiais. Se orçamento comercial usar YouTube ou Cloudflare, o Drive pode continuar no comparador, mas fora da seleção válida de produção.
+4. **DRIVE-PILOT — Google Drive preview/link — alternativa experimental, FORA das 55 features canônicas.** É tecnicamente possível usar links de visualização conforme permissões, mas Drive não é CDN nem provedor de vídeo privado para muitos assinantes. Sujeito a cotas, permissões, bloqueios, disponibilidade e possível mudança contratual. **Não atribuir preço de produção 'R$ 0' nem mensalidade 'US$ 0 garantido'.** Mostrar preço de implantação e operação como **'a validar / sob cotação'**, permitir explorar mockup e advertências, mas **bloquear exportação como proposta comercial fechada** até validação técnica/documental. Não recorrer a scraping, extração de URL temporária, bypass de quotas ou mecanismos não oficiais. Se orçamento comercial usar YouTube ou Cloudflare, o Drive pode continuar no comparador, mas fora da seleção válida de produção.
 
 A comparação deve ter colunas: descrição, quando faz sentido, quando não faz, dificuldade, horas, implantação de referência, custo mensal por cenário, privacidade/controle, offline, dependências, limitações/políticas e fonte.
 
@@ -130,7 +130,7 @@ Base obrigatória **B01–B08 = 266 h = R$53.200**, adicionada à fundação. Es
 
 **Preço de venda comercial por feature pode diferir da referência.** Modelo sugerido de cada feature: `id`, `section`, `title`, `description`, `type`, `hoursMin`, `hoursLikely`, `hoursHigh`, `complexity`, `perceivedValue`, `hourlyReference`, `referenceImplementationBRL`, `commercialPriceBRL|null`, `monthlyCostModel`, `sharedProviders`, `dependencies`, `exclusions`, `pricingStatus`, `sourceUrls`. O somatório comercial deve usar a coluna comercial quando definida; se não, mostrar referência e marcar que o preço de venda ainda é proposto. Jamais converter ausência (`null`) em zero.
 
-## 8. Catálogo canônico — 54 features e horas revisadas (não excluir, não renomear IDs)
+## 8. Catálogo canônico — 55 features e horas revisadas (não excluir, não renomear IDs)
 
 Nesta tabela, **descrição e operação pertencem a cada feature**, mas **os custos compartilhados de fornecedor não são somados uma vez por card**. Números em R$ são **valores de referência de implantação**, não preços finais aprovados.
 
@@ -147,6 +147,7 @@ Nesta tabela, **descrição e operação pertencem a cada feature**, mas **os cu
 | `A01` | Autenticação adicional | **Autenticação multifator (MFA)**: Segundo fator de autenticação opcional e recuperação segura de acesso. | Opcional | 24 h | R$ 4.800 | 3 | Supabase Auth MFA — TOTP pode usar recursos do plano; SMS acrescenta tarifa por mensagem. |
 | `A02` | Autenticação adicional | **Entrar com Google**: Entrar com uma conta Google e vincular identidades existentes. | Opcional | 16 h | R$ 3.200 | 2 | Supabase Auth + OAuth Google — Geralmente coberto pelo plano de autenticação; verificar cotas e política. |
 | `A03` | Autenticação adicional | **Entrar com Microsoft**: Entrar com Microsoft e integrar contas corporativas permitidas. | Opcional | 18 h | R$ 3.600 | 2 | Supabase Auth + Microsoft OAuth — Normalmente dentro de cotas de autenticação; licenças/Entra podem variar. |
+| `A04` | Autenticação adicional | **Entrar com Facebook**: Entrar com uma conta Facebook e vincular a identidade à conta ATSI+, com consentimento e permissões necessárias ao acesso. | Opcional | 32 h | R$ 6.400 | 3 | Serviço de identidade compartilhado + integração oficial Meta — Validar permissões, políticas, credenciais e cotas na arquitetura. |
 | `M01` | Mural — vitrines opcionais | **E-books em destaque no mural**: Card de e-book em destaque na home com capa, resumo e link. | Opcional | 10 h | R$ 2.000 | 1 | Supabase + R2 (se houver capa) — R2 Standard: US$ 0,015/GB-mês além de 10 GB + operações. |
 | `M02` | Mural — vitrines opcionais | **Eventos em destaque no mural**: Card de evento em destaque na home com data e link. | Opcional | 10 h | R$ 2.000 | 1 | Supabase + R2 (capa) — Dados no backend; armazenamento da capa em R2 conforme uso. |
 | `M03` | Mural — vitrines opcionais | **Promoções em destaque no mural**: Banners e chamadas promocionais com programação e link de destino. | Opcional | 12 h | R$ 2.400 | 2 | Supabase + R2 (banners) — Dados dentro do backend; armazenamento/leituras em R2 conforme uso. |
@@ -191,7 +192,7 @@ Nesta tabela, **descrição e operação pertencem a cada feature**, mas **os cu
 | `GM03` | Gamificação | **Ranking público**: Mostrar classificação pública por pontos e períodos. | Opcional | 36 h | R$ 7.200 | 4 | Supabase / cache eventual — Consultas e ranking; Redis opcional só se necessário. |
 | `GM04` | Gamificação | **Pontos e posição no ranking no perfil**: Mostrar pontos acumulados e posição do usuário em seu perfil. | Opcional | 18 h | R$ 3.600 | 2 | Supabase — Leituras de pontuação dentro das cotas do backend. |
 
-**Totalização e checagem:** a matriz canônica contém **54 features: 8 obrigatórias + 43 opcionais + 3 de escolha única**, mais 7 linhas de fundação. `G02` recebeu estimativa conservadora de 250 h / R$ 50.000 em 17/11/2026, sem alterar os presets. **Google Drive experimental não é uma 55ª feature pronta para venda**; mantenha separado do catálogo canônico ou explique claramente a linha experimental sem contaminar contagens/contrato. Preserve também os intervalos de horas mín./prov./conserv. do CSV v5 quando esses documentos estiverem no workspace.
+**Totalização e checagem:** a matriz canônica contém **55 features: 8 obrigatórias + 44 opcionais + 3 de escolha única**, mais 7 linhas de fundação. `G02` recebeu estimativa conservadora de 250 h / R$ 50.000 em 17/11/2026, sem alterar os presets. `A04` acrescenta login com Facebook como opcional independente. **Google Drive experimental não é uma 56ª feature pronta para venda**; mantenha separado do catálogo canônico ou explique claramente a linha experimental sem contaminar contagens/contrato. Preserve também os intervalos de horas mín./prov./conserv. do CSV v5 quando esses documentos estiverem no workspace.
 
 ## 9. Dependências e incompatibilidades obrigatórias
 
@@ -228,7 +229,7 @@ Nesta tabela, **descrição e operação pertencem a cada feature**, mas **os cu
 
 Teste com as ferramentas disponíveis na stack atual; crie funções puras para a matemática e use suite de testes automatizados quando viável. **Não declarar PASS sem execução efetiva.** Casos mínimos:
 
-1. 54 IDs canônicos únicos; oito B obrigatórios; exatamente um vídeo; não incluir DRIVE-PILOT no total de produção.
+1. 55 IDs canônicos únicos; oito B obrigatórios; exatamente um vídeo; não incluir DRIVE-PILOT no total de produção.
 2. F01..F07 = 236 h; B01..B08 = 266 h. Essencial puro: 522 h / R$104.400; privado puro: 570 h / R$114.000; offline puro: 668 h / R$133.600 **na referência, sem opcionais**.
 3. C02→C03 recalcula corretamente e não soma Stream duas vezes. Se C01→C02, atualizar mockup, descrição, horas, implantação e operação.
 4. Presets todos válidos; personalização, valores editáveis, recarregar/importar, dependências, exclusões, remoção em cascata, G02 selecionável com aviso de viabilidade por rede.
@@ -242,7 +243,7 @@ Teste com as ferramentas disponíveis na stack atual; crie funções puras para 
 ## 13. Entregáveis e relato final obrigatórios
 
 - Código do configurador atualizado (preservando o padrão do repositório), com testes possíveis e `AGENTS.md`/README ajustados ao **estado real**.
-- Matriz/dados precificação internos (54 IDs + fundação) separados do componente de UI quando possível; camada de fórmula isolada.
+- Matriz/dados precificação internos (55 IDs + fundação) separados do componente de UI quando possível; camada de fórmula isolada.
 - Documentação 'Arquitetura e Custos' com **descrição de cada feature**, horas e custo de implantação, custo operacional por serviço, comparação entre YouTube / Cloudflare Stream / offline / Drive experimental, data-base e links oficiais.
 - No relatório final ao solicitante: arquivos modificados, implementação concluída, cálculos conferidos, comandos de teste e resultados reais, pendências/limitações/decisões que exigem contrato ou fornecedor. **Não pedir ao solicitante para repetir definições já informadas**; use essas decisões como fonte. Não publicar/contratar serviços ou fazer deploy sem autorização.
 

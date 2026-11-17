@@ -64,7 +64,7 @@ O fluxo detalhado abaixo é histórico; não é mais a interface atual do config
   Fundação, obrigatórias,
   alternativas exclusivas de vídeo e mensalidades não recebem o percentual
   adicional. O desconto normal do pacote sobre seu total não foi alterado.
-- Dependências opcionais incluídas com confirmação só recebem o percentual
+- Dependências opcionais incluídas automaticamente, com aviso e botão OK, só recebem o percentual
   adicional se também estiverem fora de todos os planos. Caso contrário, mantêm
   preço de tabela, sem duplicar itens ou custos.
 - Remover um item do pacote ou substituir sua estratégia de vídeo suspende
