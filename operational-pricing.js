@@ -74,9 +74,13 @@
       `${downloadMinutes} minutos baixados/mês adicionais à reprodução online; sem nova cobrança por assistir ao arquivo local.`);
     const fmt=n=>n.toLocaleString('pt-BR',{maximumFractionDigits:2});
     const videoLabel={C01:'YouTube incorporado',C02:'Streaming privado',C03:'Streaming privado + offline'}[p.videoStrategy];
-    const explanation=privateVideo?
-      'O adicional operacional pode crescer principalmente com os serviços de streaming privado: armazenamento, transmissão dos vídeos e downloads offline, quando contratados. O valor varia conforme o volume de usuários e o consumo. Com vídeos via YouTube, esse adicional é zerado e permanece apenas a mensalidade base de manutenção.':
-      'Com vídeos via YouTube, o adicional operacional é zerado e permanece apenas a mensalidade base de manutenção, que cobre a infraestrutura compartilhada do cenário. Ao optar por streaming privado ou offline, há um adicional que pode crescer principalmente com o armazenamento, a transmissão e os downloads dos vídeos, conforme o consumo.';
+    const explanation=[
+      'A mensalidade reúne o cuidado contínuo com a plataforma e os serviços necessários para seu funcionamento. Esse valor é separado do investimento inicial para desenvolver o projeto.',
+      'Manutenção do plano: inclui as horas mensais contratadas para correções, ajustes e melhorias no software. Se precisar de mais horas, um pacote adicional será combinado antes da execução.',
+      'Serviços e vídeos: ao escolher vídeos privados ou com opção de baixar para assistir sem internet, há um valor adicional pelos serviços que mantêm a plataforma funcionando e disponibilizam esses conteúdos. Esse custo pode crescer principalmente conforme a quantidade de vídeos armazenados, assistidos e baixados pelos alunos.',
+      'Com vídeos pelo YouTube, esse adicional é zero. Nesse caso, permanece apenas a mensalidade base do plano, que já cobre os serviços de funcionamento considerados nesta simulação.',
+      'O controle de usuários ajuda a estimar esse valor conforme o público esperado. Ele não gera cobranças automáticas: mudanças de capacidade ou consumo serão combinadas previamente. O consumo de inteligência artificial é contratado separadamente.'
+    ].join('\n\n');
     const assumptions=[
       `${fmt(p.activeUsers)} usuários ativos por mês (pessoas distintas que usam a plataforma, não contas cadastradas).`,
       `Pico hipotético de ${fmt(p.peakPercentage)}%: ${fmt(peakUsers)} usuários simultâneos; não é capacidade garantida nem limite contratado.`,

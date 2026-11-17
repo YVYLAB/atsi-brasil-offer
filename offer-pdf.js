@@ -246,14 +246,17 @@
     }
     heading('Manutenção e operação mensal',true);
     keyValue('Plano de manutenção',model.support.planName);
-    if(model.support.operations)paragraph(model.support.operations.explanation);
-    keyValue('Mensalidade base',`${brl(model.support.priceCents)} / mês`);
     if(model.support.operations){
-      keyValue('Adicional operacional estimado',`${brl(model.support.operations.totalCents)} / mês`);
+      heading('O que compõe sua mensalidade?');
+      for(const text of model.support.operations.explanation.split('\n\n'))paragraph(text);
+    }
+    keyValue('Manutenção do plano',`${brl(model.support.priceCents)} / mês`);
+    if(model.support.operations){
+      keyValue('Serviços e vídeos - valor estimado',`${brl(model.support.operations.totalCents)} / mês`);
       keyValue('Total mensal estimado',`${brl(model.support.totalCents)} / mês`,true);
     }
     keyValue('Horas mensais incluídas',`${number(model.support.hours)} h`);
-    paragraph('A mensalidade base cobre as horas compartilhadas entre desenvolvimento, alterações do software e correções. Com YouTube, o adicional operacional é zerado e a infraestrutura compartilhada do cenário fica coberta pela base. Com streaming privado ou offline, o adicional é somado conforme usuários ativos e consumo. IA é contratada separadamente. Horas excedentes exigem contratação à parte antes da execução. Base e adicional não recebem desconto da implantação e não integram seu pagamento único.');
+    paragraph('As horas do plano são compartilhadas entre correções, ajustes e melhorias no software. Os descontos do desenvolvimento inicial não se aplicam à mensalidade. Esse valor mensal não integra o pagamento único para desenvolver o projeto.');
     if(model.support.operations){
       const ops=model.support.operations;
       heading('Cenário de operação mensal');

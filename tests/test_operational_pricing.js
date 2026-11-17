@@ -18,12 +18,17 @@ for(const [users,peak,...totals] of expected){
     assert.equal(result.lines.reduce((n,row)=>n+row.amountCentsUSD,0),result.totalCentsUSD);
     assert.equal(result.lines.reduce((n,row)=>n+row.estimatedCents,0),result.totalEstimatedCents);
     assert.equal(result.billingPolicy,video==='C01'?'youtube_included_in_base':'estimated_surcharge');
-    assert(result.explanation.includes('streaming privado'));
+    assert(result.explanation.includes('Manutenção do plano:'));
+    assert(result.explanation.includes('Serviços e vídeos:'));
+    assert(result.explanation.includes('não gera cobranças automáticas'));
+    assert(result.explanation.includes('inteligência artificial é contratado separadamente'));
+    assert.equal(result.explanation.split('\n\n').length,5);
+    assert(!/adicional operacional|infraestrutura compartilhada|benchmark|câmbio/.test(result.explanation));
     if(video==='C01'){
       assert.equal(result.totalCents,0);
       assert(result.totalEstimatedCents>0);
       assert(result.lines.every(line=>line.priceCents===0));
-      assert(result.explanation.includes('adicional operacional é zerado'));
+      assert(result.explanation.includes('Com vídeos pelo YouTube, esse adicional é zero.'));
     }else assert.equal(result.totalEstimatedCents,result.totalCents);
     assert.equal(new Set(result.lines.map(row=>row.id)).size,result.lines.length);
     assert.equal(result.version,ops.version);

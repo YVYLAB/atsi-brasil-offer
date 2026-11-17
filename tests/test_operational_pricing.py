@@ -71,7 +71,21 @@ class OperationalPricingTest(unittest.TestCase):
           start.monthlyTotalBRL===3000&&start.operations.peakUsers===10);
         const explanation=document.getElementById('maintenanceExplanation');
         check('explicação logo abaixo da mensalidade',explanation.previousElementSibling.querySelector('#maintenancePrice')&&
-          explanation.textContent.includes('adicional operacional é zerado')&&explanation.textContent.includes('streaming privado'));
+          explanation.textContent.includes('Com vídeos pelo YouTube, esse adicional é zero.')&&
+          explanation.textContent.includes('vídeos privados'));
+        check('explicação organizada sem jargão',explanation.querySelector('h4').textContent==='O que compõe sua mensalidade?'&&
+          explanation.querySelectorAll('p').length===5&&explanation.querySelectorAll('strong').length===3&&
+          !/adicional operacional|infraestrutura compartilhada|benchmark|câmbio/.test(explanation.textContent));
+        check('regras de manutenção claras',explanation.textContent.includes('horas mensais contratadas')&&
+          explanation.textContent.includes('antes da execução')&&
+          explanation.textContent.includes('não gera cobranças automáticas')&&
+          explanation.textContent.includes('inteligência artificial é contratado separadamente'));
+        check('rótulos comerciais simples',document.getElementById('maintenanceBasePrice').previousElementSibling.textContent==='Manutenção do plano'&&
+          document.getElementById('operationalPrice').previousElementSibling.textContent==='Serviços e vídeos — valor estimado');
+        const advanced=document.getElementById('operationalPeak').closest('details');
+        check('pico e câmbio recolhidos',advanced&&!advanced.open&&advanced.contains(document.getElementById('operationalExchange')));
+        check('franquia sem repetição',document.querySelectorAll('#maintenanceHours').length===1&&
+          document.getElementById('maintenanceHours').textContent==='10 horas por mês');
         const selected=[...state.selected].join(','),snapshot=JSON.stringify(pricingSnapshot());
         users(1000);
         check('slider não muda implantação nem preset',state.activePreset==='essencial'&&
@@ -87,7 +101,7 @@ class OperationalPricingTest(unittest.TestCase):
         check('resumo fecha com dados',document.getElementById('maintenancePrice').textContent===brl(q.monthlyTotalBRL)&&
           document.getElementById('maintenanceBasePrice').textContent===brl(4000)&&
           document.getElementById('operationalPrice').textContent===brl(1710));
-        check('explicação de streaming acompanha escolha',explanation.textContent.includes('pode crescer principalmente')&&
+        check('explicação de vídeos acompanha escolha',explanation.textContent.includes('pode crescer principalmente')&&
           explanation.textContent.includes('YouTube'));
         check('PDF congela cenário e separa base',pdf.support.priceCents===400000&&pdf.support.totalCents===571000&&
           JSON.stringify(pdf.support.operations)===JSON.stringify(q.operations));
@@ -107,7 +121,7 @@ class OperationalPricingTest(unittest.TestCase):
         const youtubePDF=buildOfferPDFModel();
         check('YouTube zerado também no PDF e exports',youtubePDF.support.operations.totalCents===0&&
           youtubePDF.support.totalCents===500000&&youtubePDF.support.operations.totalEstimatedCents===45000&&
-          quoteRows().some(row=>row[0]==='Adicional operacional estimado'&&row[1]===brl(0)));
+          quoteRows().some(row=>row[0]==='Serviços e vídeos — valor estimado'&&row[1]===brl(0)));
         users(10000);
         check('YouTube segue zerado no maior volume',quoteData().monthlyOperationalBRL===0&&
           quoteData().monthlyTotalBRL===5000&&document.getElementById('operationalPrice').textContent===brl(0));
@@ -159,6 +173,9 @@ class OperationalPricingTest(unittest.TestCase):
                 const inputs=[document.getElementById('monthlyActiveUsers'),...document.querySelectorAll('[data-operational]')];
                 document.querySelector('.operation-controls details').open=true;
                 const panel=document.getElementById('operationalLines').closest('details');panel.open=true;
+                const explanation=document.getElementById('maintenanceExplanation');
+                check('texto cabe no painel',explanation.scrollWidth<=explanation.clientWidth&&
+                  explanation.querySelectorAll('p').length===5);
                 check('sem overflow horizontal',document.documentElement.scrollWidth<=window.innerWidth+1);
                 check('inputs dentro do viewport',inputs.every(input=>{
                   const box=input.getBoundingClientRect();return box.width>80&&box.left>=0&&box.right<=window.innerWidth+1;

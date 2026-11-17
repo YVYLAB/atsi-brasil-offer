@@ -334,6 +334,8 @@
     .operation-inputs input{box-sizing:border-box;width:100%;min-width:0;padding:10px;border-radius:8px;border:1px solid #638279;background:#102b32;color:#fff;font:inherit}
     .operation-inputs input:focus-visible,.operation-controls input:focus-visible{outline:2px solid #8fe2aa;outline-offset:3px}
     .operation-controls p,.operation-assumptions{font-size:13px;line-height:1.65}
+    #maintenanceExplanation h4{font-size:15px;margin:16px 0 8px}
+    #maintenanceExplanation p{margin:0 0 12px}
     #operationalInputStatus{color:#ffd18e}
     @media(max-width:480px){.operation-inputs{grid-template-columns:1fr}}
     .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
@@ -635,18 +637,21 @@
         <section class="total-box" aria-labelledby="maintenanceTitle">
           <h3 id="maintenanceTitle">Manutenção e operação mensal</h3>
           <div class="value"><span id="maintenancePrice">R$ 3.000,00</span><span style="font-size:16px;font-weight:600"> / mês</span></div>
-          <p id="maintenanceExplanation" class="operation-assumptions"></p>
+          <div id="maintenanceExplanation" class="operation-assumptions">
+            <h4>O que compõe sua mensalidade?</h4>
+            <div id="maintenanceExplanationCopy"></div>
+          </div>
           <p id="maintenancePlanLabel">Manutenção Essencial</p>
-          <div class="sub">Total mensal estimado, separado da implantação e sem desconto promocional.</div>
+          <div class="sub">Os descontos do desenvolvimento inicial não se aplicam à mensalidade.</div>
           <div class="operation-controls">
             <label for="monthlyActiveUsers">Quantos usuários devem usar a plataforma por mês?</label>
             <output id="monthlyActiveUsersValue" for="monthlyActiveUsers">100 usuários ativos/mês</output>
             <input id="monthlyActiveUsers" type="range" min="100" max="10000" step="100" value="100" aria-describedby="monthlyUsersHelp">
             <div class="operation-range-labels"><span>100</span><span>10.000</span></div>
             <p id="monthlyUsersHelp">Conte pessoas que usam a plataforma no mês, não apenas cadastros. Ajuste o volume para acompanhar o crescimento.</p>
-            <p id="operationalPeak"></p>
             <details>
-              <summary>Ajustar premissas de consumo e câmbio</summary>
+              <summary>Ver e ajustar detalhes da estimativa</summary>
+              <p id="operationalPeak"></p>
               <div class="operation-inputs">
                 <div><label for="operationalExchange">Câmbio de simulação (R$/US$)</label><input id="operationalExchange" type="number" min="0.01" max="100" step="0.01" value="6" data-operational="exchangeRate"></div>
                 <div><label for="operationalPeakPercentage">Pico simultâneo hipotético (%)</label><input id="operationalPeakPercentage" type="number" min="1" max="100" step="1" value="10" data-operational="peakPercentage"></div>
@@ -660,27 +665,22 @@
             <p id="operationalInputStatus" role="status" aria-live="polite"></p>
           </div>
           <div class="monthly-breakdown" aria-live="polite" aria-atomic="true">
-            <div><span>Mensalidade base do plano</span><strong id="maintenanceBasePrice"></strong></div>
-            <div><span>Adicional operacional estimado</span><strong id="operationalPrice"></strong></div>
+            <div><span>Manutenção do plano</span><strong id="maintenanceBasePrice"></strong></div>
+            <div><span>Serviços e vídeos — valor estimado</span><strong id="operationalPrice"></strong></div>
             <div><span>Total mensal estimado</span><strong id="monthlyTotalPrice"></strong></div>
           </div>
+          <p class="operation-assumptions">Seu plano inclui até <strong id="maintenanceHours">10 horas por mês</strong> para correções, ajustes e melhorias no software.</p>
           <details>
-            <summary>Como o adicional é composto</summary>
+            <summary>Entenda o valor dos serviços e vídeos</summary>
             <div id="operationalLines" class="monthly-breakdown"></div>
             <p id="operationalConversion" class="operation-assumptions"></p>
-            <p class="operation-assumptions">Infraestrutura compartilhada contabilizada uma vez, mais o consumo da estratégia de vídeo escolhida. Valores de referência dos fornecedores convertidos pelo câmbio informado, sem margem ou reserva adicional. Tarifas consultadas em 17/11/2026.</p>
+            <p class="operation-assumptions">Os serviços usados pela plataforma são contados uma única vez, junto ao consumo de vídeos escolhido. Os preços dos fornecedores são convertidos pelo valor do dólar informado, sem acréscimo sobre as tarifas. Referências consultadas em 17/11/2026.</p>
             <ul id="operationalExclusions" class="operation-assumptions"></ul>
             <p id="operationalSources" class="operation-assumptions"></p>
           </details>
-          <ul>
-            <li>Operação estimada somada à base conforme o volume e as premissas acima. Ampliações e excedentes são combinados antes da cobrança.</li>
-            <li>Inclui até <strong id="maintenanceHours">10 horas por mês</strong>, compartilhadas entre desenvolvimento, alterações do software e correções de bugs.</li>
-            <li><strong>Consumo de IA contratado separadamente.</strong></li>
-            <li>Para ampliar as horas mensais, sua equipe pode contratar <strong>um pacote adicional</strong>, combinado antes da execução.</li>
-          </ul>
           <details>
-            <summary>Um acompanhamento alinhado à sua operação</summary>
-            <p>Início, vigência, atendimento e demais condições são combinados no contrato. O planejamento dimensiona a operação e os serviços cobertos para a realidade da ATSI.</p>
+            <summary>Condições de atendimento e cobrança</summary>
+            <p>Início, duração do contrato, atendimento e demais condições são combinados na contratação. O planejamento define os serviços cobertos de acordo com o uso esperado pela ATSI.</p>
           </details>
         </section>
 
@@ -1040,7 +1040,7 @@
         monthlyOperationalBRL:operations.totalCents/100,
         monthlyTotalBRL:(maintenance.priceCents+operations.totalCents)/100,
         monthlyHours:maintenance.hours,operations,
-        operationalCoverage:operations.explanation+' IA separada. Ampliações e excedentes mediante acordo prévio.',
+        operationalCoverage:operations.explanation,
         campaign:campaignConfig,
         offer:currentOffer,offerStatus:campaignConfig?ATSIPromotion.campaignStatus(campaignConfig,now):ATSIPromotion.status(currentOffer,pricingSnapshot(),now)};
     }
@@ -1061,8 +1061,8 @@
         ['Desconto do plano',brl((q.pricing.planDiscountCents??q.pricing.discountCents)/100)],
         ['Desconto dos opcionais adicionais',brl((q.pricing.additionalDiscountCents||0)/100)],
         ['Implantação final',brl(q.pricing.finalCents/100)],
-        ['Manutenção mensal base',brl(q.monthlyMaintenanceBRL)],
-        ['Adicional operacional estimado',brl(q.monthlyOperationalBRL)],
+        ['Manutenção do plano',brl(q.monthlyMaintenanceBRL)],
+        ['Serviços e vídeos — valor estimado',brl(q.monthlyOperationalBRL)],
         ['Total mensal estimado',brl(q.monthlyTotalBRL)],['Horas mensais',String(q.monthlyHours)],
         ['Usuários ativos/mês',String(q.operations.inputs.activeUsers)],
         ['Pico simultâneo hipotético',String(q.operations.peakUsers)],
@@ -1550,7 +1550,17 @@
       document.getElementById('operationalPrice').textContent=brl(operations.totalCents/100);
       document.getElementById('monthlyTotalPrice').textContent=brl((base+operations.totalCents)/100);
       document.getElementById('maintenancePrice').textContent=brl((base+operations.totalCents)/100);
-      document.getElementById('maintenanceExplanation').textContent=operations.explanation;
+      const explanation=document.getElementById('maintenanceExplanationCopy');
+      explanation.replaceChildren(...operations.explanation.split('\n\n').map(text=>{
+        const p=document.createElement('p');
+        const prefix=['Manutenção do plano:','Serviços e vídeos:','Com vídeos pelo YouTube, esse adicional é zero.']
+          .find(label=>text.startsWith(label));
+        if(prefix){
+          const strong=document.createElement('strong');strong.textContent=prefix;
+          p.append(strong,document.createTextNode(text.slice(prefix.length)));
+        }else p.textContent=text;
+        return p;
+      }));
       const list=document.getElementById('operationalAssumptions');
       list.replaceChildren(...operations.assumptions.map(text=>{const p=document.createElement('p');p.textContent=text;return p;}));
       const breakdown=document.getElementById('operationalLines');

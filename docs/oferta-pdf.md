@@ -25,6 +25,9 @@ jsPDF 4.2.1 (MIT) acompanha o projeto em `vendor/jspdf/`.
 - Explicação do impacto dos serviços de streaming abaixo da mensalidade.
   Com YouTube, adicional zerado e infraestrutura compartilhada coberta pela
   base; custos de referência identificados separadamente, sem dupla cobrança.
+  A explicação introdutória usa os mesmos cinco parágrafos em linguagem simples
+  da página, com manutenção, serviços/vídeos, regra YouTube, simulação sem cobrança
+  automática e IA separada. A composição técnica permanece na seção de detalhes.
 
 Horas são esforço de uma pessoa por tarefa, não prazos corridos individuais.
 O prazo equivalente mantém a capacidade vigente de 352 h/mês para duas pessoas.

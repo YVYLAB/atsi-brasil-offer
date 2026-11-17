@@ -22,6 +22,12 @@ permanece, inclusive em Personalizado originado de Plus/Premium. A infraestrutur
 compartilhada continua tendo custo estimado, mas é coberta pela base nesse
 cenário, não repassada novamente. Privado/offline mantêm o cálculo anterior.
 Há explicação imediatamente abaixo da mensalidade, também no PDF e exports.
+Essa explicação usa linguagem não técnica em cinco parágrafos: finalidade da
+mensalidade, horas de manutenção, serviços/vídeos, adicional zero com YouTube e
+uso do controle de usuários sem cobrança automática (IA separada). Os rótulos
+visíveis são **Manutenção do plano**, **Serviços e vídeos — valor estimado** e
+**Total mensal estimado**. Pico simultâneo e câmbio ficam em detalhes recolhidos.
+Essa revisão de texto não altera tarifas, cálculos, franquias ou dados financeiros.
 Nem a base nem o adicional recebem descontos de implantação.
 Usuários/consumo não alteram features, horas, complexidade, prazo ou implantação.
 Personalizado preserva a base mensal de origem e considera a estratégia de vídeo
