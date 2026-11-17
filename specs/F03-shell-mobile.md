@@ -5,6 +5,13 @@
 ## Escopo e premissas
 Criar fundação do app Expo/React Native, navegação e componentes reutilizáveis. Não inclui telas completas de features nem publicação.
 
+**Atualização de escopo — 17/11/2026:** a entrega inclui Android, iOS e versão
+web para alunos desde o Essencial, além do painel administrativo web separado.
+Esta spec deve contemplar também a fundação da experiência web dos alunos;
+a tecnologia e o impacto nas tarefas/horas abaixo ainda exigem revisão.
+Consulte `plataformas-entrega.md`. As 56 h atuais não são uma validação de
+cobertura da versão web.
+
 ## Tarefas para validação
 | ID | Tarefa e entrega verificável | Horas propostas | Status |
 |---|---|---:|---|
@@ -49,3 +56,6 @@ Sem contingência percentual automática e sem custos de fornecedores incluídos
 
 ## Cenário mínimo específico de aceite
 O shell abre em Android/iOS, preserva navegação e mostra estados globais de erro sem acesso a rotas protegidas por sessão inválida.
+
+O mesmo aceite deve ser detalhado para o navegador, com layout responsivo e
+sessão protegida, conforme `plataformas-entrega.md`; esforço ainda não revisado.

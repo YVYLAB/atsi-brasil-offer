@@ -20,7 +20,7 @@ dependencies = {
     "C04": "B07 (progresso)", "C06": "C05 (quizzes) e fonte autorizada",
     "C07": "fonte textual ou transcrição autorizada e serviço de IA",
     "N02": "N01 (push básico)", "N03": "N01 (push básico)",
-    "G02": "validação técnica e elegibilidade oficial do canal",
+    "G02": "validação técnica, APIs oficiais, permissões e elegibilidade de cada rede e destino",
     "G06": "G05 (perfis públicos)", "EV02": "EV01 (eventos e inscrições)",
     "EV03": "EV01 e B03 (e-mail transacional)", "EV04": "EV01 e EV02",
     "P02": "estratégia de pagamento e regras das lojas a validar",

@@ -164,7 +164,7 @@ Nesta tabela, **descrição e operação pertencem a cada feature**, mas **os cu
 | `N02` | Notificações | **Push segmentado**: Enviar notificações para segmentos como novos alunos ou cursos específicos. | Opcional | 30 h | R$ 6.000 | 3 | Supabase + push — Mesmo serviço push; consultas/filas usam backend e cotas. |
 | `N03` | Notificações | **Automações de notificações**: Disparar mensagens automaticamente por regras e agendamento. | Opcional | 52 h | R$ 10.400 | 4 | Supabase + push/cron — Processamento e jobs consumidos; custos por volume/fornecedor. |
 | `G01` | Grupos e comunidade | **Diretório/links de grupos de WhatsApp**: Catálogo de grupos com botões que abrem convites oficiais do WhatsApp. | Opcional | 12 h | R$ 2.400 | 2 | Supabase + link WhatsApp — Sem cobrança de API para simples abrir link; backend dentro do plano. |
-| `G02` | Grupos e comunidade | **Disparo automatizado de conteúdo em grupos WhatsApp**: Automatizar disparo de conteúdo em grupos WhatsApp, sujeito a viabilidade técnica. | Opcional | Pendente | **Sob cotação** | 5 | WhatsApp Groups API / parceiro — SOB COTAÇÃO: cobrança, limites e elegibilidade do canal devem ser confirmados. |
+| `G02` | Grupos e comunidade | **Encaminhamento multicanal para redes sociais**: Configurar mensagens e conteúdo para distribuição a múltiplos grupos e canais de diferentes redes sociais no mesmo agendamento, conforme APIs e permissões disponíveis. | Opcional | 250 h | **R$ 50.000** | 5 | APIs oficiais das redes / parceiros autorizados — validar por rede os destinos permitidos, credenciais, limites, cobrança e elegibilidade. |
 | `G03` | Grupos e comunidade | **Grupos internos: conteúdos e notícias**: Grupos internos com membros, notícias, publicações e moderação. | Opcional | 64 h | R$ 12.800 | 4 | Supabase + R2 para mídia — Banco/realtime/arquivos dentro de cotas; R2 conforme tamanho e operações. |
 | `G04` | Grupos e comunidade | **Chat direto entre usuários**: Mensagens privadas entre usuários com histórico, bloqueio e denúncias. | Opcional | 96 h | R$ 19.200 | 5 | Supabase Realtime + banco — Picos de conexões e volume de mensagens podem gerar excedentes mensais. |
 | `G05` | Grupos e comunidade | **Perfis públicos de usuários**: Perfil público opt-in com nome público, imagem e dados escolhidos pelo usuário. | Opcional | 40 h | R$ 8.000 | 3 | Supabase + R2 — Dentro de cotas de dados/armazenamento; R2 para imagens conforme uso. |
@@ -191,7 +191,7 @@ Nesta tabela, **descrição e operação pertencem a cada feature**, mas **os cu
 | `GM03` | Gamificação | **Ranking público**: Mostrar classificação pública por pontos e períodos. | Opcional | 36 h | R$ 7.200 | 4 | Supabase / cache eventual — Consultas e ranking; Redis opcional só se necessário. |
 | `GM04` | Gamificação | **Pontos e posição no ranking no perfil**: Mostrar pontos acumulados e posição do usuário em seu perfil. | Opcional | 18 h | R$ 3.600 | 2 | Supabase — Leituras de pontuação dentro das cotas do backend. |
 
-**Totalização e checagem:** a matriz canônica contém **54 features: 8 obrigatórias + 43 opcionais + 3 de escolha única**, mais 7 linhas de fundação. `G02` permanece sem horas/preço. **Google Drive experimental não é uma 55ª feature pronta para venda**; mantenha separado do catálogo canônico ou explique claramente a linha experimental sem contaminar contagens/contrato. Preserve também os intervalos de horas mín./prov./conserv. do CSV v5 quando esses documentos estiverem no workspace.
+**Totalização e checagem:** a matriz canônica contém **54 features: 8 obrigatórias + 43 opcionais + 3 de escolha única**, mais 7 linhas de fundação. `G02` recebeu estimativa conservadora de 250 h / R$ 50.000 em 17/11/2026, sem alterar os presets. **Google Drive experimental não é uma 55ª feature pronta para venda**; mantenha separado do catálogo canônico ou explique claramente a linha experimental sem contaminar contagens/contrato. Preserve também os intervalos de horas mín./prov./conserv. do CSV v5 quando esses documentos estiverem no workspace.
 
 ## 9. Dependências e incompatibilidades obrigatórias
 
@@ -200,7 +200,7 @@ Nesta tabela, **descrição e operação pertencem a cada feature**, mas **os cu
 - `C04` depende de `B07`. `C06` depende de `C05`. `C07` exige fonte/transcrição autorizada e uso de IA — preço de operação sob variável.
 - `C09` é distinto de `C05`; `R03` depende de `C09`.
 - `N02`, `N03` dependem de `N01`.
-- `G06` depende de `G05`; consentimento e regras de privacidade para perfis públicos, busca e ranking. `G02` bloqueada até documentação técnica oficial da API/eligibilidade, inclusive limites de grupos. **Não usar bot não oficial ou automação via WhatsApp Web para contornar restrições.** `G01` só abre diretório/links, sem disparos.
+- `G06` depende de `G05`; consentimento e regras de privacidade para perfis públicos, busca e ranking. `G02` ampliada em 17/11/2026 para múltiplas redes, grupos e canais; selecionável na simulação, com execução de cada conector condicionada à documentação oficial e elegibilidade da integração/destino. **Não usar bot não oficial ou automação via WhatsApp Web para contornar restrições.** `G01` só abre diretório/links, sem disparos.
 - `EV02`, `EV03`, `EV04` dependem de `EV01`; convite por e-mail reutiliza `B03`, sem contratar Resend duas vezes. `P04` depende de `EV01` e `P01` (ou estratégia de pagamento aprovada).
 - `P02/P03/P04` dependem de uma estratégia válida de cobrança/in-app purchase que respeite a política da loja e os direitos de acesso. `P05` é serviço de autorização e deve habilitar os cursos vendidos, liberados por perfil ou assinatura; `P06` eventos; `P07` e-books (quando existirem).
 - `R01` depende de telemetria/captura de eventos; `R02` usa progresso `B07`; `R04` exige definição inequívoca de 'usuário ativo'; `R05` exige heartbeat/presença e não equivale a 'usuários ativos'.
@@ -231,10 +231,10 @@ Teste com as ferramentas disponíveis na stack atual; crie funções puras para 
 1. 54 IDs canônicos únicos; oito B obrigatórios; exatamente um vídeo; não incluir DRIVE-PILOT no total de produção.
 2. F01..F07 = 236 h; B01..B08 = 266 h. Essencial puro: 522 h / R$104.400; privado puro: 570 h / R$114.000; offline puro: 668 h / R$133.600 **na referência, sem opcionais**.
 3. C02→C03 recalcula corretamente e não soma Stream duas vezes. Se C01→C02, atualizar mockup, descrição, horas, implantação e operação.
-4. Presets todos válidos; personalização, valores editáveis, recarregar/importar, dependências, exclusões, remoção em cascata, G02 indisponível para venda.
+4. Presets todos válidos; personalização, valores editáveis, recarregar/importar, dependências, exclusões, remoção em cascata, G02 selecionável com aviso de viabilidade por rede.
 5. Stream cenários: 100/2h/30h => US$22; 1.000/3h/100h => US$210; 5.000/4h/300h => US$1.290; ajustar segundos/minutos e arredondamentos corretos.
 6. 15GB R2 e operações abaixo da franquia => somente GB faturável de armazenamento; 0 GB e zero ops => US$0; Stream nunca duplica R2; Supabase/Resend contabilizados uma vez.
-7. Preço da feature ausente/G02/IA sem volume não vira R$0/US$0; exibir 'sob cotação' e avisos, sem falsa totalização completa.
+7. Preço da feature ausente ou IA sem volume não vira R$0/US$0; exibir 'sob cotação' e avisos, sem falsa totalização completa. G02 usa a estimativa conservadora explícita de implantação; terceiros permanecem a validar.
 8. Moedas separadas BRL/USD; câmbio manual apenas se informado; campo de custo interno não se confunde com tarifa comercial.
 9. YT + offline proibido; YT + políticas de paywall/recompensa alerta/impede proposta incompatível; Drive não tratado como privado garantido; fontes clicáveis e disclaimer.
 10. Telas/preview correspondem à feature clicada, sem seleção acidental. Responsividade em 390, 768 e 1440 px; teclados, foco, contraste, campos inválidos, exportação/impressão. Sem regressão de tema escuro, presets e mockup 50/50.

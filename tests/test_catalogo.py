@@ -18,16 +18,13 @@ class CatalogoTest(unittest.TestCase):
         reviewed = 0
         for path in specs:
             text = path.read_text()
-            if path.name.startswith("G02-"):
-                self.assertIn("Sob cotação", text)
-                continue
             rows = re.findall(r"^\| [A-Z]+\d+-T\d+[A-Z]? \| [^|\n]+ \| (\d+) \| Revisão técnica preliminar \|$", text, re.M)
             declared = re.search(r"\| \*\*Total\*\* \| \| \*\*(\d+) h\*\*", text)
             self.assertTrue(rows, path.name)
             self.assertEqual(sum(map(int, rows)), int(declared.group(1)), path.name)
             self.assertIn("## Cenário mínimo específico de aceite", text)
             reviewed += 1
-        self.assertEqual(reviewed, 60)
+        self.assertEqual(reviewed, 61)
 
     def test_browser(self):
         chrome = shutil.which("google-chrome")
@@ -49,7 +46,42 @@ class CatalogoTest(unittest.TestCase):
           check(name+' prazo para duas pessoas',el.estimatedMonths.textContent === expectedMonths && el.floatingDuration.textContent.includes(expectedMonths));
           check(name+' vídeo único',selectedFeatures().filter(f=>f.group==='curso_entrega').length===1);
           check(name+' dependências', selectedFeatures().every(f=>(prerequisites[f.id]||[]).every(id=>isSelected(getFeature(id)))));
+          const quote=quoteData();
+          check(name+' plataformas incluídas',quote.delivery.studentPlatforms.join(',')==='Android,iOS,Web (navegador)' &&
+            quote.delivery.administration==='Painel administrativo web');
+          check(name+' revisão web pendente',quote.delivery.estimateStatus==='pending_web_review' &&
+            quoteRows().some(row=>row[0]==='Revisão das estimativas'&&row[1].includes('pendente')));
+          const expectedComplexity={essencial:'Baixa',plus:'Média',premium:'Alta'}[name];
+          check(name+' complexidade relativa',el.avgComplexity.textContent===expectedComplexity &&
+            document.getElementById('complexityMetricLabel').textContent==='Complexidade do plano' &&
+            document.getElementById('complexityExplanation').textContent.includes('Classificação relativa'));
+          check(name+' complexidade na proposta',quote.complexity.label===expectedComplexity &&
+            quote.complexity.basis==='relative_plan' &&
+            quoteRows().some(row=>row[0]==='Complexidade do plano'&&row[1]===expectedComplexity));
         }
+        check('complexidade visível nos três presets',[...document.querySelectorAll('.preset-complexity')].map(node=>node.textContent).join('|')===
+          'Complexidade baixa|Complexidade média|Complexidade alta');
+        check('escala técnica preservada',complexityLabel(3)==='Média-alta' && complexityLabel(5)==='Muito alta' &&
+          features.every(f=>f.complexity===specCatalog[f.id].complexity));
+        const invalidPriceNotice=/Preço de venda:\\s*Não aprovado|não é preço aprovado|não proposta aprovada|não preços comerciais aprovados|Valores não validados/i;
+        check('tela sem aviso de preço não aprovado',!invalidPriceNotice.test(document.querySelector('.split').textContent) &&
+          !invalidPriceNotice.test(document.getElementById('floatingTotal').textContent));
+        check('cards mostram preço de implantação',features.every(f=>renderFeatureCard(f).includes('Preço de implantação') &&
+          !invalidPriceNotice.test(renderFeatureCard(f))));
+        check('popups sem aviso de preço não aprovado',features.every(f=>{
+          openFeatureDetails(f,null);
+          const valid=!invalidPriceNotice.test(document.getElementById('dialogContent').textContent);
+          featureDialog.close();
+          return valid;
+        }));
+        check('investimento sem ressalva comercial',document.querySelector('#investmentSummary > small').textContent==='Investimento de implantação');
+        check('três planos com plataformas visíveis',document.querySelectorAll('.preset-platforms').length===3 &&
+          [...document.querySelectorAll('.preset-platforms')].every(node=>node.textContent.includes('Android · iOS · Web para alunos')));
+        check('destaque desde o essencial',document.getElementById('deliveryScopeTitle').textContent==='Android, iOS e web desde o Essencial');
+        check('resumo distingue aluno e gestão',document.querySelector('#investmentSummary [data-delivery-students]').textContent===deliveryScope.studentLabel &&
+          document.querySelector('#investmentSummary [data-delivery-administration]').textContent===deliveryScope.administration);
+        check('aviso web nos planos e resumo',[...document.querySelectorAll('[data-delivery-estimate]')].every(node=>node.textContent===deliveryScope.estimateNote));
+        check('proposta descreve web para alunos',quoteRows().some(row=>row[0]==='Entrega para alunos'&&row[1].includes('versão web para alunos')));
         applyPreset('essencial');
         toggleFeature('C02',true);
         check('privado puro',targetTotal===188400);
@@ -58,7 +90,19 @@ class CatalogoTest(unittest.TestCase):
         toggleFeature('C03',false);
         check('não esvaziar vídeo',state.selected.has('C03'));
         toggleFeature('G02',true);
-        check('G02 bloqueada',!state.selected.has('G02'));
+        check('G02 selecionável com estimativa',state.selected.has('G02') && targetTotal===264000);
+        check('G02 catálogo multicanal',getFeature('G02').title==='Encaminhamento multicanal para redes sociais' &&
+          getFeature('G02').hours===250 && getFeature('G02').price===50000 &&
+          getFeature('G02').desc.includes('múltiplos grupos e canais'));
+        check('G02 ressalva técnica',document.getElementById('scopeWarnings').textContent.includes('até três conectores oficiais viáveis') &&
+          document.querySelector('[data-feature="G02"]').textContent.includes('Validar integração por rede'));
+        const beforeG02Preview=targetTotal;
+        state.activePreview='G02';renderPreview();
+        check('G02 configuração administrativa',el.phoneScreen.querySelector('.app-screen').dataset.mockContext==='admin');
+        check('G02 múltiplas redes e mensagem',['Preparar mensagem','WhatsApp','Telegram','Discord','Mesmo agendamento','status por destino'].every(text=>
+          el.phoneScreen.textContent.includes(text)));
+        check('G02 limites explícitos',el.phoneScreen.textContent.includes('nenhuma conta conectada') &&
+          el.phoneScreen.textContent.includes('não garante entrega no mesmo instante') && targetTotal===beforeG02Preview);
         toggleFeature('N02',true);
         check('incluir dependência',state.selected.has('N01'));
         toggleFeature('N01',false);
@@ -69,7 +113,7 @@ class CatalogoTest(unittest.TestCase):
           B05:'Receber promoções',A02:'Continuar com Google',A03:'Continuar com Microsoft',
           C01:'Player YouTube',C02:'Streaming privado',C03:'Download da aula',
           C06:'Revisão humana',C07:'Fonte ilustrativa',C08:'Comentários da aula',
-          C09:'satisfação',G01:'Abrir convite do WhatsApp',G05:'Publicar meu perfil',
+          C09:'satisfação',G01:'Abrir convite do WhatsApp',G02:'Redes e destinos',G05:'Publicar meu perfil',
           EV02:'QR ilustrativo',EV04:'Enquadre o QR',P01:'Aguardando pagamento',
           P02:'Renovação',P03:'Comprar curso',P04:'Reserva temporária',
           P05:'Acesso restrito',P06:'Acesso restrito',P07:'Acesso restrito',
@@ -99,7 +143,7 @@ class CatalogoTest(unittest.TestCase):
           return el.phoneScreen.querySelector('.app-brand img')?.alt==='ATSI+';
         }));
         check('título do produto',document.querySelector('h1').textContent==='Plataforma ATSI+');
-        check('menu simplificado',document.getElementById('promotionSettings').querySelectorAll('input').length===5 &&
+        check('menu simplificado',document.getElementById('promotionSettings').querySelectorAll('input').length===6 &&
           !document.getElementById('settingsDialog').querySelector('input[type=file]'));
         check('menu abre e fecha',(()=>{
           document.getElementById('openSettings').click();
@@ -129,6 +173,13 @@ class CatalogoTest(unittest.TestCase):
         check('exportação identifica oferta',quoteRows().some(row=>row[0]==='Cotação'&&row[1]==='test'));
         toggleFeature('A02',true);
         check('custom sem promoção',quoteData().pricing.discountCents===0);
+        check('custom mantém plataformas',quoteData().delivery.studentPlatforms.includes('Web (navegador)') &&
+          quoteData().delivery.estimateStatus==='pending_web_review');
+        const customAverage=selectedFeatures().reduce((sum,f)=>sum+f.complexity,0)/selectedFeatures().length;
+        check('custom usa média técnica explícita',document.getElementById('complexityMetricLabel').textContent==='Complexidade média' &&
+          el.avgComplexity.textContent===complexityLabel(customAverage) &&
+          quoteData().complexity.basis==='feature_average' && quoteData().complexity.average===customAverage &&
+          document.getElementById('complexityExplanation').textContent.includes('Personalizado: média técnica'));
         applyPreset('essencial');
         check('essencial sem promoção',targetTotal===178000);
         const clock=Date.now;
@@ -144,6 +195,7 @@ class CatalogoTest(unittest.TestCase):
         document.getElementById('discountEssencial').value=10;
         document.getElementById('discountPlus').value=15;
         document.getElementById('discountPremium').value=20;
+        document.getElementById('discountAdditionalOptional').value=25;
         document.getElementById('promotionSettings').requestSubmit();
         applyPreset('essencial');
         check('salvar campanha e descontar essencial',targetTotal===160200 && campaignConfig.percentages.essencial===10);
@@ -153,10 +205,68 @@ class CatalogoTest(unittest.TestCase):
         check('timer compacto',document.getElementById('offerTitle').textContent==='Oferta' && !document.querySelector('.offer-box').hidden);
         check('campanha persistida',JSON.parse(localStorage.getItem(campaignStorageKey)).endsAt===campaignConfig.endsAt);
         check('horas e mensalidades preservadas',quoteData().monthlyMaintenanceBRL===4000 && el.totalHours.textContent==='1150 h');
+        check('desconto adicional persistido',JSON.parse(localStorage.getItem(campaignStorageKey)).additionalOptionalPercentage===25);
+        toggleFeature('G02',true);
+        check('plus com G02 descontada',targetTotal===233000 && state.basePreset==='plus' && state.activePreset==='custom' &&
+          quoteData().pricing.planDiscountCents===3450000 && quoteData().pricing.additionalDiscountCents===1250000);
+        check('preço adicional riscado no card',document.querySelector('[data-feature="G02"] .feature-price-offer del').textContent===brl(50000) &&
+          document.querySelector('[data-feature="G02"] .feature-price-offer strong').textContent===brl(37500));
+        check('item incluído no plano não recebe desconto adicional',!document.querySelector('[data-feature="C04"] .feature-price-offer'));
+        check('resumo e dados concordam',document.getElementById('additionalDiscount').textContent===brl(12500) &&
+          quoteRows().some(row=>row[0].startsWith('G02 ·')&&row[1]===brl(37500)) &&
+          quoteData().campaign.additionalOptionalPercentage===25 && quoteData().offerStatus==='active');
+        check('horas e manutenção sem desconto adicional',el.totalHours.textContent==='1400 h' && quoteData().monthlyMaintenanceBRL===4000);
+        toggleFeature('C04',false);
+        check('remover item do plano suspende os descontos',quoteData().pricing.discountCents===0 &&
+          !document.querySelector('[data-feature="G02"] .feature-price-offer') &&
+          document.getElementById('pricingContext').textContent.includes('Composição do Plus alterada'));
+        toggleFeature('C04',true);
+        check('restaurar plano recupera descontos',targetTotal===233000);
+        toggleFeature('C03',true);
+        check('trocar vídeo não aplica campanha do plano anterior',quoteData().pricing.discountCents===0 && !quoteData().pricing.baseIntact);
+        toggleFeature('C02',true);
+        check('restaurar vídeo recupera campanha',targetTotal===233000 && quoteData().pricing.baseIntact);
+        toggleFeature('G02',false);
+        check('remover adicional restaura valor do plano',targetTotal===195500 && quoteData().pricing.additionalDiscountCents===0);
+        toggleFeature('G02',true);
         Date.now=()=>Date.parse(campaignConfig.endsAt)+1;
         render();
         check('faixas e timer somem ao expirar',document.querySelectorAll('.plan-offer').length===0 && document.querySelector('.offer-box').hidden);
+        check('expiração remove ambos os descontos',targetTotal===280000 && quoteData().pricing.discountCents===0 &&
+          !document.querySelector('[data-feature="G02"] .feature-price-offer') && quoteData().offerStatus==='expired');
         Date.now=clock;
+        render();
+        check('vigência não renovada nas edições',JSON.parse(localStorage.getItem(campaignStorageKey)).endsAt===campaignConfig.endsAt);
+        for(const [key,base] of [['essencial',160200],['plus',195500],['premium',311360]]){
+          applyPreset(key);toggleFeature('G02',true);
+          check(key+' com adicional sem desconto duplicado',targetTotal===base+37500 &&
+            quoteData().pricing.additionalDiscountCents===1250000);
+          const includedAnywhere=new Set(Object.values(presets).flatMap(preset=>preset.features));
+          check(key+' exclui opcionais de todos os planos',features.filter(f=>f.type==='optional'&&includedAnywhere.has(f.id))
+            .every(f=>featureAdditionalPricing(f).discountCents===0 &&
+              !document.querySelector(`[data-feature="${f.id}"] .feature-price-offer`)));
+        }
+        check('configurações explicam exclusão dos três planos',document.getElementById('promotionSettings').textContent.includes('nenhum dos planos Essencial, Plus ou Premium'));
+        applyPreset('essencial');toggleFeature('C04',true);toggleFeature('E01',true);
+        const crossPlanPrice=getFeature('C04').price+getFeature('E01').price;
+        check('certificados e biblioteca no essencial ficam a preço de tabela',targetTotal===160200+crossPlanPrice &&
+          quoteData().pricing.additionalDiscountCents===0 &&
+          !document.querySelector('[data-feature="C04"] .feature-price-offer') &&
+          !document.querySelector('[data-feature="E01"] .feature-price-offer'));
+        toggleFeature('G02',true);
+        check('mistura itens de planos sem desconto e G02 com desconto',targetTotal===160200+crossPlanPrice+37500 &&
+          quoteData().pricing.additionalRegularCents===5000000 &&
+          quoteData().pricing.additionalItems.length===1 && quoteData().pricing.additionalItems[0].id==='G02' &&
+          quoteRows().some(row=>row[0].startsWith('C04 ·')&&row[1]===brl(getFeature('C04').price)) &&
+          quoteRows().some(row=>row[0].startsWith('E01 ·')&&row[1]===brl(getFeature('E01').price)));
+        applyPreset('plus');toggleFeature('N03',true);
+        const n03Price=getFeature('N03').price;
+        check('dependência já incluída não duplica desconto',quoteData().pricing.additionalItems.length===1 &&
+          quoteData().pricing.additionalItems[0].id==='N03' && targetTotal===195500+n03Price*.75);
+        toggleFeature('G06',true);
+        check('dependências adicionais recebem desconto uma vez',quoteData().pricing.additionalItems.filter(i=>['G05','G06'].includes(i.id)).length===2 &&
+          new Set(quoteData().pricing.additionalItems.map(i=>i.id)).size===quoteData().pricing.additionalItems.length);
+        applyPreset('plus');toggleFeature('G02',true);
         window.scrollTo({top:0,behavior:'instant'});
         const nativeRAF=window.requestAnimationFrame;
         let scrollFrame=null;
@@ -183,6 +293,51 @@ class CatalogoTest(unittest.TestCase):
         for result in results:
             self.assertTrue(result["ok"], result["name"])
         print(f"Chrome: {len(results)} verificações de catálogo/seleção/preview aprovadas")
+
+    def test_campaign_restore(self):
+        chrome = shutil.which("google-chrome")
+        if not chrome:
+            self.skipTest("Chrome não disponível")
+        for name, additional, expected, input_value in [
+            ("legacy", None, 245500, "0"),
+            ("additional", 25, 233000, "25"),
+            ("invalid", 101, 280000, "0"),
+        ]:
+            with self.subTest(name=name):
+                field = "" if additional is None else f",additionalOptionalPercentage:{additional}"
+                seed = """
+                const restoreCampaign={schemaVersion:2,
+                  startsAt:new Date(Date.now()-3600000).toISOString(),
+                  endsAt:new Date(Date.now()+3600000).toISOString(),
+                  percentages:{essencial:10,plus:15,premium:20}FIELD};
+                localStorage.setItem(campaignStorageKey,JSON.stringify(restoreCampaign));
+                initOffers();
+                """.replace("FIELD", field)
+                script = """
+                applyPreset('plus');toggleFeature('G02',true);
+                const result={total:targetTotal,input:document.getElementById('discountAdditionalOptional').value,
+                  restored:campaignConfig!==null,
+                  sameDates:!campaignConfig || (campaignConfig.startsAt===restoreCampaign.startsAt &&
+                    campaignConfig.endsAt===restoreCampaign.endsAt)};
+                document.body.insertAdjacentHTML('beforeend','<pre id="restore-result">'+JSON.stringify(result)+'</pre>');
+                """
+                page = HTML.replace("<head>", f'<head><base href="{ROOT.as_uri()}/">', 1)
+                page = page.replace("    initOffers();", seed, 1)
+                page = page.replace("</body>", f"<script>{script}</script></body>")
+                with tempfile.TemporaryDirectory(prefix="atsi-restore-", dir="/tmp/opencode") as directory:
+                    file = Path(directory) / "test.html"
+                    file.write_text(page)
+                    run = subprocess.run([
+                        chrome, "--headless", "--no-sandbox", "--disable-gpu",
+                        "--disable-dev-shm-usage", "--dump-dom", file.as_uri()
+                    ], capture_output=True, text=True, timeout=30)
+                match = re.search(r'<pre id="restore-result">(\{.*?\})</pre>', run.stdout)
+                self.assertIsNotNone(match, "Restauração não completou")
+                result = json.loads(match.group(1))
+                self.assertEqual(result["total"], expected)
+                self.assertEqual(result["input"], input_value)
+                self.assertEqual(result["restored"], name != "invalid")
+                self.assertTrue(result["sameDates"])
 
 
 if __name__ == "__main__":

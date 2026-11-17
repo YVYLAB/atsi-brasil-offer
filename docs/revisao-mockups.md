@@ -25,7 +25,7 @@ Nenhuma alteração de horas, preços, seleção ou dependências.
 | E01 | Pesquisa, capa e arquivo da biblioteca |
 | N01 | Push do dispositivo, sem adicionar uma caixa persistente não especificada |
 | N02/N03 | Segmentação e automação administrativas com etapas e rascunho |
-| G01/G02 | Convites oficiais do WhatsApp versus automação sob validação |
+| G01/G02 | Convites oficiais do WhatsApp versus configuração multicanal de mensagens para grupos/canais de diferentes redes, sob validação |
 | G03/G04 | Feed interno e moderação versus conversa privada com bloqueio/denúncia |
 | G05/G06 | Perfil público opt-in e busca somente de perfis publicáveis |
 | EV01 | Evento/inscrição com complementos EV02–EV04 apenas se contratados |

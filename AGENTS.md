@@ -361,3 +361,54 @@ desconto sobre o total de implantação do preset (inclusive Essencial).
 Mensalidades, horas e Personalizado ficam sem desconto. Isso substitui a política
 anterior de opcionais elegíveis v1 no fluxo atual. Persistência em
 `atsi-campaign-v2` é somente local; não grava no repositório nem publica para todos.
+
+## Atualização de escopo — 17/11/2026
+
+O usuário confirmou que o Essencial já inclui aplicativos Android e iOS e
+versão web para alunos, além do painel administrativo web. Isso vale também
+para Plus, Premium e configurações personalizadas. A plataforma de acesso não
+é um opcional de plano. A antiga pendência sobre inclusão de plataformas está
+substituída por essa decisão; a tecnologia continua sujeita à arquitetura.
+Consultar `specs/plataformas-entrega.md`.
+
+Horas, valores e prazos não foram alterados nesta atualização. O impacto da web
+dos alunos ainda requer decomposição e revisão técnica/comercial; não afirmar
+que as estimativas anteriores já cobrem esse esforço. O configurador sinaliza
+essa pendência nos planos, resumo e dados de proposta.
+
+Apresentação comercial — decisão posterior do usuário em 17/11/2026: os preços
+exibidos são definidos pelo vendedor. Não mostrar "Preço de venda: Não aprovado"
+nem avisos equivalentes de preço/proposta sem aprovação nos cards, resumo ou
+popups. Usar "Preço de implantação" / "Investimento de implantação", preservando
+os valores e os cálculos existentes. Isso não aprova automaticamente entregáveis
+técnicos nem remove as ressalvas de prazo, detalhamento da web ou mockups.
+
+Complexidade dos presets: classificação relativa Essencial Baixa, Plus Média
+e Premium Alta. Não confundir com notas técnicas das features (preservadas).
+Personalizado continua exibindo a média técnica com rótulo e explicação próprios.
+Consultar `docs/complexidade-planos.md`.
+
+G02 ampliada pelo usuário em 17/11/2026: configuração administrativa para
+encaminhar mensagens/conteúdo a múltiplos grupos e canais de diferentes redes
+sociais no mesmo agendamento, não somente WhatsApp. Preservar ID G02. Por nova
+solicitação do vendedor, usa estimativa conservadora de 250 h / R$ 50.000 para até
+três conectores oficiais viáveis e é selecionável na simulação, fora dos presets.
+Isso substitui o estado anterior sob cotação/bloqueado, sem atestar viabilidade.
+Validar APIs oficiais, permissões e elegibilidade por rede/destino antes de
+executar conectores. Não prometer suporte universal ou entrega no mesmo
+instante. Spec: `specs/G02-encaminhamento-multicanal-redes-sociais.md`.
+G01 continua sendo diretório de links do WhatsApp, sem disparos.
+
+Campanha v2 agora tem um sexto input: "Desconto por feature opcional adicional".
+`additionalOptionalPercentage` é opcional no schema v2 (ausente = zero), salvo
+somente no navegador. `basePreset` preserva o plano de origem; acrescentar extras
+mantém o desconto do pacote completo e aplica o percentual adicional apenas aos
+opcionais que não estejam em NENHUM dos planos Essencial/Plus/Premium, sem
+duplicidade. Um recurso incluído em qualquer plano não recebe desconto adicional
+quando comprado separadamente em outro plano. Usar a união dos IDs dos três
+presets como exclusão, não somente os itens do plano de origem. Remover itens do pacote ou trocar vídeo
+suspende ambos; restaurar a composição recupera as condições na mesma vigência.
+Fundação, obrigatórias, vídeo e mensalidade não recebem o percentual adicional.
+Horas não mudam. O estado personalizado sem um pacote completo não é elegível.
+`pricing-promotion.js` centraliza arredondamento por feature em centavos.
+Consultar `docs/ofertas-24h.md` e executar testes Python e Node.

@@ -1,5 +1,19 @@
 # Revisão técnica preliminar — 16/11/2026
 
+> Escopo confirmado em 17/11/2026: aplicativos Android/iOS e versão web para
+> alunos, além do painel administrativo web, desde o Essencial. O impacto da
+> web dos alunos nas estimativas abaixo ainda precisa de revisão técnica e
+> comercial. Valores e prazos foram mantidos, não revalidados para esse escopo.
+> Consulte `plataformas-entrega.md`.
+
+> Atualização G02 — 17/11/2026: por solicitação do vendedor, substituída a
+> ausência de preço por estimativa conservadora de **250 h / R$ 50.000** para
+> até três conectores oficiais viáveis. Nove tarefas numéricas, sem medição
+> histórica. G02 é selecionável na simulação, mas não foi adicionada aos presets;
+> base, fundação e referências dos três planos não mudam. Viabilidade oficial
+> e permissões por rede continuam como condição antes da execução. O estado
+> sob cotação/bloqueado mencionado na revisão inicial abaixo é histórico.
+
 > Premissa de equipe atualizada: duas pessoas dedicadas, 22 dias úteis/mês,
 > 8 h/dia por pessoa, capacidade equivalente de **352 h/mês**.
 > Horas de esforço e valores não mudam. Prazos vigentes: Essencial **2,53 meses**,
@@ -76,7 +90,8 @@ C02. Mensalidades, suporte, tributos e custos externos não integram esses valor
   Necessidade de implementações adicionais de loja exige nova decomposição.
 - Definir provedor e fontes autorizadas para IA. Transcrição automática,
   moderação avançada e DRM não estão implicitamente incluídos.
-- Validar a automação WhatsApp oficialmente antes de estimar G02.
+- Validar APIs oficiais, permissões e destinos de cada rede antes de estimar G02,
+  ampliada em 17/11/2026 para configuração multicanal de redes sociais.
 - Validar políticas de YouTube para acesso pago e gamificação.
 
 ## Fonte de verdade e atualização

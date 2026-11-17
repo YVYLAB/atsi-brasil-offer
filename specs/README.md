@@ -6,15 +6,22 @@ horas são apenas propostas pendentes de avaliação.
 
 As distribuições mecânicas iniciais foram substituídas por uma revisão técnica
 por tarefa nas 53 features estimáveis e nas sete atividades de fundação.
-As estimativas permanecem preliminares e precisam de aprovação; G02 continua
-sob cotação. Consulte `REVISAO-TECNICA.md` para resultados e limitações.
+As estimativas permanecem preliminares e precisam de revisão técnica.
+G02 recebeu estimativa conservadora de 250 h / R$ 50.000 em 17/11/2026
+por solicitação do vendedor, para até três conectores oficiais viáveis.
+Consulte `REVISAO-TECNICA.md` para resultados e limitações.
+
+Escopo confirmado em 17/11/2026: Android, iOS e web para alunos desde o Essencial,
+além do painel administrativo web. Consulte `plataformas-entrega.md`.
+O impacto da web dos alunos em esforço, valores e prazo ainda requer revisão;
+as estimativas existentes foram mantidas, não revalidadas para esse escopo.
 
 O HTML usa as 54 features do catálogo como opções de orçamento. A fundação
 é incluída uma vez, com 522 h após o detalhamento genérico de ambientes e pipelines. O valor exibido
 é uma referência de implantação de R$ 200/h, não um preço de venda aprovado
 nem custo interno. Custos operacionais permanecem separados e não cotados.
-G02 está indisponível para contratação; as estimativas continuam pendentes
-de revisão técnica e comercial. Os cards legados não são migrados automaticamente
+G02 é selecionável na simulação, sem mudar os presets; a execução das integrações
+depende de validação por rede. Os cards legados não são migrados automaticamente
 para equivalentes que tenham escopo diferente.
 
 Para atualizar o catálogo incorporado ao HTML após editar especificações,

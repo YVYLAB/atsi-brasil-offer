@@ -3,15 +3,59 @@
 ## Atualização — painel simplificado
 O fluxo atual substitui os controles de importação/exportação por um popup azul
 acessível pelo menu ☰. Contém somente início e término (data/hora de Brasília),
-percentuais de Essencial/Plus/Premium e Salvar.
+percentuais de Essencial/Plus/Premium, desconto por feature opcional adicional
+e Salvar.
 O período é explícito, não obrigatoriamente 24 h. Os percentuais aplicam-se ao
-total de implantação de cada preset; mensalidades, horas e Personalizado não mudam.
+total de implantação de cada preset; mensalidades e horas não mudam.
+Personalizado sem a composição completa do plano não recebe a campanha.
 A chave `atsi-campaign-v2` salva os dados somente no navegador atual. Nenhuma
 configuração é pré-preenchida como promoção real. A oferta anterior v1 não é
 apagada, mas não é restaurada automaticamente por esse novo painel.
 O GitHub Pages não grava um JSON no repositório; o botão Salvar não publica dados
 para outros visitantes. Horário e permissões continuam sem validação de servidor.
 O fluxo detalhado abaixo é histórico; não é mais a interface atual do configurador.
+
+## Opcionais adicionais — 17/11/2026
+
+- O campo **Desconto por feature opcional adicional (%)** define um percentual
+  único para opcionais que não estejam em **nenhum** dos planos Essencial,
+  Plus ou Premium. Zero significa sem desconto.
+- `state.basePreset` registra o último plano escolhido explicitamente.
+  Acrescentar opcionais continua marcando `activePreset` como personalizado,
+  mas preserva a promoção do pacote se todos os seus itens estiverem presentes.
+- O total do plano recebe apenas o percentual daquele plano. Cada extra opcional
+  elegível recebe apenas o percentual dos adicionais; não há desconto duplicado nem
+  aplicação do desconto do plano sobre os extras.
+- Opcionais incluídos em qualquer um dos três planos não recebem o desconto
+  adicional, mesmo quando comprados separadamente em outro plano. Por exemplo,
+  certificados ou e-books adicionados ao Essencial ficam a preço de tabela.
+  G02 continua elegível por não estar em nenhum preset. A elegibilidade é
+  recalculada a partir da união dos IDs dos três planos, sem lista paralela.
+  Fundação, obrigatórias,
+  alternativas exclusivas de vídeo e mensalidades não recebem o percentual
+  adicional. O desconto normal do pacote sobre seu total não foi alterado.
+- Dependências opcionais incluídas com confirmação só recebem o percentual
+  adicional se também estiverem fora de todos os planos. Caso contrário, mantêm
+  preço de tabela, sem duplicar itens ou custos.
+- Remover um item do pacote ou substituir sua estratégia de vídeo suspende
+  ambos os descontos. Restaurar a composição recupera as condições enquanto
+  a campanha estiver vigente. Escolher outro preset redefine o plano de origem.
+- Ambos seguem as mesmas datas de Brasília: antes do início, após o fim ou
+  com configuração inválida, não são aplicados. Editar features não renova datas.
+- Cada desconto de extra é calculado e arredondado em centavos por feature.
+  O desconto do pacote é arredondado separadamente sobre seu total. O total
+  final subtrai as duas parcelas disjuntas.
+- Cards dos extras mostram tabela riscada, percentual e preço final. O resumo
+  separa as duas parcelas; dados de proposta usam o mesmo núcleo de cálculo.
+- Campanha v2 ganha o campo opcional `additionalOptionalPercentage`. Dados v2
+  anteriores sem esse campo continuam válidos com percentual adicional zero.
+  Campo presente inválido invalida a campanha; não é corrigido silenciosamente.
+  Persistência continua apenas local, em `atsi-campaign-v2`.
+
+G02 tem estimativa conservadora de 250 h / R$ 50.000, selecionável somente como
+opcional adicional, não incluída automaticamente em nenhum preset. Viabilidade
+e permissões de até três conectores oficiais ainda precisam ser validadas;
+o desconto não altera esforço, limites técnicos ou custos de terceiros.
 
 ## Estado
 O configurador continua usando as referências de implantação das specs, a

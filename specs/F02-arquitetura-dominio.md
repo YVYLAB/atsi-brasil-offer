@@ -5,6 +5,12 @@
 ## Escopo e premissas
 Desenhar fluxos e interfaces essenciais, domínio relacional e autorização para a base. Pressupõe React Native/Expo, Next.js e Supabase como hipóteses, não decisões definitivas. Não inclui implementação visual nem desenvolvimento completo.
 
+**Atualização de escopo — 17/11/2026:** considerar aplicativos Android/iOS,
+versão web para alunos e painel administrativo web desde o Essencial.
+Detalhar jornadas e diferenças por plataforma, inclusive navegadores e
+tecnologia da web dos alunos, sem confundi-la com o painel administrativo.
+O impacto nas tarefas/horas atuais está pendente; consulte `plataformas-entrega.md`.
+
 ## Tarefas para validação
 | ID | Tarefa e entrega verificável | Horas propostas | Status |
 |---|---|---:|---|
