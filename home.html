@@ -7,6 +7,7 @@
   <meta name="description" content="Proposta de desenvolvimento ATSI+: plataforma digital da ATSI Brasil, desenvolvida pela YvyLab. Conhecimento. Conexões. Oportunidades.">
   <meta property="og:title" content="ATSI+ — Plataforma Digital">
   <link rel="icon" href="branding/assets/atsi-plus-icon.svg" type="image/svg+xml">
+  <script src="branding/product-config.js"></script>
   <style>
     @font-face{
       font-family:Montserrat;font-style:normal;font-weight:100 900;font-display:swap;
@@ -495,6 +496,7 @@
       .summary-line{flex-wrap:wrap}
     }
   </style>
+  <link rel="stylesheet" href="branding/company-theme.css">
 </head>
 <body>
   <div class="page" id="pageTop">
@@ -516,7 +518,7 @@
         </g>
       </svg>
       <div class="brand">
-          <div class="logo"><img src="branding/assets/atsi-logo-cabecalho.svg" alt="ATSI Brasil" /></div>
+          <div class="logo"><img data-company-logo="institutional" src="branding/assets/atsi-logo-cabecalho.svg" alt="ATSI Brasil" /></div>
         <div>
           <div class="eyebrow">ATSI Brasil · desenvolvido por YvyLab</div>
            <h1>Plataforma ATSI+</h1>
@@ -743,7 +745,6 @@
     </form>
     <p class="settings-local-note">Salvar aplica a oferta neste navegador. O arquivo permite levar a configuração para outro dispositivo; não publica alterações para os demais visitantes.</p>
   </dialog>
-  <script src="branding/product-config.js"></script>
   <script src="pricing-promotion.js"></script>
   <script src="campaign-settings.js"></script>
   <script src="product-copy.js"></script>
@@ -943,6 +944,7 @@
         ${additionalPricing.discountCents>0?`<p>Condição para adicionar ao ${presets[state.basePreset].name}: ${additionalPricing.percentage.toLocaleString('pt-BR')}% de desconto, com economia de ${brl(additionalPricing.discountCents/100)}.</p>`:''}
         <p>${current.type==='required'?'Esta experiência já faz parte de todos os planos.':current.type==='unique'?'Escolha a forma de entrega de vídeo que combina com a sua estratégia.':'Combine este recurso com o seu plano para ampliar a experiência ATSI+.'}</p>
       `;
+      CompanyBranding.apply(dialogContent);
       featureDialog.showModal();
       document.getElementById('dialogClose').focus();
     }
@@ -990,10 +992,10 @@
     }
     function getFeature(id){ return features.find(f=>f.id===id); }
 
-    const offerStorageKey = 'atsi-offer-v1';
+    const offerStorageKey = CompanyBranding.storageKey('atsi-offer-v1');
     let currentOffer = null;
     let campaignConfig = null;
-    const campaignStorageKey='atsi-campaign-v2';
+    const campaignStorageKey=CompanyBranding.storageKey('atsi-campaign-v2');
     let cancelledOffers = [];
     function pricingSnapshot(){
       const packages={};
@@ -1030,7 +1032,8 @@
       const operations=operationalPricing();
       const maintenance=ATSIOperations.plans[state.maintenancePlan];
       return {schemaVersion:1,exportedAt:new Date(now).toISOString(),simulation:true,
-        project:{product:ATSIProduct.name,client:ATSIProduct.client,developer:ATSIProduct.developer},
+        project:{product:ATSIProduct.name,client:ATSIProduct.client,developer:ATSIProduct.developer,
+          company:ATSIProduct.company,branding:CompanyBranding.pdfBranding()},
         delivery:{...deliveryScope,studentPlatforms:[...deliveryScope.studentPlatforms]},
         includedBenefits:includedBenefits.map(benefit=>({...benefit,includedIn:[...benefit.includedIn],topics:[...benefit.topics]})),
         complexity:scopeComplexity(),
@@ -1047,7 +1050,7 @@
     function quoteRows(){
       const q=quoteData();
       return [['Projeto',`${ATSIProduct.name} — Plataforma Digital`],['Cliente',ATSIProduct.client],
-        ['Desenvolvedora',ATSIProduct.developer],['Apresentação','Configuração da experiência ATSI+'],['Cotação',q.offer?.quoteId||'A combinar'],
+        ['Desenvolvedora',ATSIProduct.developer],['Apresentação',`Configuração da experiência ${ATSIProduct.name}`],['Cotação',q.offer?.quoteId||'A combinar'],
         ['Oferta',q.campaign?'Campanha local':q.offer?.id||'Não emitida'],['Status',q.offerStatus],
         ['Início UTC',q.campaign?.startsAt||q.offer?.issuedAt||'Não definido'],
         ['Vencimento UTC',q.campaign?.endsAt||q.offer?.expiresAt||'Não definido'],['Pacote',q.packageId],
@@ -1108,7 +1111,8 @@
       return ATSIOfferPDF.buildModel({
         generatedAt:q.exportedAt,project:q.project,delivery:q.delivery,
         packageId:q.packageId,packageName:q.packageId==='custom'?'Personalizado':presets[q.packageId].name,
-        basePackageName:presets[q.basePackageId].name,pricing:q.pricing,foundation,features:featuresForPDF,
+        basePackageName:presets[q.basePackageId].name,pricing:q.pricing,
+        foundation:CompanyBranding.copy(foundation),features:CompanyBranding.copy(featuresForPDF),
         benefits:q.includedBenefits,
         support:{planName:presets[state.maintenancePlan].name,priceCents:Math.round(q.monthlyMaintenanceBRL*100),
           operations:q.operations,totalCents:Math.round(q.monthlyMaintenanceBRL*100)+q.operations.totalCents,hours:q.monthlyHours},
@@ -1225,7 +1229,8 @@
       exportButton.addEventListener('click',()=>{
         const config=readDraft();
         if(!config)return;
-        downloadJSON(ATSICampaignSettings.createFile(config,hash.value),'atsi-configuracao-descontos.json');
+        const prefix=ATSIProduct.company==='atsi-brasil'?'atsi':ATSIProduct.company;
+        downloadJSON(ATSICampaignSettings.createFile(config,hash.value),`${prefix}-configuracao-descontos.json`);
         feedback.textContent='Arquivo preparado com o hash e os campos atuais. Baixar não aplica nem publica a oferta.';
       });
       document.getElementById('importDiscountSettings').addEventListener('click',()=>fileInput.click());
@@ -1971,6 +1976,7 @@
       logo.src = ATSIProduct.logoDark;
       logo.alt = ATSIProduct.name;
       mockBrand.replaceChildren(logo);
+      CompanyBranding.apply(el.phoneScreen);
       document.getElementById('liveMode').textContent = chosenFeature.unavailable ? 'Sob validação' : isSelected(chosenFeature) ? 'Incluída no escopo' : 'Apenas visualização';
       highlightActiveFeature();
     }
@@ -2111,6 +2117,7 @@
       renderSummaryOnly(now);
       renderPreview();
       updatePriceShortcut();
+      CompanyBranding.apply();
     }
 
     // A mesma fonte de dados alimenta os entregáveis e o total obrigatório.
@@ -2230,9 +2237,11 @@
     document.getElementById('openSettings').addEventListener('click',()=>settingsDialog.showModal());
     document.getElementById('closeSettings').addEventListener('click',()=>settingsDialog.close());
     settingsDialog.addEventListener('close',()=>document.getElementById('openSettings').focus());
-    initOffers();
-    renderFoundation();
-    applyPreset('essencial');
+    if(CompanyBranding.available){
+      initOffers();
+      renderFoundation();
+      applyPreset('essencial');
+    }
   </script>
 </body>
 </html>

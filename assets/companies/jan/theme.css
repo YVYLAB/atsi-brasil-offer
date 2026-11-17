@@ -1,0 +1,18 @@
+/* Paleta demonstrativa, não homologada pela JAN. Substituir pelos valores oficiais. */
+:root{
+  --brand-bg:#180d10;
+  --brand-panel:#28171c;
+  --brand-surface:#42232c;
+  --brand-card:#342027;
+  --brand-line:#71444f;
+  --brand-text:#fff5f6;
+  --brand-muted:#dfc0c7;
+  --brand-primary:#ff8897;
+  --brand-strong:#ae2341;
+  --brand-soft:#ffd2da;
+  --brand-button-text:#250b12;
+  --brand-header-rgb:66,35,44;
+  --brand-accent-rgb:174,35,65;
+  --brand-glow-rgb:255,136,151;
+}
+/* Fundo, fonte e demais itens não sobrescritos vêm da base compartilhada. */

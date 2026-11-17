@@ -125,7 +125,7 @@ class CampaignSettingsTest(unittest.TestCase):
             run = subprocess.run([
                 chrome, "--headless", "--no-sandbox", "--disable-gpu",
                 "--disable-dev-shm-usage", "--virtual-time-budget=5000",
-                "--dump-dom", file.as_uri()
+                "--dump-dom", file.as_uri() + "?company=atsi-brasil"
             ], capture_output=True, text=True, timeout=30)
         match = re.search(r'<pre id="qa-settings">(\[.*?\])</pre>', run.stdout)
         self.assertIsNotNone(match, "Fluxo de configuração não completou")

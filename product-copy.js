@@ -256,5 +256,6 @@
       commercialLabel:'Cortesia · sem custo adicional'
     }
   };
-  root.ATSIProductCopy={features,sections,foundation,includedBenefits};
+  const presentation={features,sections,foundation,includedBenefits};
+  root.ATSIProductCopy=root.CompanyBranding?root.CompanyBranding.copy(presentation):presentation;
 })(globalThis);

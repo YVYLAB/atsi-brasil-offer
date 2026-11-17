@@ -1,11 +1,89 @@
-/* Identidade proposta do produto; não altera identificadores ou preços. */
-globalThis.ATSIProduct = Object.freeze({
-  name:'ATSI+',
-  slug:'atsi-plus',
-  client:'ATSI Brasil',
-  developer:'YvyLab',
-  slogan:'Conhecimento. Conexões. Oportunidades.',
-  logoDark:'branding/assets/atsi-plus-dark.svg',
-  logoLight:'branding/assets/atsi-plus-light.svg',
-  favicon:'branding/assets/atsi-plus-icon.svg'
-});
+/* Registro visual compartilhado. Nunca definir catálogo ou preços por empresa aqui. */
+(function(root){
+  'use strict';
+  const companies=Object.freeze({
+    'atsi-brasil':{
+      name:'ATSI+',slug:'atsi-plus',client:'ATSI Brasil',shortName:'ATSI',
+      logoInstitutional:'branding/assets/atsi-logo-cabecalho.svg',
+      logoDark:'logo-dark.svg',logoLight:'logo-light.svg',favicon:'icon.svg'
+    },
+    jan:{
+      name:'JAN',slug:'jan',client:'JAN',shortName:'JAN',
+      logoDark:'logo-dark.svg',logoLight:'logo-light.svg',favicon:'icon.svg'
+    }
+  });
+  // Somente slugs registrados podem determinar caminhos de assets.
+  const requested=new URLSearchParams(root.location.search).get('company');
+  const available=Object.hasOwn(companies,requested);
+  // A referência interna evita erros durante a navegação; nunca é exibida
+  // nem inicializa ofertas quando o link não identifica uma empresa válida.
+  const company=available?requested:'atsi-brasil';
+  const config=companies[company];
+  const assets=`assets/companies/${company}/`;
+  const product=Object.freeze({
+    ...config,company,assets,developer:'YvyLab',
+    slogan:'Conhecimento. Conexões. Oportunidades.',
+    logoDark:assets+config.logoDark,logoLight:assets+config.logoLight,
+    logoInstitutional:config.logoInstitutional || assets+config.logoDark,
+    favicon:assets+config.favicon
+  });
+  function text(value){
+    return String(value).replace(/ATSI\+|ATSI Brasil|\bATSI\b/g,match=>
+      match==='ATSI+'?product.name:match==='ATSI Brasil'?product.client:product.shortName);
+  }
+  function copy(value){
+    if(typeof value==='string')return text(value);
+    if(Array.isArray(value))return value.map(copy);
+    if(value && typeof value==='object')return Object.fromEntries(
+      Object.entries(value).map(([key,item])=>[key,copy(item)]));
+    return value;
+  }
+  function apply(container=document.body){
+    if(!available)return;
+    const walker=document.createTreeWalker(container,NodeFilter.SHOW_TEXT,{
+      acceptNode(node){
+        return node.parentElement.closest('script,style,textarea,input')?
+          NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    while(walker.nextNode()){
+      const node=walker.currentNode;
+      const branded=text(node.nodeValue);
+      if(branded!==node.nodeValue)node.nodeValue=branded;
+    }
+    container.querySelectorAll('[data-company-logo]').forEach(image=>{
+      const institutional=image.dataset.companyLogo==='institutional';
+      image.src=institutional?product.logoInstitutional:product.logoDark;
+      image.alt=institutional?product.client:product.name;
+    });
+  }
+  function pageURL(path){
+    const url=new URL(path,root.location.href);
+    url.searchParams.set('company',company);
+    return url;
+  }
+  // Preserva as campanhas existentes da ATSI; demais empresas têm chaves próprias.
+  function storageKey(key){
+    return company==='atsi-brasil'?key:`${key}:company:${company}`;
+  }
+  function pdfBranding(){
+    const style=getComputedStyle(document.documentElement);
+    const rgb=name=>style.getPropertyValue(name).trim().split(',').map(Number);
+    return {header:rgb('--brand-header-rgb'),accent:rgb('--brand-accent-rgb')};
+  }
+  root.ATSIProduct=product;
+  root.CompanyBranding=Object.freeze({available,text,copy,apply,pageURL,storageKey,pdfBranding});
+  if(!available){
+    document.documentElement.hidden=true;
+    root.location.replace(new URL('404.html',document.baseURI));
+    return;
+  }
+  document.documentElement.dataset.company=company;
+  const theme=document.createElement('link');
+  theme.rel='stylesheet';theme.href=assets+'theme.css';document.head.appendChild(theme);
+  document.querySelector('link[rel="icon"]').href=product.favicon;
+  document.title=text(document.title);
+  document.querySelectorAll('meta[name="description"],meta[property="og:title"]').forEach(meta=>{
+    meta.content=text(meta.content);
+  });
+})(globalThis);

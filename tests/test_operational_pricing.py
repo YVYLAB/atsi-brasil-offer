@@ -38,7 +38,7 @@ class OperationalPricingTest(unittest.TestCase):
             wrapper.write_text("""<!doctype html><body><script>
             (async()=>{
               const frame=document.createElement('iframe');frame.style.width='WIDTHpx';frame.style.height='1000px';
-              frame.src='test.html';const loaded=new Promise(resolve=>frame.onload=resolve);
+               frame.src='test.html?company=atsi-brasil';const loaded=new Promise(resolve=>frame.onload=resolve);
               document.body.append(frame);await loaded;
               const checks=await frame.contentWindow.qaOperationsPromise;
               checks.push({name:'viewport real',ok:frame.contentWindow.innerWidth===WIDTH});

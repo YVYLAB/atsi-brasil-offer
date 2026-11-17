@@ -1,0 +1,103 @@
+/* Camada visual white label. O catálogo e os cálculos não dependem deste CSS. */
+/* Baixa especificidade: toda empresa herda a base e sobrescreve só o necessário.
+   Não colocar URLs relativas em variáveis consumidas por outro arquivo CSS. */
+:where(:root){
+  --brand-bg:#08131d;
+  --brand-panel:#0f2430;
+  --brand-surface:#173850;
+  --brand-card:#15303b;
+  --brand-line:#2a4d56;
+  --brand-text:#eff8f7;
+  --brand-muted:#b1c8cf;
+  --brand-primary:#59c478;
+  --brand-strong:#2c9d54;
+  --brand-soft:#b9e7ca;
+  --brand-button-text:#08131d;
+  --brand-header-rgb:23,56,80;
+  --brand-accent-rgb:44,157,84;
+  --brand-glow-rgb:89,196,120;
+  --brand-font-family:Montserrat,Arial,sans-serif;
+}
+:root{
+  --bg:var(--brand-bg);--bg-2:var(--brand-panel);
+  --panel:var(--brand-panel);--panel-strong:var(--brand-panel);
+  --card:var(--brand-card);--card-2:var(--brand-surface);
+  --line:var(--brand-line);--text:var(--brand-text);--muted:var(--brand-muted);
+  --green:var(--brand-primary);--green-2:var(--brand-strong);
+}
+body{
+  color:var(--brand-text);background:linear-gradient(180deg,#0005,#0009),
+    url('assets/parallax.jpg') center/cover no-repeat,var(--brand-bg);
+  font-family:var(--brand-font-family);
+  background-attachment:fixed;
+}
+button,input,select,textarea{font-family:inherit}
+.hero,.courtesy-card,.screen-hero,.app-header,.app-video,.app-cover{
+  background:linear-gradient(135deg,var(--brand-surface),var(--brand-strong));
+}
+.hero::after{background:radial-gradient(circle,rgba(var(--brand-glow-rgb),.22),transparent 60%)}
+.hero{border-color:var(--brand-primary)}
+.hero,.panel,.spec-catalog,.section{
+  box-shadow:0 0 12px rgba(var(--brand-glow-rgb),.16),
+    inset 0 0 10px rgba(var(--brand-glow-rgb),.05);
+}
+.panel,.section,.feature,.preset,.spec-catalog,.info-dialog,.login{
+  background:linear-gradient(180deg,var(--brand-panel),var(--brand-bg));
+  border-color:var(--brand-line);
+}
+.section-head,.delivery-scope,.pdf-offer-panel,.logo,.floating-total,.price-shortcut,
+.offer-box,.preset .plan-offer,.feature-discount-banner,#settingsDialog,
+.feature-info,.info-dialog .info-close,body::before,body::after{
+  background:var(--brand-surface);border-color:var(--brand-primary);
+}
+.section-head:hover{background:var(--brand-surface)}
+.preview-caption,.total-box{background:var(--brand-panel)}
+.feature.selected,.preset.active,.courtesy-card,.login{
+  border-color:var(--brand-primary);
+  box-shadow:0 0 0 1px rgba(var(--brand-glow-rgb),.18) inset;
+}
+.feature:hover,.preset:hover{border-color:var(--brand-primary)}
+.feature-check,.operation-controls input[type="range"]{accent-color:var(--brand-primary)}
+.eyebrow,.preset small,.section-tag,.live-pill,.badge.req,.badge.plan-essencial,
+.courtesy-card .courtesy-price,.info-dialog h3,.spec-catalog h3,.footer-note,
+.total-box small,.kpi small,.field label,.meta-row,.offer-clock,#settingsDialog a{
+  color:var(--brand-soft);
+}
+.chip,.section-tag,.live-pill,.feature-info,.badge.req,.badge.plan-essencial{
+  background:rgba(var(--brand-glow-rgb),.1);border-color:rgba(var(--brand-glow-rgb),.3);
+}
+.delivery-scope h2,.price-shortcut,.menu-toggle span{color:var(--brand-text)}
+.delivery-scope p,.courtesy-card p,.courtesy-card li,.pdf-offer-panel p,
+.summary-line,.info-dialog p,.info-dialog li,.intro,.show,footer{color:var(--brand-muted)}
+.menu-toggle,input,.operation-inputs input,#promotionSettings input,#discountReleaseHash{
+  background:var(--brand-bg);border-color:var(--brand-line);color:var(--brand-text);
+}
+#generateOfferPDF,#promotionSettings button,.settings-file-tools button,
+#discountAccessForm button,.submit{
+  background:var(--brand-primary);color:var(--brand-button-text);
+}
+.app-status{background:var(--brand-surface)}
+.app-brand,.app-header p{color:var(--brand-soft)}
+.app-title,.app-stat{color:var(--brand-surface)}
+.app-button,.app-toggle{background:var(--brand-strong)}
+.app-progress span,.app-qr.scan:after,.app-scan-area:after{background:var(--brand-primary)}
+.app-chart i,.progress span,.cta{background:linear-gradient(var(--brand-primary),var(--brand-strong))}
+.app-nav span:first-child{color:var(--brand-strong)}
+.app-scan-area{background:var(--brand-surface);border-color:var(--brand-primary)}
+.app-qr{background-image:repeating-conic-gradient(var(--brand-surface) 0% 25%,#fff 0% 50%)}
+.app-header:after{border-color:var(--brand-primary)}
+button:focus-visible,input:focus-visible,summary:focus-visible,
+.feature-info:focus-visible,.operation-controls input:focus-visible{
+  outline-color:var(--brand-primary);
+}
+.logo img{max-width:100%;max-height:100%;object-fit:contain}
+/* Cores de apoio dos mockups também acompanham a empresa, sem mudar os estados. */
+.app-badge,.mobile-chip,.tag{
+  color:var(--brand-strong);background:rgba(var(--brand-glow-rgb),.12);
+}
+.app-bubble{color:var(--brand-surface);background:rgba(var(--brand-glow-rgb),.12)}
+.app-bubble.mine{background:rgba(var(--brand-glow-rgb),.22)}
+.app-flow-step{border-color:var(--brand-line)}
+@media(max-width:760px),(prefers-reduced-motion:reduce){
+  body{background-attachment:scroll}
+}

@@ -74,7 +74,7 @@ class DependenciesTest(unittest.TestCase):
             file.write_text(page)
             run = subprocess.run([
                 chrome, "--headless", "--no-sandbox", "--disable-gpu",
-                "--disable-dev-shm-usage", "--dump-dom", file.as_uri()
+                "--disable-dev-shm-usage", "--dump-dom", file.as_uri() + "?company=atsi-brasil"
             ], capture_output=True, text=True, timeout=30)
         match = re.search(r'<pre id="qa-dependencies">(\[.*?\])</pre>', run.stdout)
         self.assertIsNotNone(match, "Teste de dependências não completou")

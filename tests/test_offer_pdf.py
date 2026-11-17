@@ -84,7 +84,7 @@ class OfferPDFTest(unittest.TestCase):
             run = subprocess.run([
                 chrome, "--headless", "--no-sandbox", "--disable-gpu",
                 "--disable-dev-shm-usage", "--virtual-time-budget=10000",
-                "--dump-dom", file.as_uri()
+                "--dump-dom", file.as_uri() + "?company=atsi-brasil"
             ], capture_output=True, text=True, timeout=45)
             match = re.search(r'<pre id="qa-pdf">(\{.*?\})</pre>', run.stdout)
             self.assertIsNotNone(match, "Geração do PDF não completou")

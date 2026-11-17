@@ -53,7 +53,7 @@ class LoginTest(unittest.TestCase):
             run = subprocess.run([
                 chrome, "--headless", "--no-sandbox", "--disable-gpu",
                 "--disable-dev-shm-usage", "--virtual-time-budget=1000",
-                "--dump-dom", file.as_uri()
+                "--dump-dom", file.as_uri() + "?company=atsi-brasil"
             ], capture_output=True, text=True, timeout=30)
         match = re.search(r'<pre id="login-result">(\{.*?\})</pre>', run.stdout)
         self.assertIsNotNone(match, "Teste de login não completou")

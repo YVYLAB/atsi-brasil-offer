@@ -1,0 +1,18 @@
+/* Identidade ATSI+ atual. Apenas apresentação, sem dados comerciais. */
+:root{
+  --brand-bg:#08131d;
+  --brand-panel:#0f2430;
+  --brand-surface:#173850;
+  --brand-card:#15303b;
+  --brand-line:#2a4d56;
+  --brand-text:#eff8f7;
+  --brand-muted:#b1c8cf;
+  --brand-primary:#59c478;
+  --brand-strong:#2c9d54;
+  --brand-soft:#b9e7ca;
+  --brand-button-text:#08131d;
+  --brand-header-rgb:23,56,80;
+  --brand-accent-rgb:44,157,84;
+  --brand-glow-rgb:89,196,120;
+}
+/* Fundo, fonte e demais itens não sobrescritos vêm da base compartilhada. */

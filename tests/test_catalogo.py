@@ -393,7 +393,7 @@ class CatalogoTest(unittest.TestCase):
             file.write_text(page)
             run = subprocess.run([
                 chrome, "--headless", "--no-sandbox", "--disable-gpu",
-                "--disable-dev-shm-usage", "--window-size=1440,1000", "--dump-dom", file.as_uri()
+                "--disable-dev-shm-usage", "--window-size=1440,1000", "--dump-dom", file.as_uri() + "?company=atsi-brasil"
             ], capture_output=True, text=True, timeout=30)
         match = re.search(r'<pre id="qa-results">(\[.*?\])</pre>', run.stdout)
         self.assertIsNotNone(match, "Teste interrompido antes de gerar resultados")
@@ -472,7 +472,7 @@ class CatalogoTest(unittest.TestCase):
           for(const width of [320,390,768,1121,1440]){
             const frame=document.createElement('iframe');
             frame.style.width=width+'px';frame.style.height='1000px';
-            frame.src='test.html';
+             frame.src='test.html?company=atsi-brasil';
             const loaded=new Promise(resolve=>frame.onload=resolve);
             document.body.appendChild(frame);await loaded;
             results.push(await frame.contentWindow.eval(CHECK_SCRIPT));
@@ -516,7 +516,7 @@ class CatalogoTest(unittest.TestCase):
             with self.subTest(name=name):
                 field = "" if additional is None else f",additionalOptionalPercentage:{additional}"
                 seed = """
-                const restoreCampaign={schemaVersion:2,
+                window.restoreCampaign={schemaVersion:2,
                   startsAt:new Date(Date.now()-3600000).toISOString(),
                   endsAt:new Date(Date.now()+3600000).toISOString(),
                   percentages:{essencial:10,plus:15,premium:20}FIELD};
@@ -539,7 +539,7 @@ class CatalogoTest(unittest.TestCase):
                     file.write_text(page)
                     run = subprocess.run([
                         chrome, "--headless", "--no-sandbox", "--disable-gpu",
-                        "--disable-dev-shm-usage", "--dump-dom", file.as_uri()
+                        "--disable-dev-shm-usage", "--dump-dom", file.as_uri() + "?company=atsi-brasil"
                     ], capture_output=True, text=True, timeout=30)
                 match = re.search(r'<pre id="restore-result">(\{.*?\})</pre>', run.stdout)
                 self.assertIsNotNone(match, "Restauração não completou")

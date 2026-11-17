@@ -490,3 +490,34 @@ não afirmar que os serviços deixam de ter custo. Streaming privado/offline
 mantém os adicionais anteriores. A explicação logo abaixo da mensalidade,
 PDF e exports destaca o impacto de transmissão, armazenamento e downloads
 no crescimento do adicional. Preservar coerência entre esses canais.
+
+White label: `company` na URL seleciona identidade via `branding/product-config.js`.
+Assets e cores ficam em `assets/companies/<slug>/`; camada compartilhada em
+`branding/company-theme.css`. `company` válido é obrigatório: ausente, vazio ou
+desconhecido redireciona para `404.html`, sem fallback visual para a ATSI. Trata-se
+de página de erro no navegador, não de status HTTP 404 sem regra no hosting.
+`jan` tem identidade
+textual/paleta provisórias, não homologadas. Catálogo, IDs, valores, horas,
+presets e cálculos são únicos para todas as empresas. Não duplicar ofertas por
+branding. Campanhas locais de outras empresas usam sufixo `:company:<slug>`,
+preservando a chave histórica da ATSI. A entrada mantém o parâmetro ao navegar;
+PDF e dados de proposta identificam a empresa. Não há envio de e-mail nem
+autenticação/multitenancy real nesta entrega. Ver `docs/white-label.md` e
+`tests/test_white_label.py`.
+
+Defaults white label: imagem de fundo `branding/assets/parallax.jpg`, fonte
+Montserrat, textos e comportamento são compartilhados. `branding/company-theme.css`
+define tokens padrão com baixa especificidade; `theme.css` de cada empresa
+sobrescreve apenas o necessário. Tipografia é configurável por
+`--brand-font-family`, com controles herdando a fonte. Imagens próprias são
+opcionais: declarar `background-image` diretamente no CSS da empresa, não URL
+relativa em variável consumida por outro stylesheet. Não remover o fundo padrão
+de uma empresa só por alterar sua paleta. Testar herança parcial e carregamento
+real da imagem nas páginas de entrada, configurador e emissor interno.
+
+Logos white label têm papéis separados: `logoInstitutional` (opcional, caminho
+relativo à raiz) identifica a instituição no cabeçalho de `home.html`, com
+`data-company-logo="institutional"`. ATSI reutiliza o SVG original
+`branding/assets/atsi-logo-cabecalho.svg`, sem edição. `logoDark` continua sendo
+ATSI+ na entrada e nos mockups. Sem logo institucional própria, usar a logo da
+plataforma da empresa selecionada, sem vazar a marca ATSI para outras empresas.

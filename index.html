@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ATSI+ — Acesso à apresentação</title>
   <link rel="icon" href="branding/assets/atsi-plus-icon.svg" type="image/svg+xml">
+  <script src="branding/product-config.js"></script>
   <style>
     @font-face{font-family:Montserrat;src:url('branding/assets/montserrat-variable.ttf');font-weight:100 900;font-display:swap}
     *{box-sizing:border-box}
@@ -36,10 +37,11 @@
     @media(max-width:480px){body{padding:16px}.login{padding:26px 22px}}
     @media(prefers-reduced-motion:reduce){.login{transition:none}body.is-opening::before,body.is-opening::after{animation:none;visibility:hidden}}
   </style>
+  <link rel="stylesheet" href="branding/company-theme.css">
 </head>
 <body>
   <main class="login">
-    <img class="logo" src="branding/assets/atsi-plus-dark.svg" alt="ATSI+">
+    <img class="logo" data-company-logo src="assets/companies/atsi-brasil/logo-dark.svg" alt="ATSI+">
     <div class="eyebrow">Apresentação do projeto</div>
     <h1>Bem-vindo</h1>
     <p class="intro">Entre para conhecer a proposta da plataforma ATSI+.</p>
@@ -65,6 +67,7 @@
     const submit=document.getElementById('loginSubmit');
     const status=document.getElementById('loginStatus');
     let entering=false;
+    CompanyBranding.apply();
     document.getElementById('showPassword').addEventListener('click',event=>{
       const visible=password.type==='password';
       password.type=visible?'text':'password';
@@ -88,7 +91,7 @@
         status.textContent='Abrindo apresentação…';
         submit.textContent='Entrando…';
         document.body.classList.add('is-opening');
-        setTimeout(()=>window.location.replace(new URL('home.html',window.location.href)),
+        setTimeout(()=>window.location.replace(CompanyBranding.pageURL('home.html')),
           matchMedia('(prefers-reduced-motion: reduce)').matches?0:900);
       }catch(error){
         status.textContent='Não foi possível abrir a apresentação. Acesse pelo endereço HTTPS do site.';
