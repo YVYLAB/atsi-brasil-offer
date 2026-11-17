@@ -1,0 +1,1740 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Configurador da Plataforma ATSI+ — YvyLab × ATSI Brasil</title>
+  <meta name="description" content="Proposta de desenvolvimento ATSI+: plataforma digital da ATSI Brasil, desenvolvida pela YvyLab. Conhecimento. Conexões. Oportunidades.">
+  <meta property="og:title" content="ATSI+ — Plataforma Digital">
+  <link rel="icon" href="branding/assets/atsi-plus-icon.svg" type="image/svg+xml">
+  <style>
+    @font-face{
+      font-family:Montserrat;font-style:normal;font-weight:100 900;font-display:swap;
+      src:url('branding/assets/montserrat-variable.ttf') format('truetype');
+    }
+    :root{
+      --bg:#08131d;
+      --bg-2:#0f2430;
+      --panel:#0f2430dd;
+      --panel-strong:#0f2430;
+      --card:#15303b;
+      --card-2:#173850;
+      --line:#2a4d56;
+      --text:#eff8f7;
+      --muted:#b1c8cf;
+      --soft:#90adb5;
+      --green:#59c478;
+      --green-2:#2c9d54;
+      --yellow:#e6c67f;
+      --blue:#6eb6ff;
+      --red:#ff8a80;
+      --shadow:0 22px 60px rgba(0,0,0,.35);
+      --phone-bg:#f4f5f7;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      font:16px/1.55 Montserrat, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        linear-gradient(180deg, rgba(8,19,29,.48), rgba(8,19,29,.72)),
+        url('branding/assets/parallax.jpg') center center / cover no-repeat,
+        #08131d;
+      background-attachment: fixed;
+    }
+    .page{
+      max-width:1600px;
+      margin:0 auto;
+      padding:22px;
+    }
+    .hero{
+      display:flex;
+      gap:20px;
+      justify-content:space-between;
+      align-items:flex-start;
+      margin-bottom:18px;
+      padding:16px 18px;
+      border:1px solid rgba(93,145,111,.22);
+      background:linear-gradient(135deg, #173850, #0f2430);
+      backdrop-filter: blur(10px);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:auto -40px -45px auto;
+      width:260px;height:260px;
+      background:radial-gradient(circle, rgba(110,201,137,.22), transparent 60%);
+      pointer-events:none;
+    }
+    .hero-art{position:absolute;right:0;bottom:0;width:38%;height:100%;opacity:.18;pointer-events:none}
+    .brand{display:flex; gap:14px; align-items:center; position:relative; z-index:1}
+    .logo{
+      width:54px;height:54px;border-radius:16px;
+      display:grid;place-items:center;font-weight:900;letter-spacing:-1px;
+      background:linear-gradient(135deg, #3aa96b, #1e6f48); color:white;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.15);
+    }
+    .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8ddaaa;font-weight:800;margin-bottom:2px}
+    h1{margin:0;font-size:clamp(24px, 3vw, 38px);line-height:1.05;letter-spacing:-1.2px}
+    .hero p{margin:8px 0 0;color:var(--muted);max-width:760px}
+    .hero-actions{display:flex; flex-wrap:wrap; gap:10px; position:relative; z-index:1}
+    .chip{
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(120,168,137,.26);
+      background:rgba(18,40,30,.92);color:#d8efe0;font-weight:700;font-size:12px
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns: minmax(0,1fr) minmax(420px,1fr);
+      gap:18px;
+      align-items:start;
+    }
+
+    .panel{
+      border:1px solid rgba(95,145,114,.22);
+      background:linear-gradient(180deg, #0f2430, #08131d);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(8px);
+    }
+
+    .left-pane{padding:20px}
+    .presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}
+    .preset{
+      background:linear-gradient(180deg, rgba(23,49,38,.98), rgba(18,39,31,.98));
+      border:1px solid var(--line);
+      border-radius:18px;padding:14px 14px 12px;text-align:left;color:var(--text);
+      cursor:pointer; transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .preset:hover{transform:translateY(-1px);border-color:#40745c}
+    .preset.active{border-color:var(--green); box-shadow:0 0 0 1px rgba(87,199,133,.18) inset}
+    .preset small{display:block;color:#89b8a0;text-transform:uppercase;letter-spacing:.12em;font-weight:800;font-size:10px;margin-bottom:5px}
+    .preset strong{display:block;font-size:16px;letter-spacing:-.3px;margin-bottom:4px}
+    .preset span{display:block;color:var(--muted);font-size:12px}
+
+    .left-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:10px}
+    .left-head h2{margin:0;font-size:20px;letter-spacing:-.5px}
+    .left-head p{margin:4px 0 0;color:var(--muted);font-size:12px}
+    .hour-box{
+      display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);
+      border-radius:14px;background:rgba(15,34,26,.92);color:var(--muted);font-size:12px
+    }
+    .hour-box input{
+      width:76px;background:transparent;border:0;color:var(--text);font-weight:800;text-align:right;outline:none
+    }
+
+    .sections{display:flex;flex-direction:column;gap:12px}
+    .section{
+      border:1px solid var(--line);border-radius:20px;overflow:hidden;
+      background:linear-gradient(180deg, #0f2430, #0b1d27);
+    }
+    .section-head{
+      width:100%;background:linear-gradient(90deg, #173850, #102b39);
+      border:0;color:var(--text);padding:16px 18px;display:flex;gap:14px;align-items:center;text-align:left;cursor:pointer
+    }
+    .section-head:hover{background:linear-gradient(90deg, rgba(27,56,43,.98), rgba(18,38,30,.98))}
+    .section-color{width:5px;align-self:stretch;border-radius:20px;background:var(--green)}
+    .section-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:rgba(87,199,133,.11);font-size:20px;border:1px solid rgba(87,199,133,.18)}
+    .section-meta{flex:1;min-width:0}
+    .section-meta strong{display:block;font-size:15px}
+    .section-meta span{display:block;font-size:12px;color:var(--muted)}
+    .section-tag{padding:7px 10px;border-radius:999px;background:rgba(87,199,133,.11);border:1px solid rgba(87,199,133,.18);color:#bce5cb;font-size:11px;font-weight:800}
+    .section-content{display:none;padding:12px}
+    .section.open .section-content{display:block}
+
+    .feature{
+      padding:14px;border:1px solid #2a4d56;background:linear-gradient(180deg, #15303b, #102732);
+      border-radius:18px;margin-bottom:10px;transition:border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+      cursor:pointer;
+    }
+    .feature:hover{border-color:#3d6b56;transform:translateY(-1px)}
+    .feature.selected{border-color:#57c785;box-shadow:0 0 0 1px rgba(87,199,133,.15) inset}
+    .feature.active-preview{box-shadow:0 0 0 1px rgba(110,182,255,.24) inset, 0 0 0 2px rgba(110,182,255,.1); border-color:#5f8eb9}
+    .feature-head{display:flex; gap:12px; align-items:flex-start}
+    .feature-check{margin-top:2px;accent-color:#57c785;width:18px;height:18px;flex:none}
+    .feature-lock{
+      width:18px;height:18px;display:grid;place-items:center;margin-top:1px;flex:none;border-radius:6px;
+      background:rgba(255,255,255,.08);font-size:12px;color:#cce6d4
+    }
+    .feature-copy{flex:1;min-width:0}
+    .feature-copy strong{display:block;font-size:14px;line-height:1.35}
+    .feature-copy p{margin:4px 0 0;color:var(--muted);font-size:12px}
+    .feature-info{flex:none;padding:7px 9px;border:1px solid #56816b;border-radius:10px;background:#173629;color:#e0f6e8;font-size:11px;font-weight:700;cursor:pointer}
+    .feature-info:hover,.feature-info:focus-visible{border-color:#a6e9bd;outline:2px solid #a6e9bd;outline-offset:2px}
+    .info-dialog{width:min(620px,calc(100% - 28px));max-height:85vh;overflow:auto;border:1px solid #56816b;border-radius:20px;background:#11281e;color:var(--text);padding:22px}
+    .info-dialog::backdrop{background:rgba(0,0,0,.75)}
+    .info-dialog header{display:flex;align-items:start;justify-content:space-between;gap:12px}
+    .info-dialog h2{margin:0;font-size:20px}
+    .info-dialog h3{margin:18px 0 5px;color:#b9e9c9;font-size:13px}
+    .info-dialog p,.info-dialog li{font-size:13px;line-height:1.55;color:#d1e5d8}
+    .info-dialog ul{padding-left:20px}
+    .info-dialog .info-close{border:1px solid #56816b;border-radius:10px;background:#173629;color:#fff;padding:8px 12px;cursor:pointer}
+    .spec-catalog{margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:18px;background:#10271c}
+    .spec-catalog summary{cursor:pointer;font-weight:800}
+    .spec-catalog p{color:var(--muted);font-size:12px;line-height:1.5}
+    .spec-catalog h3{font-size:13px;color:#b9e9c9;margin:16px 0 8px}
+    .spec-catalog-list{display:flex;flex-wrap:wrap;gap:7px}
+    .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+    .badge{padding:4px 7px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.02em;background:rgba(255,255,255,.06);color:#cde4d5;border:1px solid rgba(255,255,255,.08)}
+    .badge.req{background:rgba(87,199,133,.12);color:#bfeccc;border-color:rgba(87,199,133,.2)}
+    .badge.unique{background:rgba(242,198,107,.12);color:#f3dba6;border-color:rgba(242,198,107,.2)}
+    .badge.optional{background:rgba(110,182,255,.12);color:#cce3ff;border-color:rgba(110,182,255,.2)}
+
+    .fields{
+      margin-top:12px;padding-left:30px;display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr)); gap:9px;
+    }
+    .field label{display:block;font-size:10px;color:#94b3a4;text-transform:uppercase;letter-spacing:.08em;font-weight:800;margin-bottom:4px}
+    .field strong{display:block;color:var(--text);font-size:12px;overflow-wrap:anywhere}
+    .meta-row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:10px;padding-left:30px;color:#a5c0b1;font-size:11px}
+
+    .right-pane{
+      padding:20px; position:sticky; top:18px;
+      min-height:calc(100vh - 40px);
+      display:flex; flex-direction:column; justify-content:flex-start;
+    }
+    .right-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+    .right-top h2{margin:0;font-size:20px;letter-spacing:-.5px}
+    .right-top p{margin:4px 0 0;color:var(--muted);font-size:12px}
+    .live-pill{padding:8px 11px;border-radius:999px;background:rgba(87,199,133,.1);color:#c6efd4;font-size:11px;font-weight:800;border:1px solid rgba(87,199,133,.18)}
+
+    .phone-wrap{display:grid;place-items:center; padding:8px 0 14px}
+    .phone{
+      width:min(360px, 80%); aspect-ratio: 9/19; background:#101820; border-radius:42px;
+      border:10px solid #111; box-shadow:0 22px 55px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.06);
+      position:relative; overflow:hidden;
+    }
+    .phone::before{content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);width:120px;height:22px;background:#0a0a0a;border-radius:0 0 16px 16px;z-index:4}
+    .screen{position:absolute;inset:0;background:var(--phone-bg);color:#0d1720;overflow:hidden}
+    .screen-hero{height:160px;padding:22px 18px 18px;color:white;position:relative;background:linear-gradient(135deg, #173850, #2c9d54)}
+    .screen-hero::after{content:"";position:absolute;inset:auto -10px -30px auto;width:140px;height:140px;background:radial-gradient(circle, rgba(255,255,255,.22), transparent 70%)}
+    .status{font-size:11px;opacity:.9;margin-bottom:10px;display:flex;justify-content:space-between}
+    .screen-hero h3{margin:0;font-size:24px;letter-spacing:-.8px;line-height:1.05}
+    .screen-hero p{margin:8px 0 0;font-size:12px;max-width:220px;opacity:.95}
+    .screen-body{padding:14px 14px 18px;display:flex;flex-direction:column;gap:12px}
+    .mobile-chip-row{display:flex;gap:7px;flex-wrap:wrap}
+    .mobile-chip{padding:5px 8px;border-radius:999px;background:#e4f0e9;color:#2f6645;font-size:10px;font-weight:800}
+    .mobile-card{background:white;border-radius:18px;padding:12px;box-shadow:0 10px 24px rgba(17,33,24,.08)}
+    .mobile-card h4{margin:0 0 6px;font-size:13px;color:#162028}
+    .mobile-card p{margin:0;color:#67757f;font-size:11px;line-height:1.45}
+    .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .mini-box{background:#f5f8fa;border-radius:14px;padding:10px}
+    .progress{height:8px;background:#e8edf0;border-radius:999px;overflow:hidden;margin-top:8px}
+    .progress span{display:block;height:100%;width:66%;background:linear-gradient(90deg,#49bf79,#1f8b59)}
+    .list-item{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #edf1f3;font-size:11px;color:#41505b}
+    .list-item:last-child{border-bottom:0}
+    .tag{padding:3px 7px;border-radius:999px;background:#eef7f1;color:#2a6947;font-weight:800;font-size:10px}
+    .cta{padding:12px 14px;border-radius:16px;background:linear-gradient(90deg,#2d8d5b,#3cab72);color:white;font-weight:800;text-align:center;font-size:12px}
+    .app-screen{position:absolute;inset:0;background:#f1f6f5;color:#173850;overflow:hidden;font-size:11px}
+    .app-status{display:flex;justify-content:space-between;padding:12px 17px 4px;font-size:9px;font-weight:800;color:#fff;background:#173850}
+    .app-header{padding:13px 18px 23px;background:linear-gradient(145deg,#173850,#255d54);color:#fff;position:relative;overflow:hidden}
+    .app-header:after{content:"";position:absolute;width:140px;height:100px;right:-25px;bottom:-58px;border:1px solid #83c99f;border-radius:50%;box-shadow:0 0 0 15px #ffffff0d,0 0 0 30px #ffffff0a}
+    .app-brand{font-size:10px;letter-spacing:.1em;font-weight:900;color:#b9e7ca}
+    .app-header h3{font-size:20px;line-height:1.15;margin:12px 0 4px;max-width:220px}
+    .app-header p{margin:0;color:#d0e9df;font-size:10px;max-width:220px}
+    .app-content{padding:12px 14px 45px;display:flex;flex-direction:column;gap:9px;overflow:hidden}
+    .app-card{background:#fff;border-radius:14px;padding:12px;box-shadow:0 4px 18px #1738500c;animation:mock-enter .42s both}
+    .app-card:nth-child(2){animation-delay:.06s}.app-card:nth-child(3){animation-delay:.12s}
+    .app-label{color:#748d96;font-size:9px;text-transform:uppercase;font-weight:800;letter-spacing:.06em}
+    .app-title{display:block;font-size:12px;margin:3px 0;color:#173850;font-weight:800}
+    .app-muted{color:#70858b;font-size:10px;line-height:1.4}
+    .app-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid #edf3f1}
+    .app-row:last-child{border:0;padding-bottom:0}
+    .app-badge{background:#e4f5e9;color:#237346;border-radius:20px;padding:4px 7px;font-size:9px;font-weight:800;white-space:nowrap}
+    .app-button{background:#2c9d54;color:#fff;border-radius:10px;padding:10px;text-align:center;font-weight:800}
+    .app-input{border:1px solid #d8e7e4;border-radius:9px;color:#81969a;padding:9px;margin-top:6px;background:#fbfdfc}
+    .app-progress{height:6px;background:#e1eeea;border-radius:10px;overflow:hidden;margin-top:8px}
+    .app-progress span{display:block;width:68%;height:100%;background:#59c478;animation:mock-progress 1s ease-out both}
+    .app-video{height:91px;background:linear-gradient(135deg,#173850,#276454);border-radius:11px;display:grid;place-items:center;color:white;font-size:25px}
+    .app-video.offline{background:linear-gradient(135deg,#173850,#3b6170)}
+    .app-qr{width:92px;height:92px;margin:10px auto;background:repeating-conic-gradient(#173850 0% 25%,#fff 0% 50%) 0 0/13px 13px;border:7px solid white;outline:1px solid #dbe8e4}
+    .app-qr.scan{position:relative}
+    .app-qr.scan:after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:#59c478;animation:mock-scan 2s ease-in-out infinite alternate}
+    .app-chart{height:70px;display:flex;align-items:end;gap:10px;padding:8px 4px 0}
+    .app-chart i{flex:1;background:linear-gradient(#59c478,#2c9d54);border-radius:5px 5px 0 0;animation:mock-bars .6s ease-out both;transform-origin:bottom}
+    .app-bubble{background:#e8f3ee;padding:8px 10px;border-radius:10px 10px 10px 2px;margin-top:7px;color:#345b51}
+    .app-bubble.mine{background:#d4eddf;margin-left:28px;border-radius:10px 10px 2px 10px}
+    .app-toggle{display:inline-flex;width:32px;height:18px;border-radius:16px;background:#2c9d54;padding:3px;justify-content:flex-end;flex:none}
+    .app-toggle:after{content:"";width:12px;height:12px;background:white;border-radius:50%}
+    .app-cover{height:76px;background:linear-gradient(135deg,#173850,#285f51);color:#eff8f7;border-radius:9px;padding:12px;font-size:14px;font-weight:800;display:flex;align-items:end}
+    .app-alert{border-left:3px solid #d1ab55;background:#fff6df;color:#77591f;padding:8px;font-size:10px;line-height:1.5}
+    .app-stat{font-size:25px;font-weight:800;color:#173850}
+    .app-flow-step{padding:9px;border:1px solid #cce1d5;border-radius:9px;margin:5px 0;background:#f6faf8}
+    .app-scan-area{height:112px;position:relative;overflow:hidden;border:2px dashed #2c9d54;border-radius:10px;background:#173850;display:grid;place-items:center;color:#eff8f7}
+    .app-scan-area:after{content:"";position:absolute;top:10px;left:8px;right:8px;height:2px;background:#59c478;animation:mock-scan 2s ease-in-out infinite alternate}
+    @media(prefers-reduced-motion:reduce){.app-scan-area:after{animation:none}}
+    .app-nav{position:absolute;bottom:0;left:0;right:0;height:38px;display:flex;justify-content:space-around;align-items:center;background:#fff;border-top:1px solid #e2edeb;color:#799196;font-size:9px;font-weight:700}
+    .app-nav span:first-child{color:#2c9d54}
+    @keyframes mock-enter{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes mock-progress{from{width:0}to{width:68%}}
+    @keyframes mock-bars{from{transform:scaleY(.1)}to{transform:scaleY(1)}}
+    @keyframes mock-scan{from{transform:translateY(0)}to{transform:translateY(76px)}}
+    @media (prefers-reduced-motion:reduce){.app-card,.app-progress span,.app-chart i,.app-qr.scan:after{animation:none}}
+
+    .preview-caption{
+      margin-top:8px;padding:14px 16px;border-radius:18px;background:rgba(16,33,26,.9);border:1px solid var(--line)
+    }
+    .preview-caption h3{margin:0 0 4px;font-size:16px}
+    .preview-caption p{margin:0;color:var(--muted);font-size:12px}
+
+    .total-box{
+      margin-top:16px;padding:18px;border-radius:22px;
+      background:linear-gradient(135deg, rgba(25,51,40,.98), rgba(16,33,26,.98));
+      border:1px solid rgba(87,199,133,.2)
+    }
+    .total-box small{display:block;color:#90bca1;text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:800}
+    .total-box .value{font-size:34px;font-weight:900;letter-spacing:-1.2px;margin:6px 0 4px}
+    .total-box .sub{color:var(--muted);font-size:12px}
+    .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+    .kpi{padding:12px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+    .kpi small{display:block;color:#94b3a4;font-size:10px;text-transform:uppercase;letter-spacing:.09em;font-weight:800}
+    .kpi strong{display:block;margin-top:5px;font-size:17px;letter-spacing:-.4px}
+    .summary-list{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;gap:8px}
+    .summary-line{display:flex;justify-content:space-between;gap:12px;color:#cfe4d7;font-size:12px}
+    .summary-line span:last-child{font-weight:800;color:#fff}
+
+    .footer-note{margin-top:14px;color:#7ba08a;font-size:11px;line-height:1.5}
+    .floating-total{
+      position:fixed;right:20px;bottom:20px;z-index:100;
+      width:380px;max-width:calc(100vw - 28px);padding:22px 26px;border-radius:20px;
+      background:#193b2a;border:1px solid #57c785;box-shadow:0 12px 36px rgba(0,0,0,.45);
+      pointer-events:none;
+    }
+    .floating-total[hidden]{display:none}
+    .floating-total small{display:block;color:#b5d9c2;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+    .floating-total strong{display:block;margin-top:6px;font-size:clamp(28px,5vw,36px);color:#fff}
+    .floating-total .floating-duration{display:block;margin-top:8px;color:#d3e9dc;font-size:15px}
+    .price-shortcut{position:fixed;right:18px;bottom:20px;z-index:95;min-height:48px;padding:12px 18px;border:1px solid #59c478;border-radius:14px;background:#173850;color:#eff8f7;font:inherit;font-weight:800;cursor:pointer;box-shadow:0 6px 22px #0006}
+    .floating-total:not([hidden]) ~ .price-shortcut{bottom:210px}
+    .price-shortcut:focus-visible{outline:3px solid #ffe033;outline-offset:3px}
+    @media(max-width:760px){.price-shortcut{right:14px}}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    @media (max-width: 1120px){
+      .split{grid-template-columns:1fr}
+      .right-pane{position:static;min-height:initial}
+      .phone{width:min(380px, 85vw)}
+    }
+    @media (max-width: 760px){
+      .page{padding:14px}
+      .hero{padding:14px;flex-direction:column}
+      .presets{grid-template-columns:1fr}
+      .fields{grid-template-columns:1fr 1fr;padding-left:0}
+      .meta-row{padding-left:0}
+      .feature-head{gap:10px}
+      .feature-head{flex-wrap:wrap}
+      .feature-copy{flex:1 1 calc(100% - 42px)}
+      .feature-info{margin-left:30px}
+      .split{gap:14px}
+      .kpis{grid-template-columns:1fr}
+      .right-top{flex-direction:column}
+      .floating-total{right:14px;bottom:14px}
+    }
+    /* Superfícies translúcidas: a transparência não é aplicada aos textos. */
+    .hero,.panel,.spec-catalog{
+      background:rgba(8,19,29,.88);
+      border:1px solid rgba(89,196,120,.8);
+      box-shadow:0 0 12px rgba(89,196,120,.16),inset 0 0 10px rgba(89,196,120,.05);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+    }
+    .section{
+      background:rgba(15,36,48,.82);
+      border:1px solid rgba(89,196,120,.65);
+      box-shadow:0 0 9px rgba(89,196,120,.12);
+    }
+    .section-head,.section-head:hover{background:rgba(23,56,80,.88)}
+    .feature{background:rgba(15,36,48,.90);border-color:rgba(89,196,120,.4)}
+    .feature.selected{border-color:#59c478;box-shadow:0 0 9px rgba(89,196,120,.2),inset 0 0 8px rgba(89,196,120,.06)}
+    .feature.active-preview{border-color:#6eb6ff;box-shadow:0 0 12px rgba(110,182,255,.3)}
+    .preset{background:rgba(15,36,48,.90)}
+    .preview-caption,.total-box{background:rgba(15,36,48,.94)}
+    @media(max-width:760px),(prefers-reduced-motion:reduce){body{background-attachment:scroll}}
+    /* Tipografia e alvos de interação mais confortáveis, sem mudar a precificação. */
+    button,input,select,textarea{font-family:inherit}
+    button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #a6e9bd;outline-offset:3px}
+    .logo{width:142px;height:72px;padding:8px 10px;flex:none;background:#173850;border-radius:12px;box-shadow:none}
+    .logo img{width:100%;height:100%;object-fit:contain}
+    h1{font-size:clamp(23px,2.4vw,30px)}
+    .menu-toggle{width:44px;height:44px;padding:11px;display:flex;flex-direction:column;justify-content:space-between;margin-bottom:12px;border:1px solid #59c478;border-radius:10px;background:#0f2430;cursor:pointer}
+    .menu-toggle span{display:block;height:2px;background:#eff8f7;width:100%;border-radius:2px}
+    #settingsDialog a{color:#b9e7ca}
+    #settingsDialog .feature-info{margin-left:0}
+    #settingsDialog{background:#173850;border:1px solid #6eb6ff;width:min(500px,calc(100% - 28px))}
+    #promotionSettings{display:grid;gap:16px;margin-top:20px}
+    #promotionSettings label{display:grid;gap:6px;font-size:14px;font-weight:600}
+    #promotionSettings input{width:100%;min-height:44px;border:1px solid #6a899f;border-radius:9px;background:#0f2430;color:#eff8f7;padding:10px;font:inherit;color-scheme:dark}
+    #promotionSettings button{min-height:46px;border:0;border-radius:10px;background:#59c478;color:#08131d;font:inherit;font-weight:800;cursor:pointer}
+    .offer-box{position:fixed;top:14px;right:18px;z-index:90;display:flex;align-items:center;gap:10px;margin:0;padding:8px 14px;background:rgba(8,19,29,.95);border:1px solid #ffe033;border-radius:12px;color:#ffe033;box-shadow:0 4px 18px #0005}
+    .offer-box[hidden]{display:none}
+    .offer-box h3{font-size:16px;color:#ffe033;margin:0}
+    .offer-box .offer-clock{font-size:28px;font-weight:800;color:#ffe033}
+    .presets{padding-top:24px;row-gap:38px}
+    .preset{position:relative}
+    .preset.has-offer{padding-top:100px}
+    .preset .plan-offer{position:absolute;top:-20px;left:8px;right:8px;padding:10px 6px;border:1px solid #ffe033;border-radius:12px;background:#173850;box-shadow:0 5px 14px #0005;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 8px;text-align:center;color:#eff8f7;pointer-events:none}
+    .plan-offer del{font-size:16px;color:#c5d4d9}
+    .plan-offer b{display:block;flex-basis:100%;font-size:clamp(20px,1.8vw,28px);color:#ffe033;line-height:1.3}
+    .plan-offer em{font-size:17px;font-style:normal;color:#ffe033;font-weight:800}
+    @media(max-width:760px){.offer-box{top:14px;right:14px}.offer-box .offer-clock{font-size:24px}}
+    .institutional-credit{display:flex;align-items:center;gap:12px;margin-top:18px;color:var(--muted);font-size:12px;flex-wrap:wrap}
+    .institutional-credit img{width:110px;height:42px;object-fit:contain}
+    .eyebrow{font-size:12px}
+    .hero p,.left-head p,.right-top p{font-size:14px}
+    .hero-actions .chip{font-size:13px}
+    .preset{min-height:145px}
+    .preset small{font-size:11px}
+    .preset strong{font-size:19px}
+    .preset span{font-size:14px}
+    .preset .package-price{display:block;margin-top:10px;font-size:18px;color:#eff8f7}
+    .offer-box{border:1px solid #59c478;border-radius:16px;padding:14px;margin-bottom:16px;background:#173850}
+    .offer-box h3{font-size:16px;margin:0}
+    .offer-box p{font-size:12px;margin:6px 0}
+    .offer-clock{font-size:26px;font-variant-numeric:tabular-nums;color:#b9e7ca}
+    .offer-tools{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+    .comparison{overflow:auto;margin-bottom:16px}
+    .comparison table{border-collapse:collapse;width:100%;font-size:12px}
+    .comparison th,.comparison td{padding:8px;border-bottom:1px solid #2a4d56;text-align:left}
+    .hour-box{font-size:13px;flex-wrap:wrap;min-width:150px}
+    .section-meta strong{font-size:17px}
+    .section-meta span{font-size:13px}
+    .section-tag{font-size:12px}
+    .feature-copy strong{font-size:17px}
+    .feature-copy p{font-size:14px;line-height:1.6}
+    .badge{font-size:12px}
+    .feature-info,.info-dialog .info-close{font-size:13px;min-height:44px;padding:10px 12px}
+    .feature-check{width:24px;height:24px;cursor:pointer}
+    .fields{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .field label,.kpi small,.total-box small{font-size:11px}
+    .field strong{font-size:14px}
+    .meta-row,.summary-line,.footer-note{font-size:13px;line-height:1.6}
+    .preview-caption p,.total-box .sub{font-size:14px}
+    .info-dialog p,.info-dialog li{font-size:15px}
+    .app-brand img{display:block;width:86px;height:28px;object-fit:contain;object-position:left center}
+    .app-header{padding-top:8px;padding-bottom:16px}
+    .app-header h3{margin-top:8px;font-size:22px}
+    .app-header p,.app-muted{font-size:12px}
+    .app-title{font-size:14px}
+    .app-label,.app-badge,.app-nav{font-size:10px}
+    .app-screen{font-size:12px;display:flex;flex-direction:column}
+    .app-status,.app-header{flex:none}
+    .app-content{flex:1;min-height:0;overflow-y:auto;padding-bottom:16px;scrollbar-width:thin}
+    .app-card{flex:none}
+    .app-nav{position:static;flex:none}
+    .phone{width:min(390px,95%)}
+    @media(max-width:760px){
+      .brand{align-items:flex-start;flex-direction:column}
+      .left-head{align-items:flex-start;flex-direction:column}
+      .left-pane,.right-pane{padding:14px}
+      .section-head{padding:14px 10px;gap:8px}
+      .section-icon{width:30px;height:36px;flex:none}
+      .section-tag{padding:5px;font-size:10px}
+      .fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .phone{width:min(390px,100%)}
+      .summary-line{flex-wrap:wrap}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="offer-box" aria-labelledby="offerTitle" hidden>
+      <h3 id="offerTitle">Oferta</h3>
+      <div class="offer-clock" id="offerClock" hidden aria-hidden="true"></div>
+      <span id="offerMessage" class="sr-only"></span>
+      <span id="offerDeadline" class="sr-only"></span>
+    </section>
+    <button type="button" class="menu-toggle" id="openSettings" aria-label="Abrir menu de configurações" aria-haspopup="dialog" aria-controls="settingsDialog"><span></span><span></span><span></span></button>
+    <section class="hero">
+      <svg class="hero-art" viewBox="0 0 1200 540" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        <circle cx="972" cy="130" r="58" fill="#e6c67f"/>
+        <path d="M0 320 Q300 205 580 322 T1200 284 V540 H0Z" fill="#184f42"/>
+        <path d="M0 380 Q290 270 620 366 T1200 345 V540 H0Z" fill="#2c9d54"/>
+        <g fill="none" stroke="#a9d9b3" stroke-width="3">
+          <path d="M-90 545 Q270 300 620 545"/><path d="M90 545 Q385 335 740 545"/>
+          <path d="M285 545 Q492 353 858 545"/><path d="M515 545 Q655 378 995 545"/>
+        </g>
+      </svg>
+      <div class="brand">
+          <div class="logo"><img src="branding/assets/atsi-logo-cabecalho.svg" alt="ATSI Brasil" /></div>
+        <div>
+          <div class="eyebrow">ATSI Brasil · desenvolvido por YvyLab</div>
+           <h1>Plataforma ATSI+</h1>
+          <p>Monte o escopo por funcionalidades. À esquerda, escolha as features; à direita, acompanhe um mockup do aplicativo e o investimento estimado em tempo real.</p>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <div class="chip">Tema escuro · visual agro</div>
+        <div class="chip">Presets Essencial, Plus e Premium</div>
+        <div class="chip">Mockup dinâmico por feature</div>
+      </div>
+    </section>
+
+    <div class="split">
+      <section class="panel left-pane">
+        <div class="presets" id="presetButtons"></div>
+        <div class="left-head">
+          <div>
+            <h2>Features da plataforma</h2>
+            <p>Obrigatórias, opcionais e escolhas únicas de implementação.</p>
+          </div>
+        </div>
+
+        <section class="spec-catalog" aria-labelledby="predevelopmentTitle">
+          <h2 id="predevelopmentTitle">Entregas obrigatórias antes do desenvolvimento</h2>
+          <p>Incluídas em todos os planos, sem opção de remoção. O início do desenvolvimento depende da revisão e aprovação destes entregáveis pela ATSI e pela YvyLab. Aprovação pendente.</p>
+          <article class="feature selected">
+            <div class="badges"><span class="badge req">Obrigatória · F01</span></div>
+            <h3>Análise e especificação de requisitos</h3>
+            <ul>
+              <li><strong>Análise de requisitos:</strong> objetivos, jornadas, regras de negócio, requisitos funcionais e não funcionais, premissas e pendências.</li>
+              <li><strong>Épicos:</strong> agrupamento das funcionalidades por objetivo, escopo e prioridade.</li>
+              <li><strong>Specs por feature:</strong> descrição, dependências, exclusões e critérios de aceite.</li>
+              <li><strong>Tarefas:</strong> implementação, testes e homologação, com estimativas revisadas.</li>
+            </ul>
+            <p id="requirementsEstimate"></p>
+          </article>
+          <article class="feature selected">
+            <div class="badges"><span class="badge req">Obrigatória · F02</span></div>
+            <h3>Design e arquitetura</h3>
+            <ul>
+              <li><strong>Telas e mockups:</strong> fluxos, interfaces essenciais e estados para validação da experiência.</li>
+              <li><strong>Diagrama de classes e domínio:</strong> entidades, relacionamentos e responsabilidades, com decisões de arquitetura e autorização.</li>
+            </ul>
+            <p id="designEstimate"></p>
+          </article>
+          <p id="foundationExplanation"></p>
+          <details><summary>Composição das atividades obrigatórias de fundação</summary><div id="foundationBreakdown"></div></details>
+        </section>
+        <div class="sections" id="sections"></div>
+      </section>
+
+      <aside class="panel right-pane">
+        <div class="right-top">
+          <div>
+            <h2>Visualização da feature</h2>
+            <p>O celular abaixo muda conforme a funcionalidade selecionada.</p>
+          </div>
+          <div class="live-pill" id="liveMode">Preview ao vivo</div>
+        </div>
+
+        <div class="phone-wrap">
+          <div class="phone">
+            <div class="screen" id="phoneScreen"></div>
+          </div>
+        </div>
+
+        <div class="preview-caption">
+          <h3 id="previewTitle">Mural inicial</h3>
+          <p id="previewDescription">Destaques de cursos, e-books, eventos presenciais e promoções logo na entrada do aplicativo.</p>
+          <small>Mockup conceitual ATSI+ · dados ilustrativos, sem operações reais.</small>
+        </div>
+
+        <div class="total-box" id="investmentSummary" tabindex="-1">
+          <small>Referência de implantação · não é preço aprovado</small>
+          <div class="value" id="totalPrice">R$ 0,00</div>
+          <div class="sub" id="totalSub">0 features selecionadas · 0 horas estimadas</div>
+
+          <div class="kpis">
+            <div class="kpi"><small>Horas</small><strong id="totalHours">0 h</strong></div>
+            <div class="kpi"><small>Prazo estimado</small><strong id="estimatedMonths">—</strong></div>
+            <div class="kpi"><small id="foundationLabel">Fundação obrigatória</small><strong id="internalCost">—</strong></div>
+            <div class="kpi"><small>Complexidade média</small><strong id="avgComplexity">—</strong></div>
+          </div>
+
+          <div class="summary-list">
+            <div class="summary-line"><span>Implantação sem oferta</span><span id="regularImplementation">—</span></div>
+            <div class="summary-line"><span>Base elegível</span><span id="eligibleImplementation">—</span></div>
+            <div class="summary-line"><span>Desconto de implantação</span><span id="discountImplementation">—</span></div>
+            <div class="summary-line"><span>Implantação final</span><span id="finalImplementation">—</span></div>
+            <div class="summary-line"><span>Base obrigatória</span><span id="mandatoryValue">R$ 0</span></div>
+            <div class="summary-line"><span>Adicionais opcionais</span><span id="optionalValue">R$ 0</span></div>
+            <div class="summary-line"><span>Estratégia dos cursos</span><span id="courseStrategy">Não definida</span></div>
+          </div>
+          <p class="footer-note" id="scopeWarnings"></p>
+        </div>
+
+        <section class="total-box" aria-labelledby="maintenanceTitle">
+          <h3 id="maintenanceTitle">Manutenção e operação mensal</h3>
+          <div class="value"><span id="maintenancePrice">R$ 3.000,00</span><span style="font-size:16px;font-weight:600"> / mês</span></div>
+          <p id="maintenancePlanLabel">Manutenção Essencial</p>
+          <div class="sub">Mensalidade separada do investimento de implantação.</div>
+          <ul>
+            <li>Inclui os custos operacionais da plataforma.</li>
+            <li>Inclui até <strong id="maintenanceHours">10 horas por mês</strong>, compartilhadas entre desenvolvimento, alterações do software e correções de bugs.</li>
+            <li><strong>Tokens de IA não estão incluídos.</strong></li>
+            <li>Demandas que ultrapassem as horas mensais incluídas exigem <strong>contrato à parte</strong>, antes da execução do excedente.</li>
+          </ul>
+          <details>
+            <summary>Condições a formalizar no contrato</summary>
+            <p>Início da cobrança, vencimento, vigência, reajuste, cancelamento, prazos de atendimento e eventual acúmulo de horas ainda serão definidos. A arquitetura e o dimensionamento deverão validar os custos operacionais cobertos, sem presumir limites ou cobranças adicionais.</p>
+          </details>
+        </section>
+
+        <div class="footer-note">Simulação preliminar de implantação, não proposta aprovada. Prazo equivalente para duas pessoas dedicadas, considerando média de 22 dias úteis por mês e 8 horas por dia por pessoa (352 horas de capacidade mensal). A divisão pressupõe trabalho paralelizável; dependências, coordenação, feriados, disponibilidade parcial e atrasos podem ampliar o prazo real. Valores de implantação são referências calculadas a R$ 200/h, não preços comerciais aprovados nem custo interno. Incluem fundação uma vez, base obrigatória e escolhas selecionadas. A mensalidade de manutenção varia por plano, inclui operação exceto tokens de IA e não é somada ao investimento único. As tarefas ainda precisam de validação. Identidade visual provisória baseada no material de branding, não homologada pela ATSI.</div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="floating-total" id="floatingTotal" hidden aria-hidden="true">
+    <small>Referência de implantação</small>
+    <strong id="floatingPrice"></strong>
+    <span class="floating-duration" id="floatingDuration"></span>
+  </div>
+  <button type="button" class="price-shortcut" id="viewPrice" aria-controls="investmentSummary">Ver preço ↓</button>
+  <div id="totalAnnouncement" class="sr-only" role="status" aria-live="polite"></div>
+  <dialog class="info-dialog" id="featureDialog" aria-labelledby="dialogTitle">
+    <header><h2 id="dialogTitle"></h2><button class="info-close" id="dialogClose" type="button">Fechar</button></header>
+    <div id="dialogContent"></div>
+  </dialog>
+
+  <dialog class="info-dialog" id="settingsDialog" aria-labelledby="settingsTitle">
+    <header><h2 id="settingsTitle">Configurações</h2><button class="info-close" type="button" id="closeSettings">Fechar</button></header>
+    <form id="promotionSettings">
+      <label>Data e hora de início (Brasília)<input id="promotionStart" type="datetime-local" required></label>
+      <label>Data e hora final (Brasília)<input id="promotionEnd" type="datetime-local" required></label>
+      <label>Desconto Essencial (%)<input id="discountEssencial" type="number" min="0" max="100" step="0.01" required></label>
+      <label>Desconto Plus (%)<input id="discountPlus" type="number" min="0" max="100" step="0.01" required></label>
+      <label>Desconto Premium (%)<input id="discountPremium" type="number" min="0" max="100" step="0.01" required></label>
+      <button type="submit">Salvar</button>
+    </form>
+  </dialog>
+  <script src="branding/product-config.js"></script>
+  <script src="pricing-promotion.js"></script>
+  <script>
+    const presets = {
+      essencial: {
+        name: 'Essencial',
+        subtitle: 'Entrada mais enxuta',
+        desc: 'Mural, login, perfil, cursos com YouTube, e-books no mural e push básico.',
+        features: ['mural','login','perfil','marketing_optin','catalogo_cursos','curso_youtube','admin_basico','ebook_vitrine','push_basico']
+      },
+      plus: {
+        name: 'Plus',
+        subtitle: 'Mais controle',
+        desc: 'Hospedagem privada de vídeo, notificações segmentadas e comunidade básica.',
+        features: ['mural','login','perfil','marketing_optin','catalogo_cursos','curso_privado','admin_basico','ebook_vitrine','biblioteca_ebooks','push_basico','push_segmentado','grupos_basicos','comentarios_aulas','progresso','certificados']
+      },
+      premium: {
+        name: 'Premium',
+        subtitle: 'Experiência avançada',
+        desc: 'Cursos offline, MFA, automações e comunidade expandida.',
+        features: ['mural','login','perfil','marketing_optin','catalogo_cursos','curso_offline','admin_basico','ebook_vitrine','biblioteca_ebooks','push_basico','push_segmentado','automacoes','grupos_basicos','chat_grupos','lives_grupos','comentarios_aulas','progresso','certificados','quizzes','mfa','login_google','login_microsoft']
+      }
+    };
+
+    const sectionMeta = {
+      obrigatorias: { title:'Base obrigatória', icon:'🌾', desc:'Fundação mínima da plataforma', color:'#57c785' },
+      autenticacao: { title:'Login e segurança', icon:'🔐', desc:'Acesso e proteção da conta', color:'#6eb6ff' },
+      cursos: { title:'Cursos', icon:'🎓', desc:'Entrega do conteúdo e experiência educacional', color:'#f2c66b' },
+      ebooks: { title:'E-books', icon:'📚', desc:'Vitrine e biblioteca digital', color:'#9f89ff' },
+      notificacoes: { title:'Notificações', icon:'🔔', desc:'Engajamento e comunicação', color:'#ffb86b' },
+      grupos: { title:'Grupos', icon:'👥', desc:'Comunidade e interação entre clientes', color:'#ff8a80' }
+    };
+
+    const features = [
+      { id:'mural', section:'obrigatorias', title:'Mural inicial', type:'required', hours:28, price:7200, complexity:2, value:'Alta', desc:'Tela principal com cursos, e-books, eventos presenciais e promoções em destaque.', preview:'mural' },
+      { id:'login', section:'obrigatorias', title:'Login e recuperação de senha', type:'required', hours:18, price:4200, complexity:2, value:'Alta', desc:'Login com e-mail/senha, sessão e redefinição de senha.', preview:'login' },
+      { id:'perfil', section:'obrigatorias', title:'Perfil do cliente', type:'required', hours:20, price:4600, complexity:2, value:'Alta', desc:'Foto, nome, e-mail, redefinição de senha e alteração de e-mail.', preview:'perfil' },
+      { id:'marketing_optin', section:'obrigatorias', title:'Preferência de marketing', type:'required', hours:8, price:1500, complexity:1, value:'Média', desc:'Flag para receber comunicações promocionais e e-mails de marketing.', preview:'perfil' },
+      { id:'catalogo_cursos', section:'obrigatorias', title:'Catálogo de cursos', type:'required', hours:34, price:7600, complexity:3, value:'Alta', desc:'Listagem de cursos, detalhe do curso, módulos e aulas.', preview:'curso_catalogo' },
+      { id:'admin_basico', section:'obrigatorias', title:'Painel administrativo básico', type:'required', hours:30, price:6900, complexity:3, value:'Alta', desc:'Gestão inicial de destaques, cursos e conteúdos da plataforma.', preview:'admin' },
+
+      { id:'mfa', section:'autenticacao', title:'MFA / autenticação multifator', type:'optional', hours:16, price:3200, complexity:3, value:'Média', desc:'Camada extra de segurança para autenticação com segundo fator.', preview:'seguranca' },
+      { id:'login_google', section:'autenticacao', title:'Login com Google', type:'optional', hours:10, price:1900, complexity:2, value:'Média', desc:'Acesso rápido usando conta Google.', preview:'login_social' },
+      { id:'login_microsoft', section:'autenticacao', title:'Login com Microsoft', type:'optional', hours:12, price:2200, complexity:2, value:'Média', desc:'Acesso rápido usando conta Microsoft.', preview:'login_social' },
+
+      { id:'curso_youtube', section:'cursos', title:'Vídeos via YouTube embedado', type:'unique', group:'curso_entrega', hours:14, price:2600, complexity:1, value:'Alta', desc:'Estratégia mais econômica para entrega do vídeo das aulas.', preview:'curso_youtube' },
+      { id:'curso_privado', section:'cursos', title:'Vídeos privados em nuvem', type:'unique', group:'curso_entrega', hours:36, price:8900, complexity:3, value:'Alta', desc:'Conteúdo hospedado com maior controle de acesso e distribuição.', preview:'curso_privado' },
+      { id:'curso_offline', section:'cursos', title:'Vídeos privados com acesso offline', type:'unique', group:'curso_entrega', hours:62, price:15400, complexity:5, value:'Muito alta', desc:'Download controlado das aulas para assistir sem internet.', preview:'curso_offline' },
+      { id:'progresso', section:'cursos', title:'Progresso por aula e curso', type:'optional', hours:18, price:3500, complexity:2, value:'Alta', desc:'Marcação de conclusão e barra de progresso do aluno.', preview:'curso_progresso' },
+      { id:'certificados', section:'cursos', title:'Certificados', type:'optional', hours:20, price:4300, complexity:3, value:'Alta', desc:'Emissão de certificado após conclusão.', preview:'curso_certificado' },
+      { id:'quizzes', section:'cursos', title:'Quizzes e avaliações', type:'optional', hours:26, price:5600, complexity:3, value:'Alta', desc:'Perguntas, respostas e validação de desempenho.', preview:'curso_quiz' },
+      { id:'comentarios_aulas', section:'cursos', title:'Comentários nas aulas', type:'optional', hours:16, price:3100, complexity:2, value:'Média', desc:'Espaço para interação e dúvidas por aula.', preview:'curso_comentarios' },
+
+      { id:'ebook_vitrine', section:'ebooks', title:'E-books em destaque no mural', type:'optional', hours:8, price:1500, complexity:1, value:'Média', desc:'Exibição de e-books em cards de destaque na home.', preview:'ebook_vitrine' },
+      { id:'biblioteca_ebooks', section:'ebooks', title:'Biblioteca de e-books', type:'optional', hours:24, price:4800, complexity:2, value:'Alta', desc:'Área para listar, filtrar e acessar os e-books do cliente.', preview:'ebook_biblioteca' },
+
+      { id:'push_basico', section:'notificacoes', title:'Notificações push básicas', type:'optional', hours:16, price:3000, complexity:2, value:'Alta', desc:'Avisos simples para promoções, eventos e novos conteúdos.', preview:'notificacoes' },
+      { id:'push_segmentado', section:'notificacoes', title:'Push segmentado por perfil', type:'optional', hours:18, price:3900, complexity:3, value:'Alta', desc:'Envio de campanhas por público, interesse ou comportamento.', preview:'notificacoes_segmentadas' },
+      { id:'automacoes', section:'notificacoes', title:'Automação de notificações', type:'optional', hours:26, price:5900, complexity:4, value:'Alta', desc:'Fluxos automáticos como boas-vindas, abandono e reengajamento.', preview:'automacoes' },
+
+      { id:'grupos_basicos', section:'grupos', title:'Grupos / comunidade básica', type:'optional', hours:26, price:5800, complexity:3, value:'Alta', desc:'Espaço de grupos com listagem, feed e participação do aluno.', preview:'grupos' },
+      { id:'chat_grupos', section:'grupos', title:'Chat dentro dos grupos', type:'optional', hours:22, price:4800, complexity:4, value:'Alta', desc:'Conversas em tempo real entre membros.', preview:'grupos_chat' },
+      { id:'lives_grupos', section:'grupos', title:'Lives ou encontros nos grupos', type:'optional', hours:32, price:7100, complexity:4, value:'Alta', desc:'Sessões ao vivo dentro da comunidade.', preview:'grupos_live' }
+    ];
+
+    // Especificações preliminares; os IDs legados nem sempre têm escopo equivalente.
+    const featureDetails = {
+      mural: {code:'B01', scope:'Cursos em destaque, capas e acesso ao catálogo. E-books, eventos e promoções são opcionais separados na especificação.', tasks:['Dados e critérios de destaque — 4 h','Consulta e autorização — 6 h','Mural e estados vazios — 10 h','Testes — 6 h'], hours:26, deps:'Fundação, B06 e B08.', costs:'Backend compartilhado e eventual armazenamento de capas, conforme uso.', note:'O mural atual inclui outros destaques e não equivale exatamente a B01.'},
+      login: {code:'B02', scope:'Entrada e saída por e-mail e senha, sessão protegida e recuperação. MFA e login social são separados.', tasks:['Fluxos e sessão — 4 h','Autenticação e proteção — 10 h','Telas e recuperação — 8 h','Testes — 6 h'], hours:28, deps:'Fundação e B03 para e-mail transacional.', costs:'Autenticação e e-mail usam serviços compartilhados, sujeitos a cotas.'},
+      perfil: {code:'B04', scope:'Perfil privado com foto, nome, e-mail verificado e gestão de senha. Perfil público é separado.', tasks:['Dados e permissões — 6 h','Atualização segura e foto — 10 h','Telas e fluxos — 10 h','Testes — 6 h'], hours:32, deps:'Fundação, B02 e B03.', costs:'Banco e armazenamento compartilhados; custo depende do volume.'},
+      marketing_optin: {code:'B05', scope:'Registrar e revogar preferência de comunicações; campanhas não estão incluídas.', tasks:['Definir consentimento — 3 h','Persistência e controle — 5 h','Testes — 4 h'], hours:12, deps:'Fundação e B04.', costs:'Backend compartilhado; campanhas e disparos não incluídos.'},
+      catalogo_cursos: {code:'B06', scope:'Catálogo, detalhes, módulos e aulas; entrega de vídeo é uma escolha separada.', tasks:['Modelagem — 12 h','Consultas e acesso — 14 h','Telas e navegação — 24 h','Testes — 14 h'], hours:64, deps:'Fundação, B08 e estratégia de vídeo.', costs:'Backend compartilhado; operação de vídeo é separada.'},
+      progresso: {code:'B07', scope:'Registrar e apresentar progresso por aula e curso, sem incluir certificados.', tasks:['Regras e dados — 6 h','Persistência e cálculo — 12 h','Exibição — 8 h','Testes — 6 h'], hours:32, deps:'B02 e B06.', costs:'Backend compartilhado; consumo depende das leituras e escritas.', note:'Na especificação é obrigatório; no configurador atual permanece opcional.'},
+      admin_basico: {code:'B08', scope:'Gerenciar cursos, módulos, aulas e destaques com permissões; eventos e auditoria detalhada são separados.', tasks:['Fluxos de edição — 8 h','Dados e permissões — 14 h','Telas e validações — 22 h','Testes — 12 h'], hours:56, deps:'F04, F05 e B06.', costs:'Hospedagem web e backend compartilhados, sujeitos a contratação e uso.'}
+    };
+
+    // BEGIN GENERATED SPEC CATALOG
+    const specCatalog = {"B01": {"title": "Mural inicial: cursos em destaque", "module": "Base obrigatória", "description": "Mural inicial com cursos em destaque, banners de capa e acesso ao catálogo.", "hours": 32, "kind": "Obrigatória", "complexity": 2, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase (base compartilhada) — Uso de banco/API dentro do plano; excedentes variáveis.", "tasks": ["Definir contrato de destaques e disponibilidade dos cursos — 4", "Consultar e paginar destaques publicados com autorização — 6", "Construir mural, capas e navegação ao catálogo — 10", "Tratar carregamento, vazio, imagem ausente e falha de rede — 4", "Testar publicação, acesso e navegação Android/iOS — 8"], "acceptance": "Somente cursos publicados e elegíveis aparecem; destaque navega ao curso correto, e vitrines M01–M03 não são embutidas como entrega gratuita de B01.", "file": "B01-mural-cursos.md"}, "B02": {"title": "Login, logout e recuperação de senha", "module": "Base obrigatória", "description": "Entrar, sair e recuperar senha por e-mail, com sessão protegida.", "hours": 40, "kind": "Obrigatória", "complexity": 3, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase Auth + e-mail — Incluído no plano base até franquia; reset conta na cota de e-mails.", "tasks": ["Configurar login e validação de credenciais no provedor — 6", "Implementar sessão, renovação, expiração e logout — 8", "Implementar recuperação e deep link de redefinição — 8", "Construir telas, erros e proteção contra enumeração — 8", "Testar sessão expirada, recuperação e isolamento de usuários — 10"], "acceptance": "Sessão expirada não permite operação protegida; link de recuperação inválido ou expirado é rejeitado, sem revelar se um e-mail existe.", "file": "B02-login-recuperacao.md"}, "B03": {"title": "Integração com serviço de e-mail transacional", "module": "Base obrigatória", "description": "Envio de e-mails transacionais, como redefinição de senha, com domínio autenticado.", "hours": 24, "kind": "Obrigatória", "complexity": 2, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Resend ou provedor transacional — Free: 3.000 e-mails/mês (limite diário); Pro: US$ 20/mês até 50.000.", "tasks": ["Configurar domínio, DNS e autenticação do remetente — 4", "Integrar envio transacional com credenciais protegidas — 6", "Preparar modelos e links seguros de recuperação — 4", "Tratar falha, limites e rastreabilidade sem expor dados — 4", "Validar entrega e documentar configuração operacional — 6"], "acceptance": "Mensagem transacional usa remetente autenticado e link correto; falha de envio é observável sem registrar segredos.", "file": "B03-email-transacional.md"}, "B04": {"title": "Perfil privado do cliente", "module": "Base obrigatória", "description": "Perfil privado: foto, nome, e-mail verificado e gestão de senha.", "hours": 40, "kind": "Obrigatória", "complexity": 2, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase + Cloudflare R2 — Banco no plano compartilhado; R2: US$ 0,015/GB-mês além da franquia + operações.", "tasks": ["Modelar perfil privado e políticas de leitura/alteração — 6", "Implementar foto com tipo, tamanho e autorização — 8", "Implementar alteração de nome e e-mail com verificação — 8", "Integrar gestão de senha e reautenticação necessária — 6", "Construir telas e testar privacidade, falhas e validações — 12"], "acceptance": "Usuário altera somente o próprio perfil; e-mail novo exige verificação e arquivo inválido não é aceito como foto.", "file": "B04-perfil-privado.md"}, "B05": {"title": "Preferência de comunicações de marketing", "module": "Base obrigatória", "description": "Aceite e revogação de e-mails promocionais com registro da escolha.", "hours": 16, "kind": "Obrigatória", "complexity": 2, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase + e-mail — Dados incluídos no backend; campanhas não estão incluídas.", "tasks": ["Definir versão do texto, registro e revogação do consentimento — 4", "Persistir escolha com identificação e data — 4", "Implementar controle no perfil e feedback de atualização — 4", "Testar revogação, acesso e evidência da escolha — 4"], "acceptance": "Aceite e revogação persistem com versão e data; a escolha pode ser consultada sem implicar disparos de campanha.", "file": "B05-preferencia-marketing.md"}, "B06": {"title": "Catálogo, módulos e aulas de cursos", "module": "Base obrigatória", "description": "Catálogo de cursos, módulos, aulas e páginas de detalhes.", "hours": 72, "kind": "Obrigatória", "complexity": 4, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase — Consultas dentro do plano; consumo adicional se exceder cotas.", "tasks": ["Modelar cursos, módulos, aulas e ordem de publicação — 12", "Implementar consultas, paginação e acesso básico autorizado — 14", "Construir catálogo e página de detalhes — 16", "Construir navegação módulo/aula e integração do player escolhido — 12", "Tratar conteúdo indisponível e falhas de carregamento — 6", "Testar ordenação, publicação e fluxos mobile — 12"], "acceptance": "A ordem curso/módulo/aula é consistente com o painel; conteúdo não publicado não é exposto por consulta direta.", "file": "B06-catalogo-cursos.md"}, "B07": {"title": "Progresso por aula e curso", "module": "Base obrigatória", "description": "Registro e visualização do progresso do aluno em aulas e cursos.", "hours": 40, "kind": "Obrigatória", "complexity": 3, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase — Escritas/leituras e armazenamento de progresso; excedentes por uso.", "tasks": ["Definir regras de conclusão e retomada por estratégia de vídeo — 6", "Implementar progresso idempotente por usuário e aula — 10", "Calcular conclusão do curso e atualizar visualização — 8", "Tratar reconexão e alterações no catálogo — 6", "Testar isolamento, repetição de eventos e retomada — 10"], "acceptance": "Repetir um evento de conclusão não duplica progresso e a conclusão pertence exclusivamente ao usuário autenticado.", "file": "B07-progresso-cursos.md"}, "B08": {"title": "Painel administrativo básico", "module": "Base obrigatória", "description": "Painel ATSI para administrar cursos, aulas e destaques com permissões.", "hours": 76, "kind": "Obrigatória", "complexity": 4, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase + hospedagem web — Operação de API e hospedagem; provedor e plano web a definir.", "tasks": ["Definir permissões e estados de publicação — 8", "Implementar CRUD de cursos, módulos e aulas — 18", "Construir listagens, formulários e ordenação — 20", "Integrar capas e destaques do mural — 8", "Tratar validações, exclusão e referências em uso — 8", "Testar autorização e ciclo completo de publicação — 14"], "acceptance": "Publicar uma aula válida a disponibiliza na ordem correta; usuário sem permissão não consegue publicar por chamada direta.", "file": "B08-painel-conteudo.md"}, "A01": {"title": "Autenticação multifator (MFA)", "module": "Autenticação adicional", "description": "Segundo fator de autenticação opcional e recuperação segura de acesso.", "hours": 38, "kind": "Opcional", "complexity": 3, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase Auth MFA — TOTP pode usar recursos do plano; SMS acrescenta tarifa por mensagem.", "tasks": ["Definir política TOTP, reautenticação e recuperação — 6", "Integrar inscrição, confirmação e remoção do fator — 8", "Implementar desafio MFA no acesso e sessões — 8", "Construir telas e orientações de recuperação segura — 6", "Testar perda do fator, sessão e tentativas inválidas — 10"], "acceptance": "Desafio TOTP válido concede o nível de sessão esperado; código inválido é rejeitado e remoção exige autenticação adequada.", "file": "A01-autenticacao-multifator-mfa.md"}, "A02": {"title": "Entrar com Google", "module": "Autenticação adicional", "description": "Entrar com uma conta Google e vincular identidades existentes.", "hours": 24, "kind": "Opcional", "complexity": 2, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase Auth + OAuth Google — Geralmente coberto pelo plano de autenticação; verificar cotas e política.", "tasks": ["Configurar OAuth Google e redirecionamentos por plataforma — 4", "Integrar fluxo nativo/web e retorno ao app — 6", "Tratar vínculo, e-mail coincidente e cancelamento — 6", "Testar Android/iOS e contas de homologação — 8"], "acceptance": "Cancelamento do OAuth retorna ao app sem sessão indevida; vínculo de identidade não toma outra conta.", "file": "A02-entrar-com-google.md"}, "A03": {"title": "Entrar com Microsoft", "module": "Autenticação adicional", "description": "Entrar com Microsoft e integrar contas corporativas permitidas.", "hours": 28, "kind": "Opcional", "complexity": 2, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase Auth + Microsoft OAuth — Normalmente dentro de cotas de autenticação; licenças/Entra podem variar.", "tasks": ["Definir tenant e configurar aplicação Microsoft — 6", "Integrar OAuth e redirecionamento Android/iOS — 8", "Tratar vínculo de identidade, cancelamento e consentimento — 6", "Testar contas permitidas, restrições e falhas — 8"], "acceptance": "Conta fora do tenant permitido é recusada quando houver restrição; redirecionamento retorna ao app correto.", "file": "A03-entrar-com-microsoft.md"}, "M01": {"title": "E-books em destaque no mural", "module": "Mural — vitrines opcionais", "description": "Card de e-book em destaque na home com capa, resumo e link.", "hours": 14, "kind": "Opcional", "complexity": 1, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase + R2 (se houver capa) — R2 Standard: US$ 0,015/GB-mês além de 10 GB + operações.", "tasks": ["Definir dados do destaque e destino externo/interno — 2", "Implementar configuração no painel reutilizando a base — 4", "Renderizar card, capa e navegação — 4", "Testar publicação, links e capa ausente — 4"], "acceptance": "Publicar destaque abre o destino configurado; o card não concede biblioteca E01 nem direito de download.", "file": "M01-e-books-em-destaque-no-mural.md"}, "M02": {"title": "Eventos em destaque no mural", "module": "Mural — vitrines opcionais", "description": "Card de evento em destaque na home com data e link.", "hours": 14, "kind": "Opcional", "complexity": 1, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase + R2 (capa) — Dados no backend; armazenamento da capa em R2 conforme uso.", "tasks": ["Definir data, local e destino do destaque sem exigir gestão de eventos — 3", "Implementar configuração do card no painel — 4", "Exibir destaque e navegação no mural — 4", "Testar datas, destino e disponibilidade — 3"], "acceptance": "Destaque mostra data e destino corretos sem presumir inscrição EV01.", "file": "M02-eventos-em-destaque-no-mural.md"}, "M03": {"title": "Promoções em destaque no mural", "module": "Mural — vitrines opcionais", "description": "Banners e chamadas promocionais com programação e link de destino.", "hours": 18, "kind": "Opcional", "complexity": 2, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase + R2 (banners) — Dados dentro do backend; armazenamento/leituras em R2 conforme uso.", "tasks": ["Definir vigência, destino e regras de exibição do banner — 4", "Implementar cadastro e programação no painel — 6", "Exibir banner conforme vigência e tratar links — 4", "Testar limites de data e fallback de imagem — 4"], "acceptance": "Banner só aparece durante sua vigência no fuso definido e não implementa checkout ou motor de cupons.", "file": "M03-promocoes-em-destaque-no-mural.md"}, "C01": {"title": "Player YouTube incorporado", "module": "Cursos — entrega de vídeos", "description": "Player do YouTube integrado às aulas, sem hospedagem de vídeo própria.", "hours": 28, "kind": "Escolha única", "complexity": 2, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "YouTube embed — US$ 0/mês direto de hospedagem/streaming do vídeo no embed padrão.", "tasks": ["Validar compatibilidade do caso de uso com políticas do YouTube — 4", "Validar URL/ID e integrar player oficial — 6", "Tratar orientação, navegação e eventos permitidos — 6", "Implementar estados de vídeo indisponível e falha de rede — 4", "Testar incorporação em Android/iOS sem contornar o player — 8"], "acceptance": "Player oficial reproduz vídeo permitido e trata vídeo indisponível; não existe download, remoção de marca nem promessa de proteção privada.", "file": "C01-player-youtube-incorporado.md"}, "C02": {"title": "Streaming privado na nuvem", "module": "Cursos — entrega de vídeos", "description": "Upload, processamento, player e controle de acesso a vídeos privados online.", "hours": 80, "kind": "Escolha única", "complexity": 4, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Cloudflare Stream — Armazenamento: US$ 5/1.000 min/mês (blocos); entrega: US$ 1/1.000 min vistos.", "tasks": ["Definir ingestão e autorização do vídeo privado — 8", "Implementar upload e associação no painel — 14", "Processar estados e callbacks de preparação do vídeo — 10", "Gerar autorização/token e verificar direito de acesso — 12", "Integrar player, retomada e estados de falha — 14", "Testar expiração, acesso indevido e rede em Android/iOS — 18", "Documentar limites de proteção e consumo operacional — 4"], "acceptance": "Vídeo em processamento não é oferecido como pronto; token expirado ou usuário sem direito não obtém autorização válida de reprodução.", "file": "C02-streaming-privado-na-nuvem.md"}, "C03": {"title": "Streaming privado + download offline", "module": "Cursos — entrega de vídeos", "description": "Vídeos privados e downloads para reprodução offline controlada no app.", "hours": 208, "kind": "Escolha única", "complexity": 5, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Cloudflare Stream + armazenamento do app — Mesma tabela do Stream: US$ 5/1.000 min armazenados + US$ 1/1.000 min entregues ou baixados.", "tasks": ["Definir ingestão e autorização de vídeo online — 8", "Implementar upload e associação no painel — 14", "Processar estados e callbacks do vídeo online — 10", "Gerar autorização e verificar direitos de acesso — 12", "Integrar player online e estados de falha — 14", "Testar autorização e rede Android/iOS online — 18", "Documentar limites e consumo do vídeo online — 4", "Validar viabilidade do download no Expo e políticas de uso — 12", "Implementar fila, pausa, retomada e cancelamento de downloads — 24", "Gerenciar arquivos, espaço local e remoção por usuário — 16", "Definir e implementar expiração e revogação possível — 18", "Implementar reprodução local e retomada offline — 16", "Sincronizar progresso com resolução de eventos repetidos — 14", "Testar rede interrompida, pouco espaço, logout e Android/iOS — 28"], "acceptance": "Download interrompido pode ser retomado sem arquivo corrompido; logout e expiração obedecem à política possível, e reprodução offline não é prometida como DRM inviolável.", "file": "C03-streaming-privado-download-offline.md"}, "C04": {"title": "Emissão de certificados", "module": "Cursos — opcionais", "description": "Certificado PDF após conclusão, com modelo e código de verificação.", "hours": 42, "kind": "Opcional", "complexity": 3, "dependencies": "B07 (progresso)", "operation": "Supabase + R2 — PDFs em R2 (US$ 0,015/GB-mês fora franquia) + operações.", "tasks": ["Definir elegibilidade, identificação e dados do certificado — 6", "Gerar PDF a partir de modelo aprovado — 10", "Implementar código e consulta pública mínima de verificação — 8", "Integrar emissão idempotente, armazenamento e download — 8", "Testar acesso, conclusão e repetição de emissão — 10"], "acceptance": "Só aluno elegível recebe certificado; nova solicitação não duplica a emissão e código de verificação corresponde ao documento.", "file": "C04-emissao-de-certificados.md"}, "C05": {"title": "Quizzes e avaliações de aprendizagem", "module": "Cursos — opcionais", "description": "Quizzes com perguntas, alternativas, correção e tentativas do aluno.", "hours": 56, "kind": "Opcional", "complexity": 3, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase — Persistência no backend; custos adicionais só por uso além de cotas.", "tasks": ["Modelar perguntas, alternativas, tentativas e política de aprovação — 8", "Implementar autoria e edição no painel — 14", "Construir execução e envio das respostas no app — 12", "Corrigir no servidor e persistir resultado com segurança — 10", "Testar reenvios, tentativas e proteção do gabarito — 12"], "acceptance": "Servidor corrige tentativa sem confiar na nota enviada pelo app; política de limite e repetição é respeitada.", "file": "C05-quizzes-e-avaliacoes-de-aprendizagem.md"}, "C06": {"title": "Geração de testes com inteligência artificial", "module": "Cursos — opcionais", "description": "IA gera sugestões de testes a partir de texto do curso, com revisão humana.", "hours": 64, "kind": "Opcional", "complexity": 4, "dependencies": "C05 (quizzes) e fonte autorizada", "operation": "API de IA + transcrição/arquivo — Variável por tokens do modelo; transcrição/ingestão pode ter custo adicional.", "tasks": ["Definir fontes autorizadas, formato e política de geração — 8", "Preparar ingestão textual e limites de conteúdo — 10", "Integrar provedor com saída estruturada validada — 12", "Construir revisão, edição e publicação humana no quiz — 12", "Implementar limites de uso, erros e registro de consumo operacional — 8", "Testar respostas inválidas, segurança e qualidade amostral — 14"], "acceptance": "Saída inválida do modelo não vira quiz publicado; toda sugestão exige revisão humana antes de entrar em C05.", "file": "C06-geracao-de-testes-com-inteligencia-artificial.md"}, "C07": {"title": "Chat com IA sobre o vídeo/aula", "module": "Cursos — opcionais", "description": "Chat com IA responde dúvidas sobre aulas usando transcrições e fontes autorizadas.", "hours": 136, "kind": "Opcional", "complexity": 5, "dependencies": "fonte textual ou transcrição autorizada e serviço de IA", "operation": "API de IA + embeddings/RAG — Variável por tokens, transcrição, indexação e consultas ao banco vetorial.", "tasks": ["Definir fontes, privacidade, retenção e limites do assistente — 12", "Implementar ingestão, segmentação e indexação autorizada — 24", "Implementar busca com autorização por curso/usuário — 20", "Integrar resposta com referências e recusa fora do contexto — 20", "Construir conversa e estados de envio no app — 16", "Aplicar limites, tratamento de falha e rastreabilidade — 12", "Avaliar vazamento entre cursos, injeção de instruções e qualidade — 24", "Documentar reindexação, atualização e operação — 8"], "acceptance": "Consulta não recupera material de curso não autorizado; resposta apresenta referência disponível e ausência de base é sinalizada.", "file": "C07-chat-com-ia-sobre-o-video-aula.md"}, "C08": {"title": "Comentários em videoaulas", "module": "Cursos — opcionais", "description": "Comentários e respostas em cada videoaula com moderação básica.", "hours": 44, "kind": "Opcional", "complexity": 3, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase (dados/Realtime se ativado) — Dados e eventual tempo real dentro de franquias; excedentes sob uso.", "tasks": ["Modelar comentários, respostas e permissões — 6", "Implementar envio, edição e remoção autorizada — 10", "Construir listagem paginada e respostas no app — 10", "Adicionar moderação administrativa básica — 8", "Testar abuso básico, acesso e exclusão — 10"], "acceptance": "Só autor ou moderador autorizado altera/remove comentário; paginação não perde nem duplica respostas.", "file": "C08-comentarios-em-videoaulas.md"}, "C09": {"title": "Avaliação de satisfação do curso", "module": "Cursos — opcionais", "description": "Aluno atribui nota e opinião ao curso depois da experiência.", "hours": 24, "kind": "Opcional", "complexity": 2, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase — Armazenamento da avaliação no plano base; eventuais excedentes.", "tasks": ["Definir elegibilidade, nota e política de edição — 4", "Persistir avaliação por usuário/curso com autorização — 6", "Construir formulário e confirmação no app — 6", "Testar repetição, edição e acesso — 8"], "acceptance": "Há no máximo uma avaliação vigente por aluno/curso conforme regra aprovada, com nota dentro da escala.", "file": "C09-avaliacao-de-satisfacao-do-curso.md"}, "E01": {"title": "Biblioteca de e-books", "module": "E-books", "description": "Biblioteca de PDFs/e-books com pesquisa, capas e download autorizado.", "hours": 50, "kind": "Opcional", "complexity": 3, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Cloudflare R2 + Supabase — R2 Standard US$ 0,015/GB-mês além da franquia; operações A/B tarifáveis.", "tasks": ["Modelar metadados, arquivos e acesso básico — 6", "Implementar cadastro, capas e upload no painel — 12", "Construir biblioteca com pesquisa e paginação — 10", "Implementar abertura e download autorizado do arquivo — 10", "Testar tipos, tamanho, links expirados e dispositivos — 12"], "acceptance": "Arquivo e capa inválidos são recusados; consulta e download seguem a autorização base, sem implementar P07 implicitamente.", "file": "E01-biblioteca-de-e-books.md"}, "N01": {"title": "Notificações push básicas", "module": "Notificações", "description": "Enviar avisos push de novos cursos, eventos e comunicações da plataforma.", "hours": 46, "kind": "Opcional", "complexity": 3, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Expo Push + FCM/APNs — O envio básico pode usar Expo sem tarifa por mensagem; custos de apps/build e limites à parte.", "tasks": ["Configurar credenciais push e permissões Android/iOS — 8", "Registrar e renovar tokens por dispositivo/usuário — 8", "Implementar envio administrativo e recibos de falha — 10", "Integrar recebimento, navegação e preferência de usuário — 8", "Testar app aberto, fechado, token inválido e logout — 12"], "acceptance": "Token inválido é tratado; tocar em notificação abre destino permitido, sem acesso de usuário anterior após logout.", "file": "N01-notificacoes-push-basicas.md"}, "N02": {"title": "Push segmentado", "module": "Notificações", "description": "Enviar notificações para segmentos como novos alunos ou cursos específicos.", "hours": 40, "kind": "Opcional", "complexity": 3, "dependencies": "N01 (push básico)", "operation": "Supabase + push — Mesmo serviço push; consultas/filas usam backend e cotas.", "tasks": ["Definir segmentos suportados e regras de elegibilidade — 6", "Implementar seleção de público e prévia de quantidade — 8", "Construir configuração e revisão da campanha — 8", "Enviar em lotes evitando duplicação por campanha — 8", "Testar segmentação, permissões e falhas parciais — 10"], "acceptance": "Prévia e envio usam a mesma definição de público; reprocessar campanha não duplica envio no mecanismo contratado.", "file": "N02-push-segmentado.md"}, "N03": {"title": "Automações de notificações", "module": "Notificações", "description": "Disparar mensagens automaticamente por regras e agendamento.", "hours": 60, "kind": "Opcional", "complexity": 4, "dependencies": "N01 (push básico)", "operation": "Supabase + push/cron — Processamento e jobs consumidos; custos por volume/fornecedor.", "tasks": ["Definir gatilhos, agenda, fuso e regras dos fluxos — 8", "Implementar processamento agendado e estado do fluxo — 14", "Adicionar idempotência, retentativa e cancelamento — 12", "Construir configuração administrativa e histórico — 12", "Testar reprocessamento, falhas e limites do serviço — 14"], "acceptance": "Reexecutar job não repete ação já concluída; cancelar fluxo impede novos disparos pendentes conforme estado.", "file": "N03-automacoes-de-notificacoes.md"}, "G01": {"title": "Diretório/links de grupos de WhatsApp", "module": "Grupos e comunidade", "description": "Catálogo de grupos com botões que abrem convites oficiais do WhatsApp.", "hours": 14, "kind": "Opcional", "complexity": 2, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase + link WhatsApp — Sem cobrança de API para simples abrir link; backend dentro do plano.", "tasks": ["Modelar grupos, categorias e links oficiais — 2", "Implementar cadastro e publicação no painel — 4", "Construir diretório e abertura do convite — 4", "Testar links inválidos, privacidade e navegação — 4"], "acceptance": "Convite abre apenas o link oficial configurado; nenhum disparo ou participação automática é efetuado.", "file": "G01-diretorio-links-de-grupos-de-whatsapp.md"}, "G02": {"title": "Disparo automatizado de conteúdo em grupos WhatsApp", "module": "Grupos e comunidade", "description": "Automatizar disparo de conteúdo em grupos WhatsApp, sujeito a viabilidade técnica.", "hours": null, "kind": "Opcional", "complexity": 5, "dependencies": "validação técnica e elegibilidade oficial do canal", "operation": "WhatsApp Groups API / parceiro — SOB COTAÇÃO: cobrança, limites e elegibilidade do canal devem ser confirmados.", "tasks": ["Validar documentação oficial, elegibilidade e viabilidade — A estimar", "Definir escopo e alternativa autorizada com a ATSI — A estimar", "Detalhar implementação e testes somente após viabilidade — A estimar"], "acceptance": "A opção permanece indisponível para contratação enquanto a viabilidade não for\nconfirmada. Horas e custo desconhecidos não são exibidos como zero.", "file": "G02-disparo-automatizado-de-conteudo-em-grupos-whatsapp.md"}, "G03": {"title": "Grupos internos: conteúdos e notícias", "module": "Grupos e comunidade", "description": "Grupos internos com membros, notícias, publicações e moderação.", "hours": 82, "kind": "Opcional", "complexity": 4, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase + R2 para mídia — Banco/realtime/arquivos dentro de cotas; R2 conforme tamanho e operações.", "tasks": ["Modelar grupos, membros, publicações e visibilidade — 10", "Implementar associação e autorização por grupo — 12", "Construir feed paginado, publicação e mídia — 20", "Implementar administração e moderação básica — 16", "Tratar exclusão, denúncia e conteúdo indisponível — 8", "Testar isolamento, mídia e fluxos de participação — 16"], "acceptance": "Usuário sem vínculo não consulta publicação privada; conteúdo moderado deixa de aparecer conforme política.", "file": "G03-grupos-internos-conteudos-e-noticias.md"}, "G04": {"title": "Chat direto entre usuários", "module": "Grupos e comunidade", "description": "Mensagens privadas entre usuários com histórico, bloqueio e denúncias.", "hours": 108, "kind": "Opcional", "complexity": 5, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase Realtime + banco — Picos de conexões e volume de mensagens podem gerar excedentes mensais.", "tasks": ["Definir privacidade, retenção e regras de contato — 10", "Modelar conversas, participantes e mensagens — 12", "Implementar entrega em tempo real e paginação de histórico — 22", "Construir conversas, estados de envio e reconexão — 20", "Implementar bloqueio, denúncias e tratamento administrativo — 16", "Testar ordenação, mensagens duplicadas e acesso indevido — 20", "Avaliar limites de conexões e documentar operação — 8"], "acceptance": "Não participante não lê conversa e bloqueio impede novos contatos conforme regra; reconexão mantém ordem e evita duplicação lógica.", "file": "G04-chat-direto-entre-usuarios.md"}, "G05": {"title": "Perfis públicos de usuários", "module": "Grupos e comunidade", "description": "Perfil público opt-in com nome público, imagem e dados escolhidos pelo usuário.", "hours": 44, "kind": "Opcional", "complexity": 3, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase + R2 — Dentro de cotas de dados/armazenamento; R2 para imagens conforme uso.", "tasks": ["Definir campos públicos e consentimento opt-in — 6", "Separar dados privados e públicos com políticas de acesso — 10", "Construir edição e prévia do perfil público — 10", "Implementar revogação e efeitos na visibilidade — 8", "Testar privacidade, imagens e exposição indevida — 10"], "acceptance": "Sem opt-in não existe exposição pública; revogação remove o perfil dos caminhos públicos e da busca.", "file": "G05-perfis-publicos-de-usuarios.md"}, "G06": {"title": "Pesquisa global por usuários", "module": "Grupos e comunidade", "description": "Pesquisa global de perfis publicáveis com paginação e regras de privacidade.", "hours": 32, "kind": "Opcional", "complexity": 3, "dependencies": "G05 (perfis públicos)", "operation": "PostgreSQL / Supabase — Consultas e índices usam plano de banco; escala pode exigir busca dedicada.", "tasks": ["Definir campos pesquisáveis e regras de descoberta — 4", "Implementar índices, consulta e paginação autorizada — 8", "Construir pesquisa, resultados e navegação ao perfil — 8", "Testar opt-out, enumeração básica e desempenho inicial — 12"], "acceptance": "Pesquisa retorna apenas perfis publicáveis e respeita opt-out e paginação.", "file": "G06-pesquisa-global-por-usuarios.md"}, "EV01": {"title": "Gestão de eventos + inscrições + painel admin", "module": "Eventos e inscrições", "description": "Cadastrar eventos, vagas, inscrições e listas no painel da ATSI.", "hours": 96, "kind": "Opcional", "complexity": 4, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase + R2 — Transações no banco e imagens em R2; custos conforme uso.", "tasks": ["Modelar eventos, lotação, inscrições e estados — 12", "Implementar administração de evento e lista de participantes — 20", "Construir detalhes e inscrição no app — 16", "Garantir vagas com transação e evitar inscrição duplicada — 16", "Implementar cancelamento e regras de disponibilidade — 12", "Testar concorrência de vagas, permissões e datas — 20"], "acceptance": "Duas inscrições concorrentes não excedem vagas e uma mesma pessoa não gera duplicação indevida.", "file": "EV01-gestao-de-eventos-inscricoes-painel-admin.md"}, "EV02": {"title": "Gerar QR Code individual para inscrição", "module": "Eventos e inscrições", "description": "Gerar um QR Code identificador exclusivo para cada inscrição.", "hours": 26, "kind": "Opcional", "complexity": 3, "dependencies": "EV01 (eventos e inscrições)", "operation": "Backend + QR/PDF — Baixo custo incremental; se gerar PDFs/imagens persistidos, R2 por volume.", "tasks": ["Definir identificador não previsível e validade da inscrição — 4", "Gerar e associar QR ao registro sem expor dados pessoais — 6", "Construir exibição e estados da inscrição — 6", "Testar cancelamento, repetição e leitura de QR — 10"], "acceptance": "QR identifica inscrição não previsível sem expor dados pessoais; inscrição cancelada não é tratada como válida.", "file": "EV02-gerar-qr-code-individual-para-inscricao.md"}, "EV03": {"title": "Enviar convite do evento por e-mail", "module": "Eventos e inscrições", "description": "Enviar convites de evento por e-mail com modelos e rastreio de envios.", "hours": 24, "kind": "Opcional", "complexity": 2, "dependencies": "EV01 e B03 (e-mail transacional)", "operation": "Resend + backend — Compartilha franquia de e-mails: Free 3.000/mês; Pro US$ 20/mês/50.000.", "tasks": ["Definir template e regras de destinatários — 4", "Integrar convite com serviço compartilhado B03 — 6", "Implementar estado de envio e reenvio controlado — 6", "Testar falhas, limites e links do convite — 8"], "acceptance": "Convite tem destinatário e evento corretos; reenvio e falha são registrados usando B03 compartilhado.", "file": "EV03-enviar-convite-do-evento-por-e-mail.md"}, "EV04": {"title": "Leitura de QR Code para check-in do evento", "module": "Eventos e inscrições", "description": "Ler QR Code na entrada, validar ingresso e registrar check-in.", "hours": 62, "kind": "Opcional", "complexity": 5, "dependencies": "EV01 e EV02", "operation": "Câmera do app + Supabase — API/banco dentro de cotas; mais uso gera mais tráfego.", "tasks": ["Definir papéis e regras de check-in online — 6", "Integrar câmera, permissões e leitor no app — 10", "Validar inscrição e registrar entrada atomicamente — 12", "Construir feedback de sucesso, erro e duplicidade — 10", "Implementar consulta administrativa de presenças — 8", "Testar reutilização, evento incorreto e rede/dispositivos — 16"], "acceptance": "QR de outro evento é recusado e segundo check-in não duplica presença; rede ausente mostra falha, não confirmação fictícia.", "file": "EV04-leitura-de-qr-code-para-check-in-do-evento.md"}, "P01": {"title": "Integração com serviço de pagamento", "module": "Pagamentos e controle de acesso", "description": "Conectar gateway web, criar pedidos, reconciliar pagamentos e webhooks.", "hours": 86, "kind": "Opcional", "complexity": 5, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Gateway de pagamento — Taxas por transação e eventuais mensalidades do gateway; fornecedor a escolher.", "tasks": ["Selecionar estratégia web e revisar fronteira com regras de lojas — 10", "Modelar pedidos, estados e referências de pagamento — 12", "Integrar criação de cobrança e checkout do provedor — 16", "Validar assinatura de webhooks e tratar idempotência — 16", "Implementar conciliação e fluxo básico de estorno — 12", "Testar sandbox, eventos fora de ordem e falhas — 20"], "acceptance": "Webhook sem assinatura válida não altera pedido; repetição e evento fora de ordem não geram efeitos duplicados.", "file": "P01-integracao-com-servico-de-pagamento.md"}, "P02": {"title": "Assinatura da plataforma", "module": "Pagamentos e controle de acesso", "description": "Oferecer planos por assinatura com renovação e cancelamento.", "hours": 100, "kind": "Opcional", "complexity": 5, "dependencies": "estratégia de pagamento e regras das lojas a validar", "operation": "Gateway + app stores se aplicável — Comissões/taxas por cobrança recorrente; varia por canal e país.", "tasks": ["Definir ciclo, cancelamento e estratégia por canal — 12", "Integrar criação e atualização da assinatura no provedor — 18", "Implementar renovação, falha e carência definidas no escopo — 18", "Construir telas de plano, estado e cancelamento — 16", "Sincronizar direitos de acesso com eventos recorrentes — 14", "Testar cancelamento, renovação e eventos fora de ordem — 22"], "acceptance": "Cancelamento e renovação refletem estado do provedor e política de acesso; aprovação de estratégia por canal precede implementação.", "file": "P02-assinatura-da-plataforma.md"}, "P03": {"title": "Venda avulsa de cursos", "module": "Pagamentos e controle de acesso", "description": "Comprar curso individualmente e liberar acesso após confirmação.", "hours": 54, "kind": "Opcional", "complexity": 4, "dependencies": "P05 e estratégia de pagamento compatível com as lojas", "operation": "Gateway/IAP + controle de acesso — Taxa por compra no gateway ou comissão da loja se aplicável.", "tasks": ["Definir oferta e elegibilidade de compra por canal — 6", "Integrar pedido e associação de comprador/curso — 10", "Liberar e revogar direitos com base no pagamento — 12", "Construir oferta, confirmação e estado da compra — 10", "Testar compra repetida, falha, estorno e autorização — 16"], "acceptance": "Somente pagamento confirmado concede o direito correto; estorno segue política aprovada e não libera outro curso.", "file": "P03-venda-avulsa-de-cursos.md"}, "P04": {"title": "Venda de ingressos/inscrições de eventos", "module": "Pagamentos e controle de acesso", "description": "Vender ingressos de eventos, com pagamento e confirmação.", "hours": 60, "kind": "Opcional", "complexity": 4, "dependencies": "EV01 e P01 ou estratégia de pagamento aprovada", "operation": "Gateway + inscrições — Taxas por transação de evento; reembolsos/estornos podem ter custos.", "tasks": ["Definir reserva de vaga e expiração do pedido — 8", "Integrar pedido e inscrição sem ultrapassar lotação — 14", "Confirmar ou liberar vaga conforme pagamento — 12", "Construir compra, confirmação e cancelamento — 10", "Testar concorrência, expiração e estorno — 16"], "acceptance": "Pagamento e expiração de reserva mantêm vagas consistentes; cobrança sem confirmação não representa ingresso válido.", "file": "P04-venda-de-ingressos-inscricoes-de-eventos.md"}, "P05": {"title": "Controle de acesso de cursos por perfil/assinatura/pagamento", "module": "Pagamentos e controle de acesso", "description": "Liberar cursos conforme perfil, assinatura, pagamento ou direito de acesso.", "hours": 76, "kind": "Opcional", "complexity": 5, "dependencies": "B06 e regras de direitos de acesso a definir", "operation": "Supabase + serviço de vídeo privado — Consultas e assinaturas dentro de cotas; Stream se C02/C03.", "tasks": ["Definir regras de perfil, compra e assinatura — 10", "Modelar direitos e precedência das regras — 12", "Aplicar autorização no backend de catálogo e aulas — 14", "Integrar autorização de vídeo privado quando aplicável — 10", "Exibir bloqueios e instruções de acesso no app — 10", "Testar expiração, revogação e acesso por URL direta — 20"], "acceptance": "Acesso direto à aula e ao vídeo verifica direito no servidor; revogação e expiração não dependem apenas da interface.", "file": "P05-controle-de-acesso-de-cursos-por-perfil-assinatura-pagamento.md"}, "P06": {"title": "Controle de acesso de eventos", "module": "Pagamentos e controle de acesso", "description": "Restringir eventos a perfis, convidados ou clientes pagantes.", "hours": 42, "kind": "Opcional", "complexity": 4, "dependencies": "EV01 e regras de elegibilidade a definir", "operation": "Supabase — Operação dentro de banco/API; escalonamento por uso.", "tasks": ["Definir elegibilidade, convite e regras de inscrição — 6", "Implementar autorização no backend do evento — 10", "Integrar restrições no app e painel — 10", "Testar convidados, pagamento, revogação e acesso direto — 16"], "acceptance": "Convite ou elegibilidade é validado antes da inscrição protegida, inclusive em chamada direta.", "file": "P06-controle-de-acesso-de-eventos.md"}, "P07": {"title": "Controle de acesso de e-books", "module": "Pagamentos e controle de acesso", "description": "Restringir acesso e download dos e-books a públicos elegíveis.", "hours": 36, "kind": "Opcional", "complexity": 3, "dependencies": "E01 e regras de elegibilidade a definir", "operation": "Supabase + R2 — Backend + R2 (armazenamento/operação) conforme uso.", "tasks": ["Definir elegibilidade de biblioteca e download — 6", "Aplicar autorização de metadados e arquivo — 10", "Integrar estados bloqueados e links temporários — 8", "Testar expiração, revogação e compartilhamento de URL — 12"], "acceptance": "URL de arquivo só é emitida para usuário elegível e expira conforme política; não se promete revogação de arquivo já baixado.", "file": "P07-controle-de-acesso-de-e-books.md"}, "L01": {"title": "Logs administrativos de auditoria", "module": "Auditoria", "description": "Registrar histórico de ações administrativas: usuário, hora e alteração.", "hours": 56, "kind": "Opcional", "complexity": 4, "dependencies": "fundação e base aplicáveis; detalhes a validar", "operation": "Supabase / logs — Retenção e armazenamento podem exigir plano/logs maiores.", "tasks": ["Definir eventos auditáveis, retenção e dados excluídos do log — 8", "Implementar gravação protegida de ator, data e alteração — 14", "Integrar ações administrativas contratadas ao mecanismo — 12", "Construir consulta com filtros e controle de acesso — 10", "Testar integridade, exposição de dados e retenção — 12"], "acceptance": "Registro contém ator, momento e operação, sem senha ou token; acesso ao histórico exige permissão e usuário comum não o altera.", "file": "L01-logs-administrativos-de-auditoria.md"}, "R01": {"title": "Relatório de visualizações de cursos/aulas", "module": "Relatórios administrativos", "description": "Relatório de visualizações de cursos e aulas por período.", "hours": 44, "kind": "Opcional", "complexity": 4, "dependencies": "telemetria de visualizações a definir", "operation": "Supabase / eventos de uso — Mais eventos gravados = mais banco/armazenamento; pode exigir analytics.", "tasks": ["Definir o que conta como visualização e fonte do evento — 6", "Instrumentar captura sem duplicar eventos de navegação — 10", "Agregar dados por curso, aula e período — 8", "Construir filtros e visualização administrativa — 8", "Testar contagem, privacidade e desempenho inicial — 12"], "acceptance": "Contagem segue definição de visualização e não soma navegação repetida como eventos distintos sem critério.", "file": "R01-relatorio-de-visualizacoes-de-cursos-aulas.md"}, "R02": {"title": "Relatório de conclusão dos cursos", "module": "Relatórios administrativos", "description": "Relatório de alunos e cursos concluídos, com filtros e exportação.", "hours": 28, "kind": "Opcional", "complexity": 2, "dependencies": "B07", "operation": "Supabase — Consultas agregadas geralmente cobertas no início; escala depende de volume.", "tasks": ["Definir conclusão e campos do relatório — 4", "Consultar e agregar progresso com autorização — 8", "Construir filtros e exportação de conclusões — 8", "Testar períodos, filtros e consistência com B07 — 8"], "acceptance": "Conclusões exportadas correspondem ao progresso B07, aos filtros e ao período exibido.", "file": "R02-relatorio-de-conclusao-dos-cursos.md"}, "R03": {"title": "Relatório de avaliações/satisfação de cursos", "module": "Relatórios administrativos", "description": "Painel consolidado de avaliações e satisfação dos cursos.", "hours": 26, "kind": "Opcional", "complexity": 2, "dependencies": "C09", "operation": "Supabase — Consultas agregadas; consumo de banco conforme uso.", "tasks": ["Definir agregação, amostra e exibição de opiniões — 4", "Implementar consultas sobre avaliações C09 — 6", "Construir indicadores e filtros administrativos — 8", "Testar amostra vazia, atualização e privacidade — 8"], "acceptance": "Indicadores correspondem às avaliações C09 e distinguem ausência de avaliação de nota zero.", "file": "R03-relatorio-de-avaliacoes-satisfacao-de-cursos.md"}, "R04": {"title": "Relatório de usuários ativos", "module": "Relatórios administrativos", "description": "Métricas de usuários ativos diariamente e mensalmente.", "hours": 48, "kind": "Opcional", "complexity": 4, "dependencies": "definição e coleta de usuários ativos", "operation": "Supabase / analytics — Coleta de eventos e agregação; excedentes ou analytics dedicado.", "tasks": ["Definir evento qualificante e janelas DAU/MAU — 8", "Instrumentar captura com deduplicação por usuário — 10", "Implementar agregações e tratamento de fuso — 10", "Construir painel e filtros por período — 8", "Testar múltiplos dispositivos e consistência dos indicadores — 12"], "acceptance": "Mesmo usuário em vários dispositivos conta uma vez na janela definida, com limites de dia/mês no fuso aprovado.", "file": "R04-relatorio-de-usuarios-ativos.md"}, "R05": {"title": "Relatório de usuários simultâneos", "module": "Relatórios administrativos", "description": "Mostrar quantidade de usuários online simultaneamente.", "hours": 78, "kind": "Opcional", "complexity": 5, "dependencies": "mecanismo de presença e heartbeat", "operation": "Supabase Realtime / presença — Conexões concorrentes, mensagens e heartbeat podem gerar excedentes.", "tasks": ["Definir online, intervalo de heartbeat e tolerância — 8", "Implementar presença e expiração de conexões — 18", "Deduplicar sessões e dispositivos por usuário — 12", "Construir indicador administrativo e atualização — 12", "Testar desconexão, reconexão e limites de concorrência — 22", "Documentar limitações de precisão e custos de presença — 6"], "acceptance": "Conexão expirada deixa de contar após tolerância definida; sessões simultâneas do mesmo usuário seguem a regra de deduplicação.", "file": "R05-relatorio-de-usuarios-simultaneos.md"}, "GM01": {"title": "Motor de pontos por aulas e cursos concluídos", "module": "Gamificação", "description": "Ganhar pontos por concluir aulas e cursos, com saldo e regras.", "hours": 64, "kind": "Opcional", "complexity": 4, "dependencies": "B07 e regras de pontuação compatíveis com o provedor de vídeo", "operation": "Supabase — Gravação de eventos e ranking; banco dentro de cotas inicialmente.", "tasks": ["Definir eventos elegíveis e restrições das plataformas de vídeo — 8", "Modelar extrato e regras de pontuação — 10", "Implementar concessão idempotente e reversão definida — 14", "Construir configuração administrativa básica — 10", "Integrar consulta de saldo e atividades — 8", "Testar repetição, exploração básica e alterações de conteúdo — 14"], "acceptance": "Evento repetido concede pontos uma vez; regras não recompensam assistir ao player YouTube em desacordo com políticas.", "file": "GM01-motor-de-pontos-por-aulas-e-cursos-concluidos.md"}, "GM02": {"title": "Pontos por presença em eventos", "module": "Gamificação", "description": "Creditar pontos após participação comprovada em eventos.", "hours": 26, "kind": "Opcional", "complexity": 3, "dependencies": "GM01 e check-in confirmado EV04", "operation": "Supabase + check-in — Baixo custo incremental no banco, dependendo do volume.", "tasks": ["Definir regra de presença elegível e reversão — 4", "Integrar check-in confirmado ao extrato de pontos — 8", "Exibir confirmação da pontuação no evento — 4", "Testar duplicidade e cancelamento de presença — 10"], "acceptance": "Somente check-in confirmado concede pontos, uma vez por usuário/evento.", "file": "GM02-pontos-por-presenca-em-eventos.md"}, "GM03": {"title": "Ranking público", "module": "Gamificação", "description": "Mostrar classificação pública por pontos e períodos.", "hours": 42, "kind": "Opcional", "complexity": 4, "dependencies": "GM01", "operation": "Supabase / cache eventual — Consultas e ranking; Redis opcional só se necessário.", "tasks": ["Definir períodos, desempate e consentimento público — 6", "Implementar agregação e consulta paginada — 10", "Construir ranking e estados de ausência de dados — 10", "Aplicar opt-out e restringir dados expostos — 6", "Testar empate, períodos e acesso público — 10"], "acceptance": "Empates seguem regra aprovada, período filtra corretamente e usuário sem consentimento não é exposto.", "file": "GM03-ranking-publico.md"}, "GM04": {"title": "Pontos e posição no ranking no perfil", "module": "Gamificação", "description": "Mostrar pontos acumulados e posição do usuário em seu perfil.", "hours": 22, "kind": "Opcional", "complexity": 2, "dependencies": "GM01 e GM03", "operation": "Supabase — Leituras de pontuação dentro das cotas do backend.", "tasks": ["Definir posição exibida e integração com privacidade — 4", "Consultar saldo e posição usando motor e ranking existentes — 6", "Construir componente de pontuação no perfil — 4", "Testar ausência de posição e consistência do saldo — 8"], "acceptance": "Saldo e posição correspondem a GM01/GM03; perfil sem ranking apresenta estado explícito, não posição inventada.", "file": "GM04-pontos-e-posicao-no-ranking-no-perfil.md"}};
+    const foundationCatalog = [{"id": "F01", "title": "F01 — Análise de requisitos e jornadas", "hours": 104, "tasks": ["Workshops com responsáveis, objetivos, públicos e plataformas — 12 h", "Mapear jornadas e requisitos funcionais por módulo do catálogo — 20 h", "Definir requisitos não funcionais, privacidade e restrições — 12 h", "Organizar épicos, prioridades, dependências e exclusões — 12 h", "Revisar specs e critérios de aceite das features contratáveis — 24 h", "Decompor tarefas, revisar estimativas e registrar premissas — 16 h", "Consolidar pendências e conduzir revisão de aprovação — 8 h"]}, {"id": "F02", "title": "F02 — Design e arquitetura", "hours": 120, "tasks": ["Definir arquitetura da informação e fluxos essenciais — 16 h", "Desenhar wireframes mobile e painel administrativo — 24 h", "Produzir telas de referência e estados de erro/vazio — 24 h", "Modelar domínio, diagrama de classes e relacionamentos — 16 h", "Definir arquitetura, contratos e fronteiras dos serviços — 16 h", "Desenhar autorização, segurança e fluxo de dados pessoais — 12 h", "Revisar acessibilidade e decisões com ATSI/YvyLab — 12 h"]}, {"id": "F03", "title": "F03 — Shell mobile e design system", "hours": 56, "tasks": ["Inicializar Expo/TypeScript e configuração por ambiente — 8 h", "Estruturar navegação, deep links e rotas protegidas — 12 h", "Implementar tokens, componentes e layouts reutilizáveis — 16 h", "Preparar cliente de API, erros globais e estado de sessão — 8 h", "Validar shell em Android/iOS e acessibilidade básica — 12 h"]}, {"id": "F04", "title": "F04 — Fundação do painel e RBAC", "hours": 32, "tasks": ["Inicializar Next.js, configuração e layout administrativo — 8 h", "Integrar sessão administrativa e papéis — 8 h", "Proteger rotas e centralizar autorização no servidor — 8 h", "Testar matriz de acesso e navegação administrativa — 8 h"]}, {"id": "F05", "title": "F05 — Banco, API, storage e ambientes", "hours": 56, "tasks": ["Configurar ambientes aprovados, contas, acessos e segredos nos fornecedores escolhidos — 12 h", "Configurar migrações e acesso ao banco/API — 8 h", "Estabelecer políticas RLS e isolamento inicial — 8 h", "Configurar storage, permissões e upload comum — 8 h", "Configurar monitoramento básico, backup e procedimento de restauração com validação — 12 h", "Validar isolamento dos ambientes e segurança da fundação — 8 h"]}, {"id": "F06", "title": "F06 — Versionamento, pipelines, deploy e publicação", "hours": 90, "tasks": ["Configurar assinatura e credenciais Android/iOS — 10 h", "Configurar pipelines de validação, testes, builds e artefatos — 12 h", "Distribuir builds internos e validar instalação — 10 h", "Preparar metadados, privacidade e submissões — 12 h", "Executar submissão inicial e documentar publicação — 10 h", "Configurar organização, repositórios, papéis, revisão e proteção de branches — 8 h", "Configurar deploy de homologação do painel e serviços nos fornecedores aprovados — 10 h", "Configurar entrega de produção com aprovação, segredos e migrações controladas — 10 h", "Validar falha de pipeline, rollback e documentar procedimento de release — 8 h"]}, {"id": "F07", "title": "F07 — Homologação integrada e segurança essencial", "hours": 64, "tasks": ["Preparar plano integrado, massa de dados e ambientes de homologação — 10 h", "Executar jornadas ponta a ponta da base e vídeo escolhido — 16 h", "Revisar autorização e exposição de dados entre usuários — 10 h", "Revisar acessibilidade e dispositivos representativos — 10 h", "Executar ciclo de regressão após correções integradas — 12 h", "Consolidar aceite, pendências e transferência operacional — 6 h"]}];
+    const legacySpecIds = {"mfa": "A01", "login_google": "A02", "login_microsoft": "A03", "ebook_vitrine": "M01", "curso_youtube": "C01", "curso_privado": "C02", "curso_offline": "C03", "certificados": "C04", "quizzes": "C05", "comentarios_aulas": "C08", "biblioteca_ebooks": "E01", "push_basico": "N01", "push_segmentado": "N02", "automacoes": "N03"};
+    // END GENERATED SPEC CATALOG
+
+    // O catálogo revisado substitui os cards legados; as estimativas são referências.
+    const previewByCode = {
+      B01:'mural', B02:'login', B03:'admin', B04:'perfil', B05:'perfil',
+      B06:'curso_catalogo', B07:'curso_progresso', B08:'admin',
+      A01:'seguranca', A02:'login_social', A03:'login_social',
+      M01:'ebook_vitrine', C01:'curso_youtube', C02:'curso_privado',
+      C03:'curso_offline', C04:'curso_certificado', C05:'curso_quiz',
+      C08:'curso_comentarios', E01:'ebook_biblioteca',
+      N01:'notificacoes', N02:'notificacoes_segmentadas', N03:'automacoes',
+      G03:'grupos', G04:'grupos_chat'
+    };
+    const groupColors = ['#59c478','#6eb6ff','#e6c67f','#9f89ff','#ffb86b','#ff8a80'];
+    Object.keys(sectionMeta).forEach(key => delete sectionMeta[key]);
+    features.splice(0, features.length, ...Object.entries(specCatalog).map(([id, spec]) => {
+      if (!sectionMeta[spec.module]) {
+        const index = Object.keys(sectionMeta).length;
+        sectionMeta[spec.module] = {title:spec.module, icon:'◈', desc:'Estimativas preliminares', color:groupColors[index % groupColors.length]};
+      }
+      return {
+        id, section:spec.module, title:spec.title, desc:spec.description,
+        type:spec.kind === 'Obrigatória' ? 'required' : spec.kind === 'Escolha única' ? 'unique' : 'optional',
+        group:['C01','C02','C03'].includes(id) ? 'curso_entrega' : undefined,
+        hours:spec.hours, price:spec.hours === null ? null : spec.hours * 200,
+        complexity:spec.complexity, preview:id, previewType:previewByCode[id], unavailable:id === 'G02'
+      };
+    }));
+    Object.assign(presets.essencial, {desc:'Fundação, base obrigatória e YouTube.', features:['C01']});
+    Object.assign(presets.plus, {desc:'Vídeo privado, certificados, quizzes, e-books e push.', features:['C02','C04','C05','E01','N01','M01']});
+    Object.assign(presets.premium, {desc:'Vídeo offline, cursos, notificações, comunidade e eventos.', features:['C03','A01','C04','C05','C06','C07','C08','C09','E01','M01','M02','M03','N01','N02','G03','EV01','EV02','EV03','EV04']});
+    const prerequisites = {
+      C04:['B07'], C06:['C05'], N02:['N01'], N03:['N01'], G06:['G05'],
+      EV02:['EV01'], EV03:['EV01'], EV04:['EV01','EV02'],
+      P02:['P01','P05'], P03:['P01','P05'], P04:['EV01','P01'], P05:['B06'],
+      P06:['EV01'], P07:['E01'], R02:['B07'], R03:['C09'],
+      GM01:['B07'], GM02:['GM01','EV04'], GM03:['GM01'], GM04:['GM01','GM03']
+    };
+    const foundationHours = foundationCatalog.reduce((sum, item) => sum + item.hours, 0);
+
+    const state = {
+      hourRate:200,
+      activePreset:'essencial',
+      maintenancePlan:'essencial',
+      selected:new Set(),
+      openSections:new Set(Object.keys(sectionMeta)),
+      activePreview:'B01'
+    };
+
+    const el = {
+      presetButtons: document.getElementById('presetButtons'),
+      sections: document.getElementById('sections'),
+      phoneScreen: document.getElementById('phoneScreen'),
+      previewTitle: document.getElementById('previewTitle'),
+      previewDescription: document.getElementById('previewDescription'),
+      totalPrice: document.getElementById('totalPrice'),
+      totalSub: document.getElementById('totalSub'),
+      totalHours: document.getElementById('totalHours'),
+      estimatedMonths: document.getElementById('estimatedMonths'),
+      internalCost: document.getElementById('internalCost'),
+      avgComplexity: document.getElementById('avgComplexity'),
+      mandatoryValue: document.getElementById('mandatoryValue'),
+      optionalValue: document.getElementById('optionalValue'),
+      courseStrategy: document.getElementById('courseStrategy'),
+      floatingTotal: document.getElementById('floatingTotal'),
+      floatingPrice: document.getElementById('floatingPrice'),
+      floatingDuration: document.getElementById('floatingDuration'),
+      totalAnnouncement: document.getElementById('totalAnnouncement')
+    };
+
+    const featureDialog = document.getElementById('featureDialog');
+    const dialogTitle = document.getElementById('dialogTitle');
+    const dialogContent = document.getElementById('dialogContent');
+    let dialogOpener = null;
+    document.getElementById('dialogClose').addEventListener('click', () => featureDialog.close());
+    featureDialog.addEventListener('close', () => { if (dialogOpener && dialogOpener.isConnected) dialogOpener.focus(); });
+
+    function openFeatureDetails(feature, opener, explicitSpecId = null){
+      const detail = explicitSpecId ? null : featureDetails[feature.id];
+      const specId = explicitSpecId || legacySpecIds[feature.id] || (specCatalog[feature.id] ? feature.id : null);
+      const spec = specId ? specCatalog[specId] : null;
+      dialogOpener = opener;
+      dialogTitle.textContent = feature.title;
+      dialogContent.innerHTML = `
+        <h3>Descrição e funcionamento</h3>
+        <p>${detail ? detail.scope : (spec ? spec.description : feature.desc)}</p>
+        ${explicitSpecId ? '' : `<h3>Estimativa do configurador atual</h3>
+        <p>${feature.hours === null ? 'Sob cotação' : `${feature.hours} h · referência ${brl(feature.price)}`}. Valores não validados.</p>`}
+        ${detail ? `
+          <h3>Especificação ${detail.code} — pendente de validação</h3>
+          <ul>${detail.tasks.map(task => `<li>${task}</li>`).join('')}</ul>
+          <p>Total proposto: ${detail.hours} h. A especificação não altera o orçamento atual.</p>
+          <h3>Dependências e exclusões</h3><p>${detail.deps}</p>
+          <h3>Custos operacionais esperados</h3><p>${detail.costs} Valores sob avaliação, sem preço mensal confirmado.</p>
+          ${detail.note ? `<h3>Atenção à diferença de escopo</h3><p>${detail.note}</p>` : ''}
+          <p>Detalhamento: <code>specs/${detail.code}*.md</code>.</p>
+        ` : spec ? `
+          <h3>Especificação ${specId} — pendente de validação</h3>
+          <p>${spec.description}</p>
+          <ul>${spec.tasks.map(task => `<li>${task}</li>`).join('')}</ul>
+          <p>Esforço revisado: ${spec.hours === null ? 'sob cotação' : `${spec.hours} h`}. As horas acima compõem o orçamento quando esta feature está selecionada. Aprovação pendente.</p>
+          <h3>Dependências e exclusões</h3><p>${spec.dependencies}. Detalhamento sujeito a revisão.</p>
+          <h3>Cenário mínimo de aceite</h3><p>${spec.acceptance}</p>
+          <h3>Custos operacionais esperados</h3><p>${spec.operation} Valores e condições sujeitos a confirmação.</p>
+          <p>Detalhamento: <code>specs/${spec.file}</code>.</p>
+        ` : `
+          <h3>Tarefas, dependências e custos operacionais</h3>
+          <p>Detalhamento ainda pendente de especificação e validação. Custos externos não estimados.</p>
+        `}
+      `;
+      featureDialog.showModal();
+      document.getElementById('dialogClose').focus();
+    }
+
+    function renderSpecCatalog(){
+      const container = document.getElementById('specCatalogList');
+      const groups = {};
+      Object.entries(specCatalog).forEach(([id, spec]) => {
+        (groups[spec.module] ||= []).push([id, spec]);
+      });
+      Object.entries(groups).forEach(([module, items]) => {
+        const heading = document.createElement('h3');
+        heading.textContent = module;
+        container.appendChild(heading);
+        const list = document.createElement('div');
+        list.className = 'spec-catalog-list';
+        items.forEach(([id, spec]) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'feature-info';
+          button.textContent = `${id} · ${spec.title}`;
+          button.addEventListener('click', () => openFeatureDetails(
+            {title:spec.title, desc:spec.description}, button, id
+          ));
+          list.appendChild(button);
+        });
+        container.appendChild(list);
+      });
+    }
+
+    function brl(v){ return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v || 0); }
+    function complexityLabel(v){ return ({1:'Baixa',2:'Média',3:'Média-alta',4:'Alta',5:'Muito alta'})[Math.round(v)] || '—'; }
+    function getFeature(id){ return features.find(f=>f.id===id); }
+
+    const offerStorageKey = 'atsi-offer-v1';
+    let currentOffer = null;
+    let campaignConfig = null;
+    const campaignStorageKey='atsi-campaign-v2';
+    let cancelledOffers = [];
+    function pricingSnapshot(){
+      const packages={};
+      for(const key of ['essencial','plus','premium']){
+        const ids=new Set([...features.filter(f=>f.type==='required').map(f=>f.id),...presets[key].features]);
+        packages[key]={foundationCents:foundationHours*state.hourRate*100,
+          items:features.filter(f=>ids.has(f.id)).map(f=>({id:f.id,title:f.title,type:f.type,priceCents:Math.round(f.price*100)}))};
+      }
+      return {schemaVersion:1,priceListVersion:'specs-reviewed-v1',packages};
+    }
+    function packagePricing(key){
+      if(campaignConfig)return ATSIPromotion.calculateCampaign(pricingSnapshot(),key,campaignConfig);
+      return ATSIPromotion.calculate(pricingSnapshot(),key,currentOffer);
+    }
+    function downloadJSON(data,name){
+      const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+      const a=document.createElement('a');a.href=url;a.download=name;a.click();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+    }
+    function quoteData(){
+      const total=foundationHours*state.hourRate+selectedFeatures().reduce((s,f)=>s+f.price,0);
+      const pricing=state.activePreset==='custom'?{
+        regularCents:Math.round(total*100),eligibleCents:0,discountCents:0,finalCents:Math.round(total*100)
+      }:packagePricing(state.activePreset);
+      return {schemaVersion:1,exportedAt:new Date().toISOString(),simulation:true,
+        project:{product:ATSIProduct.name,client:ATSIProduct.client,developer:ATSIProduct.developer},
+        packageId:state.activePreset,priceListSnapshot:pricingSnapshot(),
+        selectedIds:selectedFeatures().map(f=>f.id),pricing,
+        monthlyMaintenanceBRL:{essencial:3000,plus:4000,premium:5000}[state.maintenancePlan],
+        monthlyHours:{essencial:10,plus:15,premium:20}[state.maintenancePlan],
+        operationalCoverage:'Incluída na manutenção, exceto tokens de IA. Dimensionamento pendente.',
+        offer:currentOffer,offerStatus:ATSIPromotion.status(currentOffer,pricingSnapshot())};
+    }
+    function quoteRows(){
+      const q=quoteData();
+      return [['Projeto',`${ATSIProduct.name} — Plataforma Digital`],['Cliente',ATSIProduct.client],
+        ['Desenvolvedora',ATSIProduct.developer],['Simulação','Sem validação de servidor'],['Cotação',q.offer?.quoteId||'Não emitida'],
+        ['Oferta',q.offer?.id||'Não emitida'],['Status',q.offerStatus],
+        ['Vencimento UTC',q.offer?.expiresAt||'Não definido'],['Pacote',q.packageId],
+        ['Implantação regular',brl(q.pricing.regularCents/100)],
+        ['Base elegível',brl(q.pricing.eligibleCents/100)],['Desconto',brl(q.pricing.discountCents/100)],
+        ['Implantação final',brl(q.pricing.finalCents/100)],
+        ['Manutenção mensal',brl(q.monthlyMaintenanceBRL)],['Horas mensais',String(q.monthlyHours)],
+        ['Operação',q.operationalCoverage],['Excedentes','Contrato à parte'],
+        ['Fundação',brl(foundationHours*state.hourRate)],
+        ...selectedFeatures().map(f=>[`${f.id} · ${f.title}`,brl(f.price)])];
+    }
+    function updateOfferDisplay(){
+      const status=campaignConfig ? ATSIPromotion.campaignStatus(campaignConfig) : ATSIPromotion.status(currentOffer,pricingSnapshot());
+      const clock=document.getElementById('offerClock');
+      document.querySelector('.offer-box').hidden=status!=='active';
+      clock.hidden=status!=='active';
+      if(status==='active'){
+        const seconds=Math.max(0,Math.ceil((Date.parse(campaignConfig?campaignConfig.endsAt:currentOffer.expiresAt)-Date.now())/1000));
+        clock.textContent=[Math.floor(seconds/3600),Math.floor(seconds/60)%60,seconds%60].map(n=>String(n).padStart(2,'0')).join(':');
+      }
+      const messages={unavailable:'Oferta indisponível — configurar desconto e aprovação comercial.',
+        active:'Condição especial vigente.',
+        expired:'Oferta encerrada — valores regulares restabelecidos.',
+        cancelled:'Oferta cancelada localmente — valores regulares.',
+        invalid:'Oferta inválida — nenhum desconto aplicado.',
+        scheduled:'Oferta ainda não vigente — nenhum desconto aplicado.',
+        catalog_changed:'Catálogo alterado — oferta suspensa; o histórico emitido não foi reescrito.'};
+      document.getElementById('offerMessage').textContent=messages[status];
+      if(campaignConfig){
+        const format=date=>new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'short',timeZone:'America/Sao_Paulo'}).format(new Date(date));
+        document.getElementById('offerDeadline').textContent=`${format(campaignConfig.startsAt)} até ${format(campaignConfig.endsAt)} (Brasília)`;
+      }else document.getElementById('offerDeadline').textContent=currentOffer ?
+        `Cotação ${currentOffer.quoteId} · vencimento ${new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'long',timeZone:'America/Sao_Paulo'}).format(new Date(currentOffer.expiresAt))} (São Paulo)` : '';
+      return status;
+    }
+    function initOffers(){
+      try{
+        const saved=JSON.parse(localStorage.getItem(campaignStorageKey)||'null');
+        if(ATSIPromotion.validCampaign(saved))campaignConfig=saved;
+      }catch(err){console.warn('Não foi possível restaurar a campanha local.',err);}
+      const start=document.getElementById('promotionStart'),end=document.getElementById('promotionEnd');
+      const ids={essencial:'discountEssencial',plus:'discountPlus',premium:'discountPremium'};
+      function populate(){
+        if(!campaignConfig)return;
+        // UTC -> horário de Brasília, sem depender do fuso do computador.
+        const local=date=>new Date(Date.parse(date)-3*3600000).toISOString().slice(0,16);
+        start.value=local(campaignConfig.startsAt);end.value=local(campaignConfig.endsAt);
+        for(const key of Object.keys(ids))document.getElementById(ids[key]).value=campaignConfig.percentages[key];
+      }
+      populate();
+      [start,end].forEach(input=>input.addEventListener('input',()=>end.setCustomValidity('')));
+      document.getElementById('promotionSettings').addEventListener('submit',e=>{
+        e.preventDefault();
+        const form=e.currentTarget;
+        end.setCustomValidity('');
+        if(!form.reportValidity())return;
+        const config={schemaVersion:2,
+          startsAt:new Date(start.value+'-03:00').toISOString(),
+          endsAt:new Date(end.value+'-03:00').toISOString(),
+          percentages:Object.fromEntries(Object.entries(ids).map(([key,id])=>[key,Number(document.getElementById(id).value)]))};
+        if(!ATSIPromotion.validCampaign(config)){
+          end.setCustomValidity('A data final deve ser posterior à data de início.');end.reportValidity();return;
+        }
+        try{localStorage.setItem(campaignStorageKey,JSON.stringify(config));}
+        catch(err){end.setCustomValidity('Não foi possível salvar neste navegador.');end.reportValidity();return;}
+        campaignConfig=config;currentOffer=null;render();
+        document.getElementById('settingsDialog').close();
+      });
+      let previous=updateOfferDisplay();
+      setInterval(()=>{const status=updateOfferDisplay();if(previous!==status){previous=status;render();}},1000);
+    }
+
+    let displayedTotal = 0;
+    let targetTotal = null;
+    let totalAnimation = null;
+    let floatingTimer = null;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function totalIsVisible(){
+      const rect = el.totalPrice.getBoundingClientRect();
+      return rect.bottom > 0 && rect.top < window.innerHeight &&
+        rect.right > 0 && rect.left < window.innerWidth;
+    }
+
+    function hideFloatingTotal(){
+      el.floatingTotal.hidden = true;
+      clearTimeout(floatingTimer);
+      floatingTimer = null;
+    }
+
+    function updateTotal(value){
+      if (targetTotal === value) return;
+      const initial = targetTotal === null;
+      targetTotal = value;
+      if (totalAnimation !== null) cancelAnimationFrame(totalAnimation);
+      totalAnimation = null;
+
+      if (!initial) {
+        el.totalAnnouncement.textContent = `Investimento total estimado: ${brl(value)}`;
+        if (!totalIsVisible()) {
+          el.floatingTotal.hidden = false;
+          clearTimeout(floatingTimer);
+          floatingTimer = setTimeout(hideFloatingTotal, 4000);
+        } else {
+          hideFloatingTotal();
+        }
+      }
+
+      function paint(amount){
+        displayedTotal = amount;
+        el.totalPrice.textContent = brl(amount);
+        el.floatingPrice.textContent = brl(amount);
+      }
+
+      if (initial || reducedMotion.matches) {
+        paint(value);
+        return;
+      }
+      const startValue = displayedTotal;
+      let startTime = null;
+      function tick(time){
+        if (startTime === null) startTime = time;
+        const progress = Math.min((time - startTime) / 700, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        paint(progress === 1 ? value : startValue + (value - startValue) * eased);
+        if (progress < 1) totalAnimation = requestAnimationFrame(tick);
+        else totalAnimation = null;
+      }
+      totalAnimation = requestAnimationFrame(tick);
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!el.floatingTotal.hidden && totalIsVisible()) hideFloatingTotal();
+    }, {passive:true});
+    window.addEventListener('resize', () => {
+      if (!el.floatingTotal.hidden && totalIsVisible()) hideFloatingTotal();
+    });
+
+    function applyPreset(key){
+      state.activePreset = key;
+      state.maintenancePlan = key;
+      state.selected = new Set(presets[key].features);
+      state.activePreview = 'B01';
+      render();
+    }
+
+    function isSelected(feature){
+      return feature.type === 'required' || state.selected.has(feature.id);
+    }
+
+    function toggleFeature(featureId, selected){
+      const feature = getFeature(featureId);
+      if (!feature || feature.type === 'required' || feature.unavailable) return;
+      if (feature.type === 'unique') {
+        if (!selected) return;
+        features.filter(f=>f.group && f.group===feature.group).forEach(f=>state.selected.delete(f.id));
+        state.selected.add(feature.id);
+      } else {
+        if (selected) {
+          const needed = new Set();
+          function collect(id){
+            (prerequisites[id] || []).forEach(dep => {
+              if (!isSelected(getFeature(dep)) && !needed.has(dep)) { needed.add(dep); collect(dep); }
+            });
+          }
+          collect(featureId);
+          if (needed.size && !confirm(`Esta opção requer: ${[...needed].map(id => getFeature(id).title).join(', ')}. Incluir também?`)) { render(); return; }
+          needed.forEach(id => state.selected.add(id));
+          state.selected.add(feature.id);
+        } else {
+          const removed = new Set([featureId]);
+          let changed = true;
+          while (changed) {
+            changed = false;
+            selectedFeatures().forEach(f => {
+              if (!removed.has(f.id) && (prerequisites[f.id] || []).some(dep => removed.has(dep))) {
+                removed.add(f.id); changed = true;
+              }
+            });
+          }
+          if (removed.size > 1 && !confirm(`Remover também as dependentes: ${[...removed].filter(id => id !== featureId).map(id => getFeature(id).title).join(', ')}?`)) { render(); return; }
+          removed.forEach(id => state.selected.delete(id));
+        }
+      }
+      state.activePreset = 'custom';
+      render();
+    }
+
+    function sectionFeatures(sectionId){ return features.filter(f=>f.section===sectionId); }
+
+    function renderPresets(){
+      el.presetButtons.innerHTML = Object.entries(presets).map(([key,preset]) => `
+        <button class="preset ${state.activePreset===key ? 'active':''} ${packagePricing(key).discountCents>0?'has-offer':''}" data-preset="${key}">
+          ${packagePricing(key).discountCents>0 ? `<span class="plan-offer"><del>${brl(packagePricing(key).regularCents/100)}</del><em>−${packagePricing(key).effectivePct.toLocaleString('pt-BR',{maximumFractionDigits:2})}%</em><b>${brl(packagePricing(key).finalCents/100)}</b></span>` : ''}
+          <small>${preset.subtitle}</small>
+          <strong>${preset.name}</strong>
+          <span>${preset.desc}</span>
+        </button>
+      `).join('');
+      el.presetButtons.querySelectorAll('[data-preset]').forEach(btn => btn.addEventListener('click', () => applyPreset(btn.dataset.preset)));
+    }
+
+    function renderSections(){
+      el.sections.innerHTML = Object.entries(sectionMeta).map(([sectionId, meta]) => {
+        const items = sectionFeatures(sectionId);
+        const open = state.openSections.has(sectionId);
+        return `
+          <div class="section ${open ? 'open':''}">
+            <button class="section-head" data-section-head="${sectionId}">
+              <span class="section-color" style="background:${meta.color}"></span>
+              <div class="section-icon">${meta.icon}</div>
+              <div class="section-meta">
+                <strong>${meta.title}</strong>
+                <span>${meta.desc}</span>
+              </div>
+              <span class="section-tag">${items.length} features</span>
+            </button>
+            <div class="section-content">
+              ${items.map(feature => renderFeatureCard(feature)).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      el.sections.querySelectorAll('[data-section-head]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.sectionHead;
+          if (state.openSections.has(id)) state.openSections.delete(id); else state.openSections.add(id);
+          renderSections();
+        });
+      });
+
+      el.sections.querySelectorAll('.feature').forEach(card => {
+        const id = card.dataset.feature;
+        const feature = getFeature(id);
+
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('input, select, label, button')) return;
+          state.activePreview = feature.preview;
+          renderPreview();
+          highlightActiveFeature();
+        });
+
+        card.querySelector('.feature-info').addEventListener('click', e => {
+          e.stopPropagation();
+          openFeatureDetails(feature, e.currentTarget);
+        });
+
+        const toggle = card.querySelector('.feature-toggle');
+        if (toggle) {
+          toggle.addEventListener('click', e => e.stopPropagation());
+          toggle.addEventListener('change', e => {
+            state.activePreview = feature.preview;
+            toggleFeature(id, e.target.checked);
+          });
+        }
+      });
+    }
+
+    function highlightActiveFeature(){
+      document.querySelectorAll('.feature').forEach(card => {
+        card.classList.toggle('active-preview', getFeature(card.dataset.feature)?.preview === state.activePreview);
+      });
+    }
+
+    function renderFeatureCard(feature){
+      const selected = isSelected(feature);
+      const badges = [
+        feature.type === 'required' ? '<span class="badge req">Obrigatória</span>' : '',
+        feature.type === 'unique' ? '<span class="badge unique">Escolha única</span>' : '',
+        feature.type === 'optional' ? '<span class="badge optional">Opcional</span>' : '',
+        feature.unavailable ? '<span class="badge unique">Sob cotação · indisponível</span>' : ''
+      ].join('');
+      return `
+        <article class="feature ${selected ? 'selected':''}" data-feature="${feature.id}">
+          <div class="feature-head">
+            ${feature.type === 'required'
+              ? '<div class="feature-lock">🔒</div>'
+              : `<input class="feature-check feature-toggle" type="${feature.type==='unique' ? 'radio':'checkbox'}" name="${feature.group || feature.id}" aria-label="Selecionar ${feature.title}" ${selected ? 'checked':''} ${feature.unavailable ? 'disabled' : ''} />`
+            }
+            <div class="feature-copy">
+              <strong>${feature.id} · ${feature.title}</strong>
+              <p>${feature.desc}</p>
+              <div class="badges">${badges}</div>
+            </div>
+            <button class="feature-info" type="button" aria-label="Mais informações sobre ${feature.title}">Mais informações</button>
+          </div>
+          <div class="fields">
+            <div class="field">
+              <label>Horas</label>
+              <strong>${feature.hours === null ? 'Sob cotação' : `${feature.hours} h`}</strong>
+            </div>
+            <div class="field">
+              <label>Referência de implantação</label>
+              <strong>${feature.price === null ? 'Sob cotação' : brl(feature.price)}</strong>
+            </div>
+            <div class="field">
+              <label>Complexidade</label>
+              <strong>${feature.complexity} · ${complexityLabel(feature.complexity)}</strong>
+            </div>
+          </div>
+          <div class="meta-row">
+            <span>Preço de venda: <strong>Não aprovado</strong></span>
+          </div>
+        </article>
+      `;
+    }
+
+    function selectedFeatures(){ return features.filter(f => isSelected(f)); }
+
+    function renderSummaryOnly(){
+      const maintenancePlans = {
+        essencial:{price:3000,hours:10}, plus:{price:4000,hours:15}, premium:{price:5000,hours:20}
+      };
+      const maintenance = maintenancePlans[state.maintenancePlan];
+      document.getElementById('maintenancePrice').textContent = brl(maintenance.price);
+      document.getElementById('maintenanceHours').textContent = `${maintenance.hours} horas por mês`;
+      document.getElementById('maintenancePlanLabel').textContent =
+        `Manutenção ${presets[state.maintenancePlan].name}${state.activePreset === 'custom' ? ' · mantida do plano de origem; confirmar no contrato' : ''}`;
+      const chosen = selectedFeatures();
+      const totalHours = foundationHours + chosen.reduce((sum, f) => sum + (Number(f.hours) || 0), 0);
+      const totalPrice = foundationHours * state.hourRate + chosen.reduce((sum, f) => sum + (Number(f.price) || 0), 0);
+      const mandatory = chosen.filter(f => f.type === 'required').reduce((sum, f) => sum + (Number(f.price) || 0), 0);
+      const optional = totalPrice - mandatory - foundationHours * state.hourRate;
+      const avgComplexityNum = chosen.length ? chosen.reduce((sum, f) => sum + (Number(f.complexity) || 0), 0) / chosen.length : 0;
+      const strategy = chosen.find(f => f.group === 'curso_entrega');
+      const warnings = [];
+      if (state.selected.has('C07') || state.selected.has('C06')) warnings.push('IA exige fontes autorizadas; operação e privacidade pendentes.');
+      if (strategy?.id === 'C01') warnings.push('YouTube: confirmar políticas antes de oferecer acesso pago ou recompensas por visualizações.');
+      if (['P01','P02','P03','P04'].some(id => state.selected.has(id))) warnings.push('Pagamentos exigem validação das regras das lojas e custos do provedor.');
+      if (state.selected.has('R01') || state.selected.has('R04') || state.selected.has('R05')) warnings.push('Relatórios exigem definir telemetria e métricas de uso.');
+
+      const pricing=state.activePreset==='custom' ? {regularCents:totalPrice*100,eligibleCents:0,discountCents:0,finalCents:totalPrice*100} : packagePricing(state.activePreset);
+      updateTotal(pricing.finalCents/100);
+      document.getElementById('regularImplementation').textContent=brl(pricing.regularCents/100);
+      document.getElementById('eligibleImplementation').textContent=brl(pricing.eligibleCents/100);
+      document.getElementById('discountImplementation').textContent=brl(pricing.discountCents/100)+(pricing.blocked?' · bloqueado pela política':'');
+      document.getElementById('finalImplementation').textContent=brl(pricing.finalCents/100);
+      updateOfferDisplay();
+      el.totalSub.textContent = `${chosen.length} features selecionadas · ${totalHours} horas estimadas`;
+      el.totalHours.textContent = `${totalHours} h`;
+      const months = totalHours / (22 * 8 * 2);
+      const duration = `${new Intl.NumberFormat('pt-BR', {maximumFractionDigits:2}).format(months)} meses`;
+      el.estimatedMonths.textContent = duration;
+      el.floatingDuration.textContent = `Prazo estimado: ${duration}`;
+      el.internalCost.textContent = brl(foundationHours * state.hourRate);
+      document.getElementById('foundationLabel').textContent = `Fundação · ${foundationHours} h`;
+      el.avgComplexity.textContent = chosen.length ? complexityLabel(avgComplexityNum) : '—';
+      el.mandatoryValue.textContent = brl(mandatory);
+      el.optionalValue.textContent = brl(optional);
+      el.courseStrategy.textContent = strategy ? strategy.title : 'Não definida';
+      document.getElementById('scopeWarnings').textContent = warnings.join(' ');
+    }
+
+    // Exemplos fictícios; os controles desenhados não executam operações reais.
+    const mockScreens = {
+      B01:['home','Olá, Maria','Cursos para você','Gestão no agro|Continue aprendendo'],
+      B02:['form',`Bem-vindo ao ${ATSIProduct.name}`,'Acesse sua conta','E-mail|Senha'],
+      B03:['message','Confira seu e-mail','Recupere seu acesso','Redefinição de senha|Enviamos instruções para seu e-mail.'],
+      B04:['profile',`Minha conta ${ATSIProduct.name}`,'Seus dados','Maria Silva|maria@exemplo.com'],
+      B05:['settings','Comunicações','Suas escolhas','Novidades da ATSI|E-mails promocionais'],
+      B06:['list','Explorar cursos','Conhecimento para o campo','Manejo eficiente|Gestão rural|Tecnologia no agro'],
+      B07:['progress','Minha jornada','Seu aprendizado','Gestão no agro|4 de 6 aulas concluídas'],
+      B08:['admin','Gestão de conteúdo','Painel administrativo','Cursos publicados|Aulas em revisão|Destaques do mural'],
+      A01:['form','Segurança da conta','Confirme sua identidade','Código de autenticação|••• •••'],
+      A02:['social','Entrar com Google','Conecte sua conta','Google|maria@exemplo.com'],
+      A03:['social','Entrar com Microsoft','Acesso para sua organização','Microsoft|maria@empresa.com'],
+      M01:['cover','Leituras em destaque','E-book no mural','Guia de boas práticas|Uma leitura para você'],
+      M02:['event','Próximos encontros','Evento no mural','Dia de campo|24 de setembro · Presencial'],
+      M03:['cover','Novidades para você','Promoção no mural','Condições especiais|Confira a oferta'],
+      C01:['video','Aula em vídeo','YouTube incorporado','Boas práticas no campo|Reprodução via YouTube'],
+      C02:['video','Aula em vídeo','Streaming privado online','Planejamento da safra|Acesso autorizado'],
+      C03:['offline','Assistir offline','Disponível sem conexão','Planejamento da safra|Download no dispositivo'],
+      C04:['certificate','Sua conquista','Curso concluído','Certificado de conclusão|Gestão no agro'],
+      C05:['quiz','Avalie o aprendizado','Quiz · módulo 1','Qual é o primeiro passo?|Analisar o cenário|Selecionar insumos'],
+      C06:['ai','Criar avaliação','Sugestões para revisão','Gerar perguntas|Revisão humana antes de publicar'],
+      C07:['chat','Pergunte sobre a aula','Assistente de aprendizado','Como planejar a safra?|Consulte o conteúdo autorizado da aula.'],
+      C08:['chat','Conversas da aula','Compartilhe dúvidas','Como aplicar na prática?|Ótima pergunta! Vamos conversar.'],
+      C09:['rating','Avalie o curso','Sua opinião importa','Como foi sua experiência?|Conte o que achou do conteúdo.'],
+      E01:['list','Biblioteca','Materiais de leitura','Guia de boas práticas|Planejamento rural|Caderno de campo'],
+      N01:['notification','Notificações','Novidades da plataforma','Novo curso disponível|Confira os conteúdos da semana.'],
+      N02:['admin','Campanha segmentada','Comunicação relevante','Público: novos alunos|Canal: push|Envio: rascunho'],
+      N03:['flow','Automações','Mensagens no momento certo','Novo cadastro|Aguardar um dia|Enviar boas-vindas'],
+      G01:['list','Grupos da comunidade','Encontre seu grupo','Produtores da região|Troca de experiências|Novidades ATSI'],
+      G02:['warning','Automação de grupos','Sujeita à validação','Disponibilidade não confirmada|Elegibilidade e regras em análise.'],
+      G03:['feed','Comunidade','Notícias e conversas',`Comunidade ${ATSIProduct.name}|Novidades para nossos participantes`],
+      G04:['chat','Mensagens','Converse com usuários','Olá! Como foi o encontro?|Foi ótimo compartilhar experiências.'],
+      G05:['profile','Perfil público','Você decide o que compartilhar','Maria Silva|Visível mediante consentimento'],
+      G06:['search','Buscar pessoas','Encontre perfis públicos','Buscar por nome|Maria Silva|João Pereira'],
+      EV01:['event','Eventos','Encontros e inscrições','Dia de campo|24 de setembro · Vagas disponíveis'],
+      EV02:['qr','Minha inscrição','Seu acesso ao evento','Dia de campo|QR individual ilustrativo'],
+      EV03:['message','Convite por e-mail','Você foi convidado','Dia de campo|Confira detalhes e confirme presença.'],
+      EV04:['scan','Check-in','Validação na entrada','Aponte para o QR Code|Inscrição identificada'],
+      P01:['payment','Pagamento','Pedido em preparação','Resumo do pedido|Provedor a definir'],
+      P02:['payment','Minha assinatura','Escolha seu plano','Plano mensal|Condições a confirmar'],
+      P03:['payment','Acesso ao curso','Compra avulsa','Gestão no agro|Condições de compra a confirmar'],
+      P04:['payment','Ingresso para evento','Revise sua inscrição','Dia de campo|Pagamento a confirmar'],
+      P05:['access','Acesso ao curso','Direitos de acesso','Gestão no agro|Disponível para seu perfil'],
+      P06:['access','Acesso ao evento','Participação autorizada','Encontro exclusivo|Disponível para convidados'],
+      P07:['access','Acesso ao e-book','Material autorizado','Guia de boas práticas|Disponível para seu perfil'],
+      L01:['admin','Histórico de ações','Auditoria administrativa','Maria atualizou um curso|João publicou uma aula|Filtro por período'],
+      R01:['chart','Visualizações','Relatório de cursos','Aulas visualizadas|Últimos 30 dias'],
+      R02:['chart','Conclusões','Relatório de aprendizagem','Cursos concluídos|Últimos 30 dias'],
+      R03:['chart','Satisfação','Feedback dos alunos','Avaliações recebidas|Últimos 30 dias'],
+      R04:['chart','Usuários ativos','Visão administrativa','Atividade da plataforma|Métrica a definir'],
+      R05:['chart','Pessoas online','Presença simultânea','Usuários conectados|Indicador ilustrativo'],
+      GM01:['points','Minha pontuação','Sua jornada reconhecida','Pontos acumulados|Progresso em cursos'],
+      GM02:['points','Presença reconhecida','Participação no evento','Dia de campo|Pontos por check-in confirmado'],
+      GM03:['ranking','Ranking','Participação da comunidade','Ana|Maria|João'],
+      GM04:['points','Meu desempenho','Pontos e posição','Sua posição no ranking|Pontos acumulados']
+    };
+
+    function specificMockContent(feature){
+      const id=feature.id;
+      const included=code=>isSelected(getFeature(code));
+      const card=body=>`<div class="app-card">${body}</div>`;
+      const title=text=>`<strong class="app-title">${text}</strong>`;
+      const muted=text=>`<div class="app-muted">${text}</div>`;
+      const row=(label,value='')=>`<div class="app-row"><span>${label}</span><span>${value}</span></div>`;
+      const action=text=>`<div class="app-button">${text}</div>`;
+      const input=(label,value)=>`<span class="app-label">${label}</span><div class="app-input">${value}</div>`;
+      const alert=text=>`<div class="app-alert">${text}</div>`;
+      const progress='<div class="app-progress"><span></span></div>';
+      switch(id){
+        case 'B01': return card('<span class="app-label">Continuar aprendendo</span>'+title('Gestão no agro')+muted('Módulo 2 · Aula 4 de 6')+progress)+
+          card('<span class="app-label">Curso em destaque</span><div class="app-cover">Boas práticas no campo</div>'+muted('Conheça a trilha e explore o catálogo'))+
+          (included('M01')?card(title('E-book em destaque')+muted('Guia de boas práticas · Conhecer')):'')+
+          (included('M02')?card(title('Próximo evento')+muted('Dia de campo · Ver detalhes')):'')+
+          (included('M03')?card(title('Promoção em destaque')+muted('Conheça as condições · Saiba mais')):'')+action('Explorar cursos');
+        case 'B02': return card(input('E-mail','maria@exemplo.com')+input('Senha','••••••••')+muted('Esqueci minha senha'))+
+          action('Entrar')+card(row('Sessão protegida','●')+muted('Ao sair da conta, o acesso protegido é encerrado.'));
+        case 'B03': return card('<span class="app-label">Mensagem transacional · exemplo</span>'+title('Redefinição de senha')+
+          muted('Para: maria@exemplo.com')+row('Remetente','ATSI+')+muted('Recebemos sua solicitação de recuperação de acesso.'))+
+          action('Redefinir minha senha')+card(muted('O link tem validade limitada. Se você não solicitou, ignore esta mensagem.'))+
+          alert('Exemplo da mensagem entregue pelo serviço; não é uma caixa de e-mail implementada no aplicativo.');
+        case 'B04': return card(title('Maria Silva')+muted('Perfil privado')+row('Nome','Maria Silva')+
+          row('E-mail','Verificado ✓')+row('Foto','Alterar')+row('Senha','Redefinir'))+
+          card(muted('Alterar o e-mail exige verificação do novo endereço.')+
+            (included('B07')?row('Meu progresso','Consultar'):'')+
+            (included('C04')?row('Meus certificados','Consultar'):''))+action('Salvar meus dados');
+        case 'B05': return card(title('Comunicações de marketing')+muted('Escolha se deseja receber novidades promocionais.')+
+          row('Receber promoções','<span class="app-toggle"></span>')+muted('Você pode revogar esta preferência a qualquer momento.'))+
+          action('Salvar preferência')+card(muted('Mensagens essenciais, como recuperação de acesso, são tratadas separadamente.'));
+        case 'B06': return card(input('Pesquisar cursos','Buscar no catálogo…'))+
+          card('<div class="app-cover">Gestão no agro</div>'+title('Gestão no agro')+row('Estrutura','2 módulos · 6 aulas')+
+            muted('Módulo 1 · Fundamentos / Módulo 2 · Aplicação'))+action('Ver módulos e aulas')+
+          (included('C04')?card(muted('Certificado disponível após cumprir os critérios do curso.')):'');
+        case 'B07': return card(title('Gestão no agro')+muted('4 de 6 aulas concluídas')+progress+
+          row('Aula 1 · Introdução','✓')+row('Aula 2 · Planejamento','✓')+row('Próxima aula','Continuar'))+
+          action('Retomar aprendizado')+card(muted('Progresso individual salvo na sua conta.'));
+        case 'B08': return card(title('Cursos e conteúdos')+row('Gestão no agro','Publicado')+row('Novo curso','Rascunho'))+
+          card(input('Editar curso','Título e descrição')+row('Módulos e aulas','Ordenar')+row('Capa e destaque','Editar'))+action('Revisar e publicar');
+        case 'A01': return card(title('Autenticador de segurança')+muted('Digite o código temporário do seu aplicativo autenticador.')+
+          input('Código de 6 dígitos','123 456'))+action('Verificar código')+
+          card(row('Gerenciar segundo fator','Ativar / remover')+muted('Recuperar acesso conforme política de segurança. Alterações exigem verificação adequada.'));
+        case 'A02': case 'A03': {
+          const provider=id==='A02'?'Google':'Microsoft';
+          return card(title('Acesso com '+provider)+muted('Você será direcionado para autenticar sua conta no provedor.'))+
+            action('Continuar com '+provider)+card(row('Vínculo seguro','Conta ATSI+')+muted('Se já houver uma conta, a vinculação seguirá as regras de identidade.'))+
+            alert('Identificação do provedor apenas para demonstração; nenhum login real é iniciado.');
+        }
+        case 'M01': return card('<span class="app-label">Destaque no mural</span><div class="app-cover">Guia de boas práticas</div>'+
+          title('E-book para sua rotina')+muted('Capa, resumo e link para conhecer o material.'))+action('Conhecer material')+
+          card(muted('Este destaque não inclui, por si só, biblioteca, leitor ou controle de download.'));
+        case 'M02': return card('<span class="app-label">Destaque no mural</span>'+title('Dia de campo')+
+          row('Data','24 de setembro')+row('Formato','Presencial')+muted('Um encontro para trocar experiências.'))+
+          action('Ver detalhes do evento')+card(muted('O card pode abrir um destino externo. Gestão de inscrições é uma entrega separada.'));
+        case 'M03': return card('<span class="app-label">Banner promocional no mural</span><div class="app-cover">Benefícios para você</div>'+
+          title('Conheça a campanha em destaque')+muted('Descrição e condições da promoção.'))+
+          action('Saiba mais')+card(muted('Exibição conforme vigência configurada; não inclui checkout ou motor de cupons.'));
+        case 'C01': case 'C02': case 'C03': {
+          const offline=id==='C03',youtube=id==='C01';
+          return card(`<span class="app-label">${youtube?'Player YouTube incorporado':offline?'Vídeo privado · online e offline':'Streaming privado online'}</span>`+
+            '<div class="app-video">▶</div>'+title('Planejamento da safra')+muted('Aula 4 · Gestão no agro')+progress)+
+            (offline?card(row('Download da aula','68%')+progress+row('Gerenciar arquivo','Pausar / remover')+muted('Disponível sem rede após concluir o download, sujeito à política de expiração.')):card(muted(youtube?'Depende de internet e das políticas do player oficial.':'A reprodução exige internet e autorização de acesso.')))+
+            alert(youtube?'Não oferece proteção privada equivalente a streaming autorizado.':offline?'Offline não significa proteção anticópia inviolável.':'Conteúdo privado não implica DRM avançado.');
+        }
+        case 'C04': return card('<span class="app-label">Certificado de conclusão</span>'+title('Maria Silva')+
+          muted('Gestão no agro · Conclusão registrada')+row('Código de verificação','ATSI-EXEMPLO'))+
+          action('Abrir certificado PDF')+card(row('Verificação','Consultar autenticidade')+muted('Emissão após cumprir os critérios; código permite consultar a autenticidade.'));
+        case 'C05': return card('<span class="app-label">Questão 1 de 5</span>'+title('Qual é o primeiro passo do planejamento?')+
+          input('Alternativa A','○ Analisar o cenário')+input('Alternativa B','○ Selecionar insumos'))+
+          action('Enviar resposta')+card(muted('Correção e tentativas seguem as regras definidas para esta avaliação.'));
+        case 'C06': return card(title('Gerar sugestões de questões')+input('Fonte autorizada','Texto do módulo 1')+
+          input('Quantidade de questões','5 questões'))+action('Gerar sugestões')+
+          card('<span class="app-label">Revisão humana</span>'+title('Sugestão de pergunta')+muted('Confira enunciado, alternativas e gabarito antes de publicar.')+row('Status','Rascunho · não publicado'))+
+          card(muted('Editar → aprovar → publicar no quiz. A IA não publica automaticamente.'));
+        case 'C07': return card('<div class="app-bubble mine">Como iniciar o planejamento?</div>'+
+          '<div class="app-bubble">A aula orienta analisar o cenário antes de definir as ações.</div>'+
+          muted('Fonte ilustrativa: módulo 1, aula 2')+input('Pergunta','Escreva uma dúvida sobre esta aula…'))+
+          card(muted('Respostas limitadas ao conteúdo autorizado. Sem fonte suficiente, o assistente sinaliza a limitação.'));
+        case 'C08': return card(title('Comentários da aula')+
+          row('Maria · aluna','Há 2 min')+muted('Como vocês aplicam esta prática?')+
+          '<div class="app-bubble">Resposta de João: começamos avaliando o cenário local.</div>'+
+          input('Seu comentário','Escreva sua dúvida…'))+action('Publicar comentário')+
+          card(muted('Respostas por aula e moderação básica. Não é uma conversa privada.'));
+        case 'C09': return card(title('Como foi sua experiência?')+'<p style="font-size:24px;color:#a47719">★ ★ ★ ★ ☆</p>'+
+          input('Comentário sobre o curso','Conte o que achou…'))+action('Enviar avaliação')+
+          card(muted('Avaliação de satisfação do curso, diferente do quiz de aprendizagem.'));
+        case 'E01': return card(input('Pesquisar e-books','Buscar por título…'))+
+          card('<div class="app-cover">Guia de boas práticas</div>'+title('Guia de boas práticas')+muted('PDF · material de leitura')+
+            row('Arquivo','Abrir / baixar'))+card(title('Planejamento rural')+muted('Veja outros materiais da biblioteca.'));
+        case 'N01': return card('<span class="app-label">Exemplo de notificação push</span>'+title('ATSI+ · Novo curso disponível')+
+          muted('Conheça a nova trilha de aprendizado.'))+
+          card(row('Permissão do dispositivo','Notificações autorizadas')+
+            muted('Ao tocar no aviso, você abre o destino autorizado. Não pressupõe uma caixa de notificações persistente no app.'));
+        case 'N02': return card(title('Criar campanha push')+input('Segmento','Alunos do curso Gestão no agro')+
+          input('Mensagem','Nova aula disponível!')+row('Prévia de destinatários','Exemplo: 48'))+
+          action('Revisar envio segmentado')+card(muted('Segmentação e envio em lotes reutilizam a infraestrutura de push básico.'));
+        case 'N03': return card(title('Fluxo de boas-vindas')+'<div class="app-flow-step">1 · Novo cadastro</div>'+
+          '<div class="app-flow-step">2 · Aguardar um dia</div><div class="app-flow-step">3 · Enviar notificação</div>'+
+          row('Estado do fluxo','Rascunho'))+action('Revisar automação')+card(muted('Regras, agendamento, histórico e prevenção de disparos repetidos.'));
+        case 'G01': return card(input('Grupos disponíveis','Escolha um grupo…')+title('Produtores da região')+
+          muted('Troca de experiências no WhatsApp'))+action('Abrir convite do WhatsApp')+
+          card(muted('Somente diretório de links oficiais. Não envia mensagens automaticamente.'));
+        case 'G02': return alert('Viabilidade e elegibilidade ainda não confirmadas.')+
+          card(title('Automação de grupos WhatsApp')+row('Integração','A validar')+row('Implantação','Sob cotação')+
+            muted('Nenhum disparo está disponível para contratação.'))+card(muted('Somente soluções oficialmente autorizadas poderão ser consideradas.'));
+        case 'G03': return card(title('Comunidade ATSI+')+row('Grupo interno','Membros')+
+          muted('Notícias e conteúdos da comunidade.'))+card(title('Nova publicação da ATSI')+
+          muted('Compartilhamos orientações para a próxima semana.')+row('Publicação','Ver conteúdo'))+
+          card(row('Administração do grupo','Membros e moderação')+muted('Participação e moderação seguem as permissões do grupo.'));
+        case 'G04': return card(row('Conversa privada','Maria e João')+
+          '<div class="app-bubble mine">Olá! Como foi o encontro?</div><div class="app-bubble">Foi ótimo trocar experiências!</div>'+
+          input('Mensagem','Escreva uma mensagem…'))+card(row('Segurança da conversa','Bloquear / denunciar'));
+        case 'G05': return card(title('Meu perfil público')+row('Publicar meu perfil','<span class="app-toggle"></span>')+
+          input('Nome público','Maria Silva')+row('Foto pública','Escolher')+input('Apresentação','Atuação no agronegócio'))+
+          action('Revisar dados públicos')+card(muted('Somente campos escolhidos são públicos. É possível revogar a visibilidade.'));
+        case 'G06': return card(input('Buscar pessoas','Maria…'))+
+          card(title('Maria Silva')+muted('Perfil público · Ver perfil'))+
+          card(title('Maria Oliveira')+muted('Perfil público · Próxima página'))+
+          card(muted('Apenas pessoas que autorizaram a exposição pública aparecem na busca.'));
+        case 'EV01': return card(title('Dia de campo')+row('Data','24 de setembro')+row('Vagas','Disponíveis')+
+          muted('Detalhes do encontro e regras de participação.'))+action('Inscrever-se')+
+          card(title('Minha inscrição')+muted('Confirmação da inscrição no evento.')+
+            (included('EV02')?row('QR individual','Disponível'):'')+
+            (included('EV03')?row('Convite por e-mail','Disponível'):'')+
+            (included('EV04')?row('Entrada no evento','Check-in por QR'):''));
+        case 'EV02': return card(title('Minha inscrição · Dia de campo')+
+          '<div class="app-qr"></div>'+muted('QR ilustrativo, não utilizável · inscrição individual')+row('Situação','Confirmada'))+
+          card(muted('A imagem identifica a inscrição; a leitura para check-in é uma feature separada.'));
+        case 'EV03': return card('<span class="app-label">Exemplo de convite recebido por e-mail</span>'+title('Você está convidado!')+
+          muted('Dia de campo · 24 de setembro')+row('Para','maria@exemplo.com'))+action('Ver detalhes do evento')+
+          card(muted('Modelo de convite e rastreio de envio no serviço transacional compartilhado.'));
+        case 'EV04': return card(title('Leitor de check-in')+'<div class="app-scan-area">Enquadre o QR da inscrição</div>'+
+          row('Inscrição encontrada','Maria Silva')+row('Evento','Dia de campo'))+
+          action('Confirmar presença')+card(muted('Inscrição inválida ou já utilizada gera aviso; o registro de entrada não é duplicado.'));
+        case 'P01': return card(title('Resumo do pedido')+row('Identificador','PED-EXEMPLO')+
+          row('Valor','A definir')+row('Status','Aguardando pagamento'))+action('Continuar no provedor de pagamento')+
+          card(muted('Confirmação por evento validado do provedor, não apenas pelo retorno à tela.'))+
+          alert('Estratégia por canal e regras das lojas ainda precisam de aprovação.');
+        case 'P02': return card(title('Assinatura da plataforma')+row('Plano','Mensal · exemplo')+
+          row('Valor e vigência','A definir')+row('Estado','Exemplo de assinatura ativa')+row('Renovação','Conforme contrato'))+
+          action('Gerenciar assinatura')+card(row('Cancelamento','Consultar condições')+muted('Renovação, cancelamento e falhas de cobrança respeitam as condições aprovadas.'));
+        case 'P03': return card(title('Comprar curso')+muted('Gestão no agro')+row('Acesso','Curso individual')+
+          row('Preço','A definir')+row('Pedido','Aguardando confirmação'))+
+          action('Revisar compra do curso')+card(muted('O acesso é liberado após pagamento confirmado. Cobrança depende da estratégia aprovada por canal.'));
+        case 'P04': return card(title('Ingresso · Dia de campo')+row('Quantidade','1 inscrição')+
+          row('Preço','A definir')+row('Vaga','Reserva temporária'))+action('Revisar pagamento do ingresso')+
+          card(muted('Pagamento confirma a inscrição; expiração da reserva libera a vaga conforme regra definida.'));
+        case 'P05': case 'P06': case 'P07': {
+          const names={P05:['Curso','Gestão no agro'],P06:['Evento','Dia de campo'],P07:['E-book','Guia de boas práticas']};
+          const [type,name]=names[id];
+          return card('<span class="app-label">Exemplo com acesso autorizado</span>'+title(type+' · '+name)+
+            row('Direito de acesso','Disponível para seu perfil'))+
+            card('<span class="app-label">Exemplo sem direito de acesso</span>'+title('Acesso restrito')+
+              muted('Seu perfil ainda não possui autorização para este conteúdo.'))+
+            alert(id==='P07'?'Download autorizado não impede cópia de arquivo já baixado.':'Autorização validada no servidor conforme perfil, convite ou direito adquirido.');
+        }
+        case 'L01': return card(input('Filtro','Últimos 7 dias · todos os administradores')+
+          title('Alteração de curso')+row('Responsável','Maria · administradora')+row('Momento','16/11 · 10:35')+
+          row('Registro','Curso Gestão no agro')+muted('Ação: título atualizado'))+
+          card(muted('Histórico de ações administrativas, com retenção e acesso controlado.'));
+        case 'R01': case 'R02': case 'R03': case 'R04': case 'R05': {
+          const metrics={
+            R01:['Visualizações de aulas','128','Curso e aula','Eventos de visualização, não conclusões.'],
+            R02:['Conclusões de cursos','32','Curso e aluno','Fonte: progresso registrado. Inclui exportação.'],
+            R03:['Satisfação do curso','4,6 / 5','Curso','18 avaliações · amostra ilustrativa.'],
+            R04:['Usuários ativos','84','Dia / mês','Deduplicação por usuário na janela definida.'],
+            R05:['Pessoas online agora','12','Presença simultânea','Heartbeat e tolerância; não equivale a usuários ativos mensais.']
+          };
+          const [metric,value,filter,explanation]=metrics[id];
+          return card(input('Filtros',id==='R05'?'Presença atual':filter+' · últimos 30 dias')+
+            '<span class="app-label">Dados fictícios para demonstração</span>'+title(metric)+
+            `<div class="app-stat">${value}</div>`+
+            (id==='R03'?muted('Sem respostas: exibir “Sem avaliações”, não nota zero.'):'<div class="app-chart"><i style="height:35%"></i><i style="height:62%"></i><i style="height:80%"></i><i style="height:54%"></i></div>'))+
+            card(muted(explanation))+(id==='R02'?action('Exportar conclusões'):'');
+        }
+        case 'GM01': return card(title('Extrato de pontos')+row('Aula concluída','+10 pts')+row('Curso concluído','+30 pts')+
+          muted('Exemplos de regras; pontuação final a definir.'))+
+          card(muted('Cada evento pontua uma vez. Pontos por conclusão não podem contrariar políticas do provedor de vídeo.'));
+        case 'GM02': return card(title('Presença reconhecida')+row('Evento','Dia de campo')+row('Check-in','Confirmado')+
+          row('Pontos do evento','+20 pts · exemplo'))+
+          card(muted('O crédito depende de presença confirmada e não é repetido ao reler o QR.'));
+        case 'GM03': return card(input('Período do ranking','Mês atual · exemplo')+row('1º · Ana','150 pts')+
+          row('2º · Maria','120 pts')+row('3º · João','100 pts'))+
+          card(muted('Exposição pública mediante consentimento; empate segue critério definido.'));
+        case 'GM04': return card(title('Maria Silva')+row('Pontos acumulados','120 pts · exemplo')+
+          row('Posição no ranking','2º · mês atual'))+action('Ver ranking')+
+          card(muted('Saldo e posição reutilizam o motor de pontos e o ranking; sem posição disponível, exibir estado explícito.'));
+        default: return null;
+      }
+    }
+
+    function appMockup(feature){
+      const [kind, title, subtitle, text] = mockScreens[feature.id];
+      const parts = text.split('|');
+      const rows = items => items.map(item => `<div class="app-row"><span>${item}</span><span class="app-badge">Ver</span></div>`).join('');
+      const card = content => `<div class="app-card">${content}</div>`;
+      const button = text => `<div class="app-button">${text}</div>`;
+      let content=specificMockContent(feature);
+      if(content===null)switch(kind){
+        case 'home': content = card(`<span class="app-label">Curso em destaque</span><div class="app-video">▶</div><strong class="app-title">${parts[0]}</strong><span class="app-muted">${parts[1]}</span><div class="app-progress"><span></span></div>`) +
+          (state.selected.has('M01') ? card('<strong class="app-title">E-book em destaque</strong>Guia de boas práticas') : '') +
+          (state.selected.has('M02') ? card('<strong class="app-title">Próximo evento</strong>Encontro da comunidade') : '') +
+          (state.selected.has('M03') ? card('<strong class="app-title">Oferta em destaque</strong>') : ''); break;
+        case 'form': content = card(parts.map(p=>`<div class="app-label">${p}</div><div class="app-input">${p==='Senha'?'••••••••':'Digite aqui'}</div>`).join('')) + button('Continuar'); break;
+        case 'profile': content = card(`<span style="font-size:30px;color:#2c9d54">●</span><strong class="app-title">${parts[0]}</strong><span class="app-muted">${parts[1]}</span>`) + card(rows(['Dados pessoais','Privacidade','Preferências',
+          ...(isSelected(getFeature('B07'))?['Meu progresso']:[]),
+          ...(isSelected(getFeature('C04'))?['Meus certificados']:[])])) + button('Editar perfil'); break;
+        case 'video': case 'offline': content = card(`<div class="app-video ${kind}">${kind==='offline'?'↓':'▶'}</div><strong class="app-title">${parts[0]}</strong><span class="app-muted">${parts[1]}</span><div class="app-progress"><span></span></div>`) + card(rows(['Introdução','Próxima aula'])) + button(kind==='offline'?'Baixar aula':'Assistir'); break;
+        case 'qr': case 'scan': content = card(`<span class="app-label">${parts[0]}</span><div class="app-qr ${kind}"></div><div class="app-muted" style="text-align:center">${parts[1]} · ilustração</div>`) + button(kind==='scan'?'Confirmar presença':'Ver inscrição'); break;
+        case 'chart': content = card(`<span class="app-label">${parts[0]}</span><strong class="app-title">Dados ilustrativos</strong><div class="app-chart"><i style="height:35%"></i><i style="height:62%"></i><i style="height:48%"></i><i style="height:82%"></i><i style="height:70%"></i></div><span class="app-muted">${parts[1]}</span>`) + card(rows(['Período','Detalhamento'])); break;
+        case 'chat': content = card(`<div class="app-bubble mine">${parts[0]}</div><div class="app-bubble">${parts[1]}</div><div class="app-input">Escreva uma mensagem…</div>`); break;
+        case 'quiz': content = card(`<span class="app-label">Questão 1 de 5</span><strong class="app-title">${parts[0]}</strong><div class="app-input">○ ${parts[1]}</div><div class="app-input">○ ${parts[2]}</div>`) + button('Responder'); break;
+        case 'ranking': content = card(parts.map((p,i)=>`<div class="app-row"><span>${i+1}º &nbsp; ${p}</span><span class="app-badge">${120-i*20} pts</span></div>`).join('')); break;
+        case 'progress': content = card(`<span class="app-label">Seu progresso</span><strong class="app-title">${parts[0]}</strong><span class="app-muted">${parts[1]}</span><div class="app-progress"><span></span></div>`) + card(rows(['Aulas concluídas','Próxima aula'])) + button('Continuar'); break;
+        case 'rating': content = card(`<strong class="app-title">${parts[0]}</strong><p style="font-size:23px;color:#e6c67f;margin:8px 0">★ ★ ★ ★ ☆</p><div class="app-input">${parts[1]}</div>`) + button('Enviar avaliação'); break;
+        case 'points': case 'certificate': content = card(`<span class="app-label">${kind==='points'?'Sua conquista':'Certificado'}</span><div style="text-align:center;font-size:35px;color:#2c9d54;margin:9px">✦</div><strong class="app-title" style="text-align:center">${parts[0]}</strong><div class="app-muted" style="text-align:center">${parts[1]}</div>`) + button('Ver detalhes'); break;
+        case 'list': case 'admin': case 'flow': case 'search': content = card(rows(parts)) +
+          (feature.id==='B06' && isSelected(getFeature('C04'))?card('<span class="app-badge">Certificação disponível nos cursos elegíveis</span>'):'') +
+          button('Ver detalhes'); break;
+        case 'event': content = card(`<span class="app-label">${subtitle}</span><strong class="app-title">${parts[0]}</strong><p class="app-muted">${parts[1]}</p>`) +
+          (feature.id==='EV01'?card(rows(['Inscrições abertas',
+            ...(isSelected(getFeature('EV02'))?['QR individual da inscrição']:[]),
+            ...(isSelected(getFeature('EV03'))?['Convite por e-mail']:[]),
+            ...(isSelected(getFeature('EV04'))?['Check-in no evento']:[])])):'') + button('Ver evento');break;
+        case 'feed': content=card(`<strong class="app-title">${parts[0]}</strong><p class="app-muted">${parts[1]}</p>`) +
+          (isSelected(getFeature('G04'))?card('Mensagens diretas disponíveis'): '') + button('Ver publicações');break;
+        default: content = card(`<span class="app-label">${kind==='warning'?'Viabilidade pendente':subtitle}</span><strong class="app-title">${parts[0]}</strong><p class="app-muted">${parts[1] || ''}</p>`) + (kind==='event' ? card(rows(['Data e local','Detalhes do encontro'])) : '') + button(kind==='warning'?'Sob cotação':'Ver detalhes');
+      }
+      const administrative=['B08','C06','N02','N03','EV04','L01','R01','R02','R03','R04','R05'].includes(feature.id);
+      return `<div class="app-screen" data-mock-feature="${feature.id}" data-mock-context="${administrative?'admin':'user'}"><div class="app-status"><span>9:41</span><span>● ● ▰</span></div><div class="app-header"><div class="app-brand">${ATSIProduct.name}</div><h3>${title}</h3><p>${administrative?'Prévia administrativa · ':''}${subtitle}</p></div><div class="app-content">${content}</div><div class="app-nav">${administrative?'<span>▤ Gestão</span><span>◈ Conteúdo</span><span>◉ Conta</span>':'<span>⌂ Início</span><span>▤ Cursos</span><span>◉ Perfil</span>'}</div></div>`;
+    }
+
+    function renderPreview(){
+      const chosenFeature = features.find(f => f.preview === state.activePreview) || getFeature('B01');
+      el.previewTitle.textContent = chosenFeature?.title || 'Preview';
+      el.previewDescription.textContent = chosenFeature?.desc || '';
+      el.phoneScreen.innerHTML = appMockup(chosenFeature);
+      const mockBrand = el.phoneScreen.querySelector('.app-brand');
+      const logo = document.createElement('img');
+      logo.src = ATSIProduct.logoDark;
+      logo.alt = ATSIProduct.name;
+      mockBrand.replaceChildren(logo);
+      document.getElementById('liveMode').textContent = chosenFeature.unavailable ? 'Sob validação' : isSelected(chosenFeature) ? 'Incluída no escopo' : 'Apenas visualização';
+      highlightActiveFeature();
+    }
+
+    function previewMarkup(type){
+      const commonHeader = (title, subtitle, chips=[]) => `
+        <div class="screen-hero">
+          <div class="status"><span>9:41</span><span>ATSI Brasil</span></div>
+          <h3>${title}</h3>
+          <p>${subtitle}</p>
+        </div>
+        <div class="screen-body">
+          ${chips.length ? `<div class="mobile-chip-row">${chips.map(c=>`<span class="mobile-chip">${c}</span>`).join('')}</div>` : ''}
+      `;
+      const close = `</div>`;
+
+      switch(type){
+        case 'mural': return commonHeader('Mural inicial','Cursos e novidades para você.',['Cursos']) + `
+            <div class="mobile-card"><h4>Curso em destaque</h4><p>Gestão aplicada ao agro com trilha de aulas e materiais.</p><div class="progress"><span></span></div></div>
+            <div class="mini-grid">
+              ${state.selected.has('M01') ? '<div class="mobile-card"><h4>E-book</h4><p>Guia rápido de boas práticas.</p></div>' : ''}
+              ${state.selected.has('M02') ? '<div class="mobile-card"><h4>Evento</h4><p>Encontro presencial.</p></div>' : ''}
+              ${state.selected.has('M03') ? '<div class="mobile-card"><h4>Promoção</h4><p>Oferta em destaque.</p></div>' : ''}
+            </div>
+            <div class="cta">Ver tudo</div>
+          ` + close;
+        case 'login': return commonHeader('Entrar','Acesse sua conta para continuar.',[]) + `
+            <div class="mobile-card"><h4>E-mail</h4><p>cliente@empresa.com</p></div>
+            <div class="mobile-card"><h4>Senha</h4><p>••••••••••••</p></div>
+            <div class="cta">Entrar</div>
+            <div class="mobile-card"><p>Esqueci minha senha · Primeiro acesso</p></div>
+          ` + close;
+        case 'perfil': return commonHeader('Meu perfil','Gerencie seus dados e preferências.',['Conta','Privacidade']) + `
+            <div class="mobile-card"><h4>Maria da Silva</h4><p>maria@cliente.com.br</p></div>
+            <div class="list-item"><span>Alterar e-mail</span><span class="tag">ativo</span></div>
+            <div class="list-item"><span>Redefinir senha</span><span>›</span></div>
+            <div class="list-item"><span>Receber marketing</span><span class="tag">sim</span></div>
+          ` + close;
+        case 'curso_catalogo': return commonHeader('Cursos','Descubra trilhas e formações.',['Novos','Mais vistos']) + `
+            <div class="mobile-card"><h4>Trilha Comercial ATSI</h4><p>12 aulas · 4 módulos · 3h 20min</p></div>
+            <div class="mobile-card"><h4>Curso de atendimento</h4><p>8 aulas · 2 módulos · 1h 45min</p></div>
+            <div class="cta">Abrir curso</div>
+          ` + close;
+        case 'curso_youtube': return commonHeader('Aula em vídeo','Player incorporado via YouTube.',['Online','Menor custo']) + `
+            <div class="mobile-card"><h4>Player da aula</h4><p>Vídeo incorporado com reprodução simples e rápida implementação.</p></div>
+            <div class="mobile-card"><h4>Módulo 1</h4><p>Aula 1 · Aula 2 · Aula 3</p></div>
+          ` + close;
+        case 'curso_privado': return commonHeader('Aula privada','Hospedagem própria com maior controle.',['Privado','Streaming']) + `
+            <div class="mobile-card"><h4>Vídeo protegido</h4><p>Controle maior de acesso e distribuição do conteúdo.</p></div>
+            <div class="mini-grid">
+              <div class="mobile-card"><h4>Velocidade</h4><p>Autoajuste</p></div>
+              <div class="mobile-card"><h4>Qualidade</h4><p>HD</p></div>
+            </div>
+          ` + close;
+        case 'curso_offline': return commonHeader('Aulas offline','Baixe e assista sem internet.',['Offline','Premium']) + `
+            <div class="mobile-card"><h4>Downloads</h4><p>3 aulas disponíveis localmente no aplicativo.</p></div>
+            <div class="list-item"><span>Módulo 1</span><span class="tag">baixado</span></div>
+            <div class="list-item"><span>Módulo 2</span><span class="tag">baixando</span></div>
+            <div class="cta">Gerenciar downloads</div>
+          ` + close;
+        case 'curso_progresso': return commonHeader('Seu progresso','Acompanhe sua evolução.',['Progresso']) + `
+            <div class="mobile-card"><h4>Curso: Vendas consultivas</h4><p>8 de 12 aulas concluídas</p><div class="progress"><span style="width:66%"></span></div></div>
+            <div class="mobile-card"><h4>Próxima aula</h4><p>Como estruturar uma abordagem comercial</p></div>
+          ` + close;
+        case 'curso_certificado': return commonHeader('Certificado','Conclua o curso e gere seu certificado.',[]) + `
+            <div class="mobile-card"><h4>Curso concluído</h4><p>Parabéns! Seu certificado está pronto para download.</p></div>
+            <div class="cta">Baixar certificado</div>
+          ` + close;
+        case 'curso_quiz': return commonHeader('Quiz da aula','Valide o aprendizado ao final.',[]) + `
+            <div class="mobile-card"><h4>Pergunta 1</h4><p>Qual é a melhor ação após a abertura de uma oportunidade?</p></div>
+            <div class="mobile-card"><p>A · B · C · D</p></div>
+            <div class="cta">Responder</div>
+          ` + close;
+        case 'curso_comentarios': return commonHeader('Comentários','Interaja dentro da aula.',[]) + `
+            <div class="mobile-card"><h4>Dúvidas da turma</h4><p>“Essa técnica vale para clientes antigos também?”</p></div>
+            <div class="mobile-card"><h4>Resposta do instrutor</h4><p>Sim, especialmente em reativação comercial.</p></div>
+          ` + close;
+        case 'ebook_vitrine': return commonHeader('E-books','Materiais em destaque na home.',['Leituras']) + `
+            <div class="mini-grid">
+              <div class="mobile-card"><h4>E-book 1</h4><p>Guia prático ATSI</p></div>
+              <div class="mobile-card"><h4>E-book 2</h4><p>Manual do consultor</p></div>
+            </div>
+            <div class="cta">Abrir materiais</div>
+          ` + close;
+        case 'ebook_biblioteca': return commonHeader('Biblioteca','Todos os materiais do cliente.',[]) + `
+            <div class="mobile-card"><h4>Coleção de e-books</h4><p>Filtre por tema, data e favoritos.</p></div>
+            <div class="list-item"><span>Atendimento</span><span>›</span></div>
+            <div class="list-item"><span>Vendas</span><span>›</span></div>
+            <div class="list-item"><span>Produtos</span><span>›</span></div>
+          ` + close;
+        case 'notificacoes': return commonHeader('Notificações','Comunique novidades e promoções.',[]) + `
+            <div class="mobile-card"><h4>Novo curso disponível</h4><p>Você já pode acessar a nova trilha comercial ATSI.</p></div>
+            <div class="mobile-card"><h4>Evento presencial</h4><p>Inscrições abertas para o workshop do mês.</p></div>
+          ` + close;
+        case 'notificacoes_segmentadas': return commonHeader('Campanhas segmentadas','Envie mensagens para públicos específicos.',[]) + `
+            <div class="mobile-card"><h4>Segmento: clientes ativos</h4><p>Promoção exclusiva para alunos com curso em andamento.</p></div>
+            <div class="mobile-card"><h4>Segmento: novos cadastros</h4><p>Sequência de onboarding e boas-vindas.</p></div>
+          ` + close;
+        case 'automacoes': return commonHeader('Automação','Fluxos automáticos de comunicação.',[]) + `
+            <div class="mobile-card"><h4>Fluxo de boas-vindas</h4><p>Disparo automático após criação de conta.</p></div>
+            <div class="mobile-card"><h4>Reengajamento</h4><p>Mensagem enviada após 7 dias sem acesso.</p></div>
+          ` + close;
+        case 'grupos': return commonHeader('Comunidade ATSI','Participe de grupos e trocas.',[]) + `
+            <div class="mobile-card"><h4>Grupo: Consultores</h4><p>124 participantes</p></div>
+            <div class="mobile-card"><h4>Grupo: Novos alunos</h4><p>67 participantes</p></div>
+            <div class="cta">Entrar no grupo</div>
+          ` + close;
+        case 'grupos_chat': return commonHeader('Chat do grupo','Conversa em tempo real.',[]) + `
+            <div class="mobile-card"><h4>Mensagens recentes</h4><p>“Alguém já testou a abordagem da aula 3?”</p></div>
+            <div class="mobile-card"><p>“Sim, trouxe bons resultados no follow-up.”</p></div>
+          ` + close;
+        case 'grupos_live': return commonHeader('Encontro ao vivo','Lives e sessões especiais.',[]) + `
+            <div class="mobile-card"><h4>Live agendada</h4><p>Quinta-feira · 19h30 · Como aumentar a conversão.</p></div>
+            <div class="cta">Confirmar presença</div>
+          ` + close;
+        case 'seguranca': return commonHeader('Segurança','Sua conta protegida por MFA.',[]) + `
+            <div class="mobile-card"><h4>Código de verificação</h4><p>Digite o código enviado para autenticar o acesso.</p></div>
+            <div class="cta">Validar acesso</div>
+          ` + close;
+        case 'login_social': return commonHeader('Entrar com conta social','Acesso rápido e simplificado.',[]) + `
+            <div class="mobile-card"><h4>Continuar com Google</h4><p>Login em um toque</p></div>
+            <div class="mobile-card"><h4>Continuar com Microsoft</h4><p>Login em um toque</p></div>
+          ` + close;
+        case 'admin': return commonHeader('Gestão de conteúdo','Visão rápida do painel administrativo.',[]) + `
+            <div class="mobile-card"><h4>Destaques da home</h4><p>Gerencie cursos, e-books e promoções.</p></div>
+            <div class="mini-grid">
+              <div class="mobile-card"><h4>Cursos</h4><p>12</p></div>
+              <div class="mobile-card"><h4>E-books</h4><p>7</p></div>
+            </div>
+          ` + close;
+        default: return commonHeader('ATSI Brasil','Selecione uma feature para visualizar.',[]) + `<div class="mobile-card"><h4>Preview</h4><p>O mockup muda automaticamente conforme sua seleção.</p></div>` + close;
+      }
+    }
+
+    function render(){
+      renderPresets();
+      renderSections();
+      renderSummaryOnly();
+      renderPreview();
+    }
+
+    // A mesma fonte de dados alimenta os entregáveis e o total obrigatório.
+    function renderFoundation(){
+      const f01 = foundationCatalog.find(f => f.id === 'F01');
+      const f02 = foundationCatalog.find(f => f.id === 'F02');
+      document.getElementById('requirementsEstimate').textContent =
+        `${f01.hours} h · referência ${brl(f01.hours * state.hourRate)}. Planejamento do catálogo completo; aprovação pendente.`;
+      document.getElementById('designEstimate').textContent =
+        `${f02.hours} h · referência ${brl(f02.hours * state.hourRate)}. Os mockups comerciais do configurador não substituem o design de produto aprovado.`;
+      document.getElementById('foundationExplanation').textContent =
+        `As ${f01.hours + f02.hours} h de planejamento são obrigatórias e cobradas na fundação de ${foundationHours} h, incluída uma vez em todos os planos. Estimativas técnicas preliminares, sem aprovação presumida.`;
+      document.getElementById('foundationBreakdown').innerHTML = foundationCatalog.map(f =>
+        `<h3>${f.title} · ${f.hours} h</h3><ul>${f.tasks.map(t => `<li>${t}</li>`).join('')}</ul>`
+      ).join('');
+    }
+
+    // init
+    let priceScrollAnimation=null;
+    function stopPriceScroll(){
+      if(priceScrollAnimation!==null)cancelAnimationFrame(priceScrollAnimation);
+      priceScrollAnimation=null;
+    }
+    window.addEventListener('wheel',stopPriceScroll,{passive:true});
+    window.addEventListener('touchstart',stopPriceScroll,{passive:true});
+    window.addEventListener('keydown',event=>{
+      if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key))stopPriceScroll();
+    });
+    document.getElementById('viewPrice').addEventListener('click',()=>{
+      stopPriceScroll();
+      const startY=window.scrollY;
+      const summary=document.getElementById('investmentSummary');
+      summary.focus({preventScroll:true});
+      if(window.matchMedia('(min-width: 1121px)').matches){
+        // Primeiro alcançar o fim da coluna longa: o painel sticky passa então
+        // a respeitar o limite inferior das features.
+        const featuresPane=document.querySelector('.left-pane');
+        const bottom=window.scrollY+featuresPane.getBoundingClientRect().bottom;
+        window.scrollTo({top:Math.max(0,bottom-window.innerHeight+20),behavior:'instant'});
+        // O painel pode ser maior que a janela; garantir que o valor, não apenas
+        // o início do painel, esteja visível após o reposicionamento do sticky.
+        const price=el.totalPrice.getBoundingClientRect();
+        if(price.top<20 || price.bottom>window.innerHeight-80){
+          window.scrollBy({top:price.top-window.innerHeight/3,behavior:'instant'});
+        }
+      }else{
+        summary.scrollIntoView({behavior:'instant',block:'start'});
+      }
+      const targetY=window.scrollY;
+      if(!reducedMotion.matches && Math.abs(targetY-startY)>1){
+        // Medir o destino com o sticky já resolvido e restaurar antes de pintar.
+        window.scrollTo({top:startY,behavior:'instant'});
+        const startTime=performance.now();
+        const duration=850;
+        function animatePriceScroll(now){
+          const progress=Math.min(1,(now-startTime)/duration);
+          const eased=1-Math.pow(1-progress,4);
+          window.scrollTo({top:startY+(targetY-startY)*eased,behavior:'instant'});
+          if(progress<1)priceScrollAnimation=requestAnimationFrame(animatePriceScroll);
+          else priceScrollAnimation=null;
+        }
+        priceScrollAnimation=requestAnimationFrame(animatePriceScroll);
+      }
+    });
+    document.title=`Configurador da Plataforma ${ATSIProduct.name} — ${ATSIProduct.developer} × ${ATSIProduct.client}`;
+    document.querySelector('h1').textContent=`Plataforma ${ATSIProduct.name}`;
+    const settingsDialog=document.getElementById('settingsDialog');
+    document.getElementById('openSettings').addEventListener('click',()=>settingsDialog.showModal());
+    document.getElementById('closeSettings').addEventListener('click',()=>settingsDialog.close());
+    settingsDialog.addEventListener('close',()=>document.getElementById('openSettings').focus());
+    initOffers();
+    renderFoundation();
+    applyPreset('essencial');
+  </script>
+</body>
+</html>

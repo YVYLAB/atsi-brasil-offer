@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ATSI+ — Emissão local de oferta · YvyLab</title>
+<link rel="icon" href="branding/assets/atsi-plus-icon.svg" type="image/svg+xml">
+<style>
+@font-face{font-family:Montserrat;src:url('branding/assets/montserrat-variable.ttf')}
+body{font:16px/1.6 Montserrat,Arial,sans-serif;background:#08131d;color:#eff8f7;margin:24px auto;max-width:850px;padding:16px}
+section{border:1px solid #59c478;padding:20px;border-radius:16px;margin:18px 0;background:#0f2430}
+label{display:block;margin:12px 0}input,button{font:inherit;padding:8px;max-width:100%}
+input[type=number]{width:150px}button{cursor:pointer;background:#59c478;border:0;border-radius:8px}
+small{display:block;color:#b1c8cf}.items{max-height:220px;overflow:auto}
+</style>
+<img src="branding/assets/atsi-plus-dark.svg" alt="ATSI+" width="180" height="60">
+<h1>Emissão local de oferta ATSI+ — YvyLab</h1>
+<p>Projeto: ATSI+ — Plataforma Digital · Cliente: ATSI Brasil · Desenvolvedora: YvyLab</p>
+<p><strong>Protótipo interno sem autenticação.</strong> Não compartilhar esta página ou seus dados privados com clientes.
+Em produção, acesso, aprovação e horário precisam ser controlados pelo servidor.</p>
+<p>Exporte o catálogo no configurador e carregue abaixo. As referências de implantação
+precisam ser revisadas antes de serem confirmadas como preços publicados. Não há desconto padrão.</p>
+<label>Catálogo da cotação (JSON) <input id="catalog" type="file" accept=".json,application/json"></label>
+<label>Identificador da cotação <input id="quote" required></label>
+<label>Responsável pela emissão <input id="author" required></label>
+<label><input type="checkbox" id="approved"> Confirmei os valores como preços de tabela reais e aprovados para esta cotação.</label>
+<div id="packages"></div>
+<button id="issue" type="button">Emitir nova simulação de 24 horas</button>
+<p id="feedback" role="status"></p>
+<small>A emissão é explícita e gera novos identificadores. O arquivo público não contém custos internos nem o piso comercial.
+O registro local é editável e não constitui trilha de auditoria confiável. Uma nova emissão não cancela automaticamente arquivos de ofertas anteriores.</small>
+<script src="pricing-promotion.js"></script>
+<script>
+let snapshot=null;
+const byId=id=>document.getElementById(id);
+byId('catalog').addEventListener('change',async e=>{
+ try{
+  const input=JSON.parse(await e.target.files[0].text());
+  if(!ATSIPromotion.validSnapshot(input)) throw Error('Catálogo inválido');
+  snapshot=input;
+  byId('packages').replaceChildren();
+  for(const key of ['plus','premium']){
+   const section=document.createElement('section');
+   section.innerHTML=`<h2>${key==='plus'?'Plus':'Premium'}</h2>
+    <label><input id="${key}-enabled" type="checkbox"> Habilitar desconto</label>
+    <label>Percentual <input id="${key}-pct" type="number" min="0" max="100" step="0.01" placeholder="A definir"></label>
+    <label>Piso total da implantação (R$) <input id="${key}-floor" type="number" min="0" step="0.01" placeholder="A definir"></label>
+    <small>Calcular internamente: custo direto estimado + reserva de risco + contribuição mínima.
+    O piso não é R$ 200/h nem é exportado.</small>
+    <label><input id="${key}-margin" type="checkbox"> Validei o piso e a margem com os custos efetivos.</label>
+    <div class="items" id="${key}-items"></div><p id="${key}-preview"></p>`;
+   byId('packages').appendChild(section);
+   for(const item of snapshot.packages[key].items.filter(i=>i.type==='optional')){
+    const label=document.createElement('label'), check=document.createElement('input');
+    check.type='checkbox';check.value=item.id;
+    label.append(check,document.createTextNode(` ${item.id} · ${item.title} · ${(item.priceCents/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}`));
+    byId(key+'-items').appendChild(label);
+   }
+  }
+  byId('feedback').textContent='Catálogo carregado. Fundação, obrigatórias, vídeo e mensalidades não são elegíveis nesta política.';
+ }catch(err){snapshot=null;byId('feedback').textContent=err.message}
+});
+byId('issue').addEventListener('click',()=>{
+ try{
+  if(!snapshot || !byId('approved').checked || !byId('quote').value.trim() || !byId('author').value.trim())
+   throw Error('Informe cotação, responsável e aprovação dos preços.');
+  const config={};
+  for(const key of ['plus','premium']){
+   const enabled=byId(key+'-enabled').checked;
+   const pct=byId(key+'-pct').value;
+   const floorText=byId(key+'-floor').value;
+   const floor=Math.round(Number(floorText)*100);
+   const ids=[...byId(key+'-items').querySelectorAll('input:checked')].map(e=>e.value);
+   const eligible=snapshot.packages[key].items.filter(i=>ids.includes(i.id)).reduce((s,i)=>s+i.priceCents,0);
+   const discount=Math.round(eligible*Number(pct)/100);
+   const regular=ATSIPromotion.regular(snapshot.packages[key]);
+   if(enabled && (!pct || Number(pct)<=0 || Number(pct)>100 || !ids.length ||
+       !floorText || !Number.isSafeInteger(floor) || floor<0 || floor>regular ||
+       !byId(key+'-margin').checked || discount<=0 || discount>regular-floor))
+    throw Error('Configuração ou margem inválida em '+key+'. Revise percentual, elegibilidade e piso.');
+   config[key]={enabled,percentage:pct===''?null:Number(pct),eligibleFeatureIds:ids,
+    maxDiscountCents:enabled?Math.min(eligible,regular-floor):0,
+    priceApproval:true,marginApproval:enabled};
+   byId(key+'-preview').textContent=`Economia proposta: R$ ${(enabled?discount/100:0).toFixed(2)}`;
+  }
+  if(!config.plus.enabled&&!config.premium.enabled) throw Error('Habilite pelo menos um pacote.');
+  const issuedAt=new Date().toISOString();
+  const offer={schemaVersion:1,id:crypto.randomUUID(),quoteId:byId('quote').value.trim(),
+   author:byId('author').value.trim(),status:'active',issuedAt,
+   expiresAt:new Date(Date.parse(issuedAt)+86400000).toISOString(),configVersion:'local-v1',
+   snapshot,config};
+  if(!ATSIPromotion.validOffer(offer)) throw Error('Oferta inválida.');
+  const history=JSON.parse(localStorage.getItem('atsi-admin-emissions-v1')||'[]');
+  if(!Array.isArray(history))throw Error('Histórico local inválido; emissão interrompida.');
+  history.push({id:offer.id,quoteId:offer.quoteId,author:offer.author,issuedAt:offer.issuedAt,
+    expiresAt:offer.expiresAt,configVersion:offer.configVersion,priceListVersion:snapshot.priceListVersion});
+  localStorage.setItem('atsi-admin-emissions-v1',JSON.stringify(history));
+  // Só o arquivo sanitizado é gerado; os custos/piso não são incluídos.
+  const a=document.createElement('a'),url=URL.createObjectURL(new Blob([JSON.stringify(offer,null,2)],{type:'application/json'}));
+  a.href=url;a.download='oferta-'+offer.id+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  byId('feedback').textContent='Simulação emitida. Importe o JSON no configurador. Não reutilize esta ação para renovar urgência artificialmente.';
+ }catch(err){byId('feedback').textContent=err.message}
+});
+</script>
+</html>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" role="img" aria-labelledby="title">
+  <title id="title">ATSI+</title>
+  <text x="8" y="59" fill="#EFF8F7" font-family="Montserrat,Arial,sans-serif" font-weight="800" font-size="64" letter-spacing="-3">ATSI</text>
+  <path d="M203 22v36m-18-18h36" fill="none" stroke="#59C478" stroke-width="9" stroke-linecap="square"/>
+</svg>

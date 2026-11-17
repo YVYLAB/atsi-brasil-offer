@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="700" viewBox="0 0 1440 700" role="img" aria-label="Padrão abstrato de curvas de nível agrícolas para fundo">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#08131d"/><stop offset="1" stop-color="#143b44"/></linearGradient>
+    <linearGradient id="field" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#59c478" stop-opacity=".18"/><stop offset="1" stop-color="#2c9d54" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="1440" height="700" fill="url(#bg)"/>
+  <path d="M-160 550 C130 280 330 830 650 525 S1100 290 1580 580 L1580 750 H-160Z" fill="url(#field)"/>
+  <g fill="none" stroke="#59c478" stroke-width="2" opacity=".16">
+    <path d="M-220 500 C130 175 440 730 745 405 S1140 180 1650 500"/>
+    <path d="M-220 526 C130 201 440 756 745 431 S1140 206 1650 526"/>
+    <path d="M-220 552 C130 227 440 782 745 457 S1140 232 1650 552"/>
+    <path d="M-220 578 C130 253 440 808 745 483 S1140 258 1650 578"/>
+    <path d="M-220 604 C130 279 440 834 745 509 S1140 284 1650 604"/>
+    <path d="M-220 630 C130 305 440 860 745 535 S1140 310 1650 630"/>
+    <path d="M-220 656 C130 331 440 886 745 561 S1140 336 1650 656"/>
+    <path d="M-220 682 C130 357 440 912 745 587 S1140 362 1650 682"/>
+    <path d="M-220 708 C130 383 440 938 745 613 S1140 388 1650 708"/>
+  </g>
+</svg>

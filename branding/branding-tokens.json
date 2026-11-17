@@ -1,0 +1,15 @@
+{
+  "source": "Visual approximation from atsibrasil.com.br, not an official brand book",
+  "colors": {
+    "navy": "#173850",
+    "navyDeep": "#08131D",
+    "surface": "#0F2430",
+    "card": "#15303B",
+    "green": "#59C478",
+    "greenStrong": "#2C9D54",
+    "white": "#EFF8F7",
+    "muted": "#B1C8CF",
+    "border": "#2A4D56",
+    "amber": "#E6C67F"
+  }
+}

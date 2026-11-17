@@ -1,0 +1,363 @@
+# AGENTS.md — Configurador Comercial ATSI Brasil × YvyLab
+
+> **Status:** protótipo HTML interativo, em evolução.  
+> **Última contextualização:** 16 de novembro de 2026.  
+> **Idioma de produto e comunicação:** português brasileiro (`pt-BR`).  
+> **Público deste arquivo:** agentes de IA, designers, desenvolvedores, QA e pessoas que assumirem a continuidade do projeto.
+
+## 1. Missão do projeto
+
+A **YvyLab** está elaborando uma proposta comercial para a **ATSI Brasil** referente à construção de uma **plataforma digital de educação e relacionamento com clientes**, com experiência centrada no aplicativo e conteúdo relacionado ao negócio da ATSI.
+
+Em vez de oferecer apenas um orçamento por horas de desenvolvimento, a YvyLab quer possibilitar que a ATSI **configure a solução escolhendo funcionalidades**. Cada funcionalidade tem:
+
+- **Horas de esforço estimadas** (variável técnica e interna);
+- **Preço comercial da feature em reais** (independente da simples multiplicação horas × taxa/hora);
+- **Complexidade** (escala de 1 a 5);
+- **Valor percebido para o cliente** (classificação comercial);
+- **Tipo de contratação:** obrigatória, opcional ou escolha única.
+
+A ferramenta deve servir a dois propósitos: **tomada de decisão sobre o escopo** e **simulação transparente do investimento**, permitindo comparar um produto essencial, intermediário e avançado.
+
+### Princípio comercial inegociável
+
+**Preço da feature não é sinônimo de custo calculado por hora.** O custo interno de referência pode ser estimado por `horas × custo_interno_por_hora`, mas o **preço comercial de venda** é um campo próprio. O agente não deve substituir automaticamente os preços comerciais por cálculos de horas, nem tratar as estimativas iniciais como uma proposta aprovada.
+
+## 2. O que a ATSI quer construir
+
+A plataforma é voltada principalmente para **clientes/alunos da ATSI Brasil**. O produto mínimo discutido inclui:
+
+1. **Mural inicial obrigatório**, com destaque para cursos, e-books, eventos presenciais e eventuais promoções.
+2. **Login obrigatório** por e-mail e senha, recuperação de acesso e gerenciamento de sessão.
+3. **Perfil obrigatório** com foto, nome, e-mail, redefinição de senha, alteração de e-mail e preferência de recebimento de comunicações de marketing.
+4. **Cursos obrigatórios**, contendo catálogo, detalhes, módulos/aulas e reprodução de conteúdos; a forma de disponibilizar os vídeos é uma **decisão técnica/comercial exclusiva**.
+5. **Administração mínima de conteúdo** para a ATSI atualizar ofertas, cursos e destaques sem intervenção do desenvolvedor.
+
+**Importante:** a exibição de um card de e-book, evento ou promoção no mural não equivale automaticamente a implementar uma biblioteca de e-books, sistema de inscrições de eventos, checkout ou mecanismo completo de promoções. Evitar dupla cobrança por uma mesma entrega.
+
+### Funcionalidades opcionais já colocadas em discussão
+
+- MFA (autenticação multifator);
+- Login com Google;
+- Login com Microsoft;
+- Biblioteca de e-books e seus recursos associados;
+- Notificações push, segmentação e automações;
+- Grupos/comunidade, chat e encontros ao vivo;
+- Progresso de cursos, certificados, quizzes e comentários em aulas;
+- Vídeos privados em nuvem e acesso offline como alternativas de implementação da entrega de vídeos.
+
+**Pontos ainda não fechados:** apps Android/iOS nativos ou cross-platform versus PWA/web; se os cursos serão gratuitos, pagos ou restritos; pagamentos; inscrições em eventos; certificados; propriedade intelectual dos vídeos; escala de alunos; regras de acesso; custos operacionais; e quais opcionais entram no contrato.
+
+## 3. Objetivo da interface de configuração
+
+O usuário solicitou um **HTML visual, interativo e independente** com estas características:
+
+- **Tema escuro** com direção visual ligada ao **agronegócio** (tons de verde, terra, natureza; acabamento tecnológico e comercial).
+- **Tela dividida visualmente em duas metades** em desktop.
+- **Coluna esquerda:** três presets no topo; abaixo, seções de features destacadas por cor; cards de funcionalidades com seleção e campos de esforço/preço/complexidade.
+- **Coluna direita:** um **mockup grande de smartphone**, que muda de tela quando a pessoa **clica em uma feature** para visualizá-la.
+- **Abaixo do smartphone:** preço total atualizado automaticamente, horas, custo interno, composição e outras informações comerciais.
+- **Responsive:** desktop em duas colunas; tablet e mobile com empilhamento apropriado.
+- **Experiência em pt-BR:** moeda `R$` e separação decimal brasileira.
+- **Presets no topo da esquerda:** `Essencial`, `Plus`, `Premium`; alterações manuais passam para um estado de configuração personalizada.
+
+O preview do smartphone é **uma representação conceitual** de telas do aplicativo proposto. Não constitui protótipo funcional do aplicativo ATSI nem compromisso de implementação exata.
+
+## 4. Estado real do artefato e arquivos existentes
+
+Na versão que originou este documento há um único HTML autossuficiente, com CSS e JavaScript inline:
+
+- `ATSI_Brasil_Configurador_Interativo_v2.html` — arquivo para distribuição;
+- `configurador_atsi_yvylab.html` — cópia/variação de trabalho do mesmo protótipo.
+
+**Ao copiar estes arquivos para um repositório, escolher um arquivo HTML canônico e evitar manter duas versões divergentes.** No momento, não há requisito de framework, servidor ou processo de build; abrir o HTML em um navegador é o uso principal.
+
+### Implementado no HTML atual
+
+- Layout escuro com cores agro;
+- Divisão em colunas com features à esquerda e smartphone à direita;
+- Presets **Essencial**, **Plus** e **Premium**;
+- Seis categorias de funcionalidades;
+- Features obrigatórias, opcionais e escolhas únicas;
+- Campos editáveis de horas, preço e complexidade;
+- Valor percebido exibido como classificação inicial;
+- Cálculo em tempo real de total comercial, horas e custo interno;
+- Preview visual de telas distintas, conforme a feature clicada;
+- Comportamento responsivo básico.
+
+### Lacunas conhecidas / atenção antes de produção
+
+- **Não há persistência em `localStorage` ou banco** no protótipo atual: ao recarregar, volta ao estado padrão.
+- **Não há exportação funcional de proposta/JSON/CSV/PDF** nesta versão escura. Não afirmar o contrário.
+- **Não há backend, autenticação real, API de cursos ou player de vídeo real.** O smartphone é apenas mockup.
+- **Não há validação abrangente de dependências** entre opcionais: por exemplo, certificados deveriam requerer progresso; push segmentado deveria requerer infraestrutura de push; chat/lives deveriam requerer grupos.
+- **A seleção da estratégia de vídeo merece reforço:** deve haver exatamente uma alternativa válida, sem permitir deixar o módulo obrigatório de cursos sem método de entrega.
+- **O clique que seleciona uma opção e o clique que apenas visualiza o mockup são conceitos distintos.** A implementação precisa deixar esse comportamento inequívoco e garantir atualização imediata do preview após seleção.
+- **As alterações de horas e custo/hora devem atualizar também os indicadores nos cards**, além do resumo à direita.
+- **Estimativas de despesas mensais externas, impostos, suporte e descontos** ainda não estão adequadamente modeladas nesta versão.
+- **O valor percebido não é um input editável** no protótipo v2; é apenas exibido. Pode vir a se tornar editável, caso aprovado.
+- **Os preços e as horas são números demonstrativos**, não estimativas contratuais ou preços aprovados pela YvyLab.
+
+**Orientação:** melhorias futuras devem sanar as lacunas sem eliminar a experiência visual escura e a arquitetura de orçamento por features.
+
+## 5. Organização funcional atual
+
+| Seção | Conteúdo atual | Regra principal |
+|---|---|---|
+| Base obrigatória | Mural, login, perfil, preferência de marketing, catálogo de cursos, painel administrativo básico | Todas incluídas em qualquer configuração |
+| Login e segurança | MFA, Google Login, Microsoft Login | Opcionais independentes |
+| Cursos | YouTube embutido, vídeos privados, vídeos offline, progresso, certificados, quizzes, comentários | Uma estratégia de vídeo por vez; complementos opcionais |
+| E-books | Destaque no mural e biblioteca | Opcionais, sem duplicar o mural obrigatório |
+| Notificações | Push básico, push segmentado e automações | Opcionais com dependências a formalizar |
+| Grupos | Comunidade básica, chat, lives | Opcionais com dependências a formalizar |
+
+### Identificadores de features existentes no JavaScript
+
+Preservar os IDs para manter a consistência de presets e eventuais persistências/exportações:
+
+```text
+obrigatorias:
+  mural, login, perfil, marketing_optin, catalogo_cursos, admin_basico
+
+autenticacao:
+  mfa, login_google, login_microsoft
+
+cursos:
+  curso_youtube, curso_privado, curso_offline,
+  progresso, certificados, quizzes, comentarios_aulas
+
+ebooks:
+  ebook_vitrine, biblioteca_ebooks
+
+notificacoes:
+  push_basico, push_segmentado, automacoes
+
+grupos:
+  grupos_basicos, chat_grupos, lives_grupos
+```
+
+As três opções `curso_youtube`, `curso_privado` e `curso_offline` pertencem ao grupo exclusivo `curso_entrega`.
+
+## 6. Arquitetura de dados e cálculo
+
+A implementação presente mantém um array JavaScript `features`, um objeto `presets` e um estado em memória com:
+
+- `selected`: `Set` de IDs selecionados;
+- `activePreset`: preset ativo ou `custom`;
+- `activePreview`: tipo de tela exibida no smartphone;
+- `openSections`: seções expandidas;
+- `hourRate`: custo interno por hora.
+
+**Regras fundamentais:**
+
+1. Features `required` fazem parte do orçamento sempre e não podem ser desmarcadas.
+2. Features `optional` podem ser ativadas/desativadas individualmente, salvo dependências explícitas.
+3. Features `unique` pertencentes ao mesmo grupo são mutuamente exclusivas; o grupo obrigatório `curso_entrega` deve possuir **exatamente uma** opção selecionada em uma configuração comercial válida.
+4. Um preset seleciona um conjunto predefinido de features; alterações manuais indicam configuração `custom`.
+5. Clicar no **corpo do card** mostra o preview; interagir com checkbox/radio ou com campo de preço/horas não deve disparar seleções acidentais.
+6. O mockup deve corresponder à feature clicada, independentemente de ela estar ou não contratada. A seleção do escopo é controlada separadamente.
+
+### Fórmulas
+
+```text
+features_selecionadas = todas as obrigatórias + opcionais escolhidas + uma escolha por grupo obrigatório
+
+horas_totais = soma(feature.hours das features selecionadas)
+
+preco_bruto_implantacao = soma(feature.price das features selecionadas)
+
+custo_interno_estimado = horas_totais × custo_interno_por_hora
+
+margem_bruta_simplificada = preco_bruto_implantacao − custo_interno_estimado
+
+margem_percentual_simplificada =
+  preco_bruto_implantacao > 0
+  ? margem_bruta_simplificada / preco_bruto_implantacao × 100
+  : indefinida
+```
+
+**Não misturar** preço comercial de implantação com custo mensal de terceiros, suporte, tributos, royalties, taxas de gateway ou custos de distribuição de vídeos. Quando esses componentes forem implementados, devem aparecer **separados**.
+
+**Observação sobre complexidade:** usar escala de 1–5 para comunicação/risco; o campo não recalcula automaticamente preço, horas nem margem, a menos que uma política de estimativa seja aprovada explicitamente.
+
+### Premissas e preços
+
+As horas e os valores preenchidos no HTML são **dados de demonstração**. É apropriado usá-los para testar a interface, mas **nunca apresentá-los como orçamento definitivo sem revisão comercial e técnica**.
+
+## 7. Decisão crítica — entrega de vídeos dos cursos
+
+A estratégia de vídeos altera muito o custo e deve ser tratada como uma **decisão de produto**, não como três extras cobrados simultaneamente.
+
+| Alternativa | Exemplo | Perfil comercial | Cuidados |
+|---|---|---|---|
+| YouTube incorporado | `curso_youtube` | Menor custo inicial | Depende de internet; restrições da plataforma, publicidade/experiência e eventual incompatibilidade com modelo pago/privado devem ser avaliadas |
+| Hospedagem privada / streaming | `curso_privado` | Mais controle | Armazenamento, distribuição/CDN, processamento e autorização podem gerar custos variáveis |
+| Hospedagem privada + offline | `curso_offline` | Maior investimento e complexidade | Downloads locais, sincronização, expiração/renovação de licença, segurança e limitações de SO; pressupõe entrega privada, sem cobrança duplicada |
+
+**Não supor que S3 sozinho resolve streaming, proteção e offline.** Uma implementação real pode envolver S3, CDN, empacotamento/streaming, URLs/cookies assinados, player apropriado e regras de acesso. A seleção arquitetural deve considerar volume de vídeo, alunos simultâneos, plataformas-alvo, proteção de conteúdo e custos recorrentes.
+
+**Não prometer que embedding do YouTube fornece proteção efetiva de um curso pago nem download offline.** Validar termos e políticas do serviço antes de incluir essas características em contrato.
+
+## 8. UX, design e responsividade
+
+Direção visual desejada:
+
+- Fundo geral escuro com referência discreta a natureza/campo/agro; evitar imagens decorativas que prejudiquem legibilidade.
+- Verde como cor primária de destaque; cores complementares distintas para seções.
+- Cards e painéis com cantos arredondados, hierarquia clara e contraste suficiente.
+- Três presets acima das seções, com estado ativo evidente.
+- Smartphone bem visível na metade direita em desktop, com telas específicas por feature.
+- Total financeiro legível **abaixo do celular**, sem esconder os dados importantes em abas secundárias.
+- Em telas pequenas, empilhar painéis e manter edição e visualização utilizáveis.
+- Usar rótulos acessíveis, estados de foco, inputs utilizáveis por teclado e feedback visual.
+
+O layout não deve depender de imagens externas para funcionar. Qualquer futura imagem remota deve ter fallback e não deve ser necessária aos cálculos ou às interações.
+
+## 9. Como trabalhar no código sem regressões
+
+### Antes de editar
+
+1. Ler este `AGENTS.md` e inspecionar o HTML **real que está sendo modificado**.
+2. Confirmar a lista atual de features, IDs, presets, totais e comportamentos; **não assumir** que versões anteriores e atuais têm as mesmas capacidades.
+3. Separar claramente o que já está implementado do que é uma proposta futura.
+4. Planejar qualquer alteração de modelo de preços e dependências antes de mexer na interface.
+5. Preservar o pedido explícito do usuário: **HTML interativo, metade esquerda configurável e metade direita com smartphone, tema escuro e três presets**.
+
+### Ao implementar
+
+- Priorizar modificações pequenas, testáveis e reversíveis.
+- Manter o **preço comercial editável por feature** separado do custo interno.
+- Centralizar regras e dados de features para evitar divergência entre cards, mockups, presets, cálculos e exportações.
+- Evitar IDs duplicados e estados impossíveis (como duas estratégias de vídeo ou nenhuma).
+- Tratar dependências com clareza: impedir seleção inválida ou incluir requisitos explicitamente, nunca adicionar custos escondidos.
+- Se implementar persistência, versionar o schema e proteger contra dados antigos/corrompidos; disponibilizar ação de restaurar padrões.
+- Se implementar exportação, garantir que corresponda exatamente ao estado visível da configuração.
+- Não introduzir backend, bibliotecas ou infraestrutura sem necessidade: um HTML independente é requisito útil nesta fase.
+- Não misturar este projeto comercial ATSI Brasil com sistemas/repositórios não relacionados da YvyLab.
+
+### Verificações mínimas antes de entregar
+
+- O HTML abre diretamente no navegador, sem servidor.
+- Sem erros de JavaScript no console.
+- Os três presets produzem conjuntos diferentes, válidos, e totalizam corretamente.
+- Obrigatórias não podem ser removidas.
+- `curso_youtube`, `curso_privado` e `curso_offline` não podem coexistir, nem ficar todos vazios.
+- Selecionar/desmarcar opcionais altera preço, horas, custo interno e contagem corretamente.
+- Editar preço altera apenas o preço comercial pertinente e seus totais.
+- Editar horas/custo-hora altera os cálculos internos adequados, preservando preço comercial.
+- Clicar nas features troca o conteúdo e a legenda do smartphone.
+- Selecionar feature também deve atualizar imediatamente o preview se essa for a interação esperada na versão implementada.
+- Desktop mantém composição em duas metades; mobile mantém legibilidade e controles funcionais.
+- Valores em moeda usam `pt-BR`.
+- Exportação/persistência, se presentes, devem ser testadas para ida e volta sem perda de escolhas.
+
+## 10. Melhorias prioritárias para próximos ciclos
+
+### P0 — Consistência e confiabilidade
+
+- Corrigir a atualização imediata do preview ao selecionar um rádio/checkbox.
+- Garantir **uma, e somente uma**, estratégia obrigatória de vídeo.
+- Atualizar custo/margem de cada card quando horas ou taxa/hora mudarem.
+- Adicionar regras explícitas de dependências (certificados → progresso; segmentação → push; chat/lives → grupos), sem dupla cobrança.
+- Revisar sobreposições de escopo: mural obrigatório vs. e-book em destaque opcional.
+
+### P1 — Continuidade da configuração
+
+- Salvar/reabrir configuração localmente, com versão de dados e botão de restaurar.
+- Exportar/importar JSON de configuração.
+- Exportar CSV e proposta comercial legível/imprimível em PDF.
+- Adicionar observações, premissas, exclusões e identificação da versão do orçamento.
+
+### P2 — Precificação profissional
+
+- Separar implantação, suporte mensal e serviços externos recorrentes.
+- Editar custo-hora, descontos, contingência e indicadores de margem.
+- Criar comparação lado a lado dos três presets e de um cenário personalizado.
+- Manter preços-base revisados e auditáveis, evitando aumentos automáticos sem critério.
+
+### P3 — UX premium
+
+- Melhorar fidelidade visual do smartphone por feature, com transições suaves.
+- Tornar a navegação por seções e funcionalidades mais clara.
+- Evoluir o painel para experiência de apresentação comercial à ATSI.
+
+**As prioridades acima são recomendações de execução, não escopos automaticamente autorizados.**
+
+## 11. Decisões que precisam de validação com a ATSI / YvyLab
+
+Antes de converter este simulador em proposta contratual, confirmar:
+
+1. **Plataformas:** Android, iOS, web/PWA, ou combinação.
+2. **Acesso aos cursos:** gratuitos, por assinatura, compra avulsa, por convite ou vínculo com cliente.
+3. **Estratégia de vídeo:** YouTube, streaming privado ou offline; volumes esperados e requisitos de proteção.
+4. **Painel administrativo:** quem gerencia conteúdo, usuários, eventos, campanhas e mídia.
+5. **E-books:** link externo, biblioteca própria, leitor interno e/ou download.
+6. **Eventos:** somente destaque ou fluxo completo de inscrição, lista de presença e check-in.
+7. **Notificações:** somente push, e-mail, SMS/WhatsApp ou combinações; consentimentos.
+8. **Grupos:** regras de moderação, privacidade, mensagens, permissões e retenção.
+9. **Escala e operação:** usuários esperados, vídeos, custos de hospedagem, manutenção e suporte.
+10. **Políticas e compliance:** LGPD, consentimento de marketing, segurança de contas, termos de uso e regras das plataformas de vídeo/lojas.
+11. **Preços:** confirmar que horas, margem e preços comerciais foram revisados pela YvyLab.
+
+Até essa validação, apresentar números como **simulação preliminar, não oferta firme**.
+
+## 12. Critério de sucesso
+
+O configurador é bem-sucedido quando a YvyLab consegue, durante uma conversa com a ATSI:
+
+1. Mostrar **Essencial / Plus / Premium** imediatamente;
+2. Abrir seções por tema e explicar cada feature sem jargão excessivo;
+3. Clicar em uma feature e visualizar uma tela representativa no celular;
+4. Ativar/desativar opcionais ou trocar a escolha técnica de vídeo;
+5. Ajustar horas, complexidade e preço comercial com rastreabilidade;
+6. Ver o **investimento total** reagir imediatamente abaixo do mockup;
+7. Sair da reunião com um escopo consistente, decisões pendentes explícitas e um orçamento exportável — quando a etapa de exportação estiver implementada.
+
+---
+
+**Regra final para agentes:** preservar a visão do projeto, não inventar funcionalidades como já prontas, não criar números comerciais como se fossem aprovados, e priorizar uma experiência simples, visual e confiável de negociação por funcionalidades.
+
+## Atualização de estado — revisão técnica de 16/11/2026
+
+O artefato canônico é `home.html`. Ele usa o catálogo de 54 features e inclui
+fundação obrigatória uma vez. O histórico acima descreve versões anteriores.
+As horas vigentes vêm das tarefas revisadas em `specs/`, incorporadas pelo comando
+`python3 specs/gerar_catalogo.py`. Não retornar às horas históricas em `docs/`.
+
+A revisão preliminar atual soma 522 h de fundação (F01: 104 h; F02: 120 h;
+F05: 56 h; F06: 90 h após detalhar ambientes e pipelines genéricos)
+e 340 h de base obrigatória. C03 contém o esforço online de C02 sem somá-lo de novo.
+G02 permanece sob cotação e indisponível para contratação.
+R$ 200/h é referência comercial fixa, não custo interno real nem preço aprovado.
+Critérios e justificativas estão em `specs/REVISAO-TECNICA.md`.
+
+Teste reproduzível: `python3 -m unittest discover -s tests -v`.
+Ele verifica somas das specs e, quando Chrome está disponível, catálogo, totais,
+dependências, exclusividade do vídeo, bloqueio G02 e renderização dos mockups.
+Não equivale à validação funcional do futuro aplicativo nem à aprovação comercial.
+
+Fornecedores são definidos em F02, não presumidos a partir das referências de
+preço. F05 prepara os ambientes aprovados; F06 configura versionamento e pipelines.
+O módulo mensal do configurador possui spec separada, ainda sem implementação
+ou estimativa, em `specs/configurador-custos-operacionais.md`.
+
+Promoções locais: `pricing-promotion.js` concentra os cálculos em centavos;
+`ofertas-admin.html` emite JSON de oferta com aprovação explícita e sem percentuais
+padrão. Não há autenticação real. `home.html` importa/persiste a oferta, mostra
+contador de 24 h e comparação e exporta JSON/CSV/impressão.
+Nunca descontar fundação, obrigatórias, mensalidades ou personalizado. A política
+atual também exclui vídeo. Não apresentar o relógio local como autoridade comercial.
+Consultar `docs/ofertas-24h.md`. Teste adicional: `node tests/test_promotion.js`.
+
+Identidade de produto: ATSI+, com configuração em `branding/product-config.js`
+e guia `branding/atsi-plus.md`. ATSI Brasil permanece cliente/instituição e YvyLab
+desenvolvedora. Rebranding não altera IDs, snapshots financeiros ou regras de
+promoção. Assets ATSI+ são propostas, não logos homologados ou marcas registradas.
+
+Atualização posterior: painel de ofertas simplificado por solicitação do usuário.
+Popup azul com início/fim em Brasília, descontos nos três planos e Salvar;
+sem importação/exportação na interface. Campanha v2 usa datas explícitas e
+desconto sobre o total de implantação do preset (inclusive Essencial).
+Mensalidades, horas e Personalizado ficam sem desconto. Isso substitui a política
+anterior de opcionais elegíveis v1 no fluxo atual. Persistência em
+`atsi-campaign-v2` é somente local; não grava no repositório nem publica para todos.
