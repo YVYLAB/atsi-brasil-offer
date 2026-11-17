@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ATSI+ — Acesso à apresentação</title>
+  <link rel="icon" href="branding/assets/atsi-plus-icon.svg" type="image/svg+xml">
+  <style>
+    @font-face{font-family:Montserrat;src:url('branding/assets/montserrat-variable.ttf');font-weight:100 900;font-display:swap}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100svh;display:grid;place-items:center;padding:24px;color:#eff8f7;font:16px/1.6 Montserrat,Arial,sans-serif;background:linear-gradient(135deg,#08131de8,#08131d99),url('branding/assets/parallax.jpg') center/cover fixed,#08131d}
+    .login{width:100%;max-width:460px;padding:36px;border:1px solid #59c47888;border-radius:24px;background:#0f2430ed;box-shadow:0 24px 80px #0007,0 0 24px #59c47814;backdrop-filter:blur(10px);transition:opacity .35s,transform .5s}
+    .logo{width:130px;height:52px;object-fit:contain;object-position:left;margin-bottom:14px}
+    .eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#a9d9b3}
+    h1{font-size:28px;line-height:1.25;margin:8px 0}
+    .intro{color:#b1c8cf;font-size:14px;margin:0 0 24px}
+    label{display:block;font-size:14px;font-weight:600;margin:16px 0 6px}
+    input,button{font:inherit}
+    input{width:100%;height:50px;border:1px solid #446578;border-radius:10px;background:#08131d;color:#eff8f7;padding:12px}
+    input:focus-visible,button:focus-visible{outline:3px solid #a9d9b3;outline-offset:3px}
+    .password{position:relative}
+    .password input{padding-right:85px}
+    .show{position:absolute;right:8px;top:5px;min-height:40px;border:0;background:transparent;color:#b1c8cf;font-size:12px;cursor:pointer}
+    .submit{width:100%;height:50px;margin-top:20px;border:0;border-radius:10px;background:#59c478;color:#08131d;font-weight:800;cursor:pointer}
+    .submit:disabled{cursor:wait;opacity:.75}
+    #loginStatus{font-size:13px;min-height:22px;margin:12px 0 0;color:#ffe033}
+    footer{font-size:12px;color:#91adb7;margin-top:22px}
+    body::before,body::after{content:"";position:fixed;top:0;bottom:0;width:50%;background:#173850;z-index:5;pointer-events:none;visibility:hidden}
+    body::before{left:0;border-right:1px solid #59c478}
+    body::after{right:0;border-left:1px solid #59c478}
+    body.is-opening::before{visibility:visible;animation:door-left .85s cubic-bezier(.2,.7,.2,1) forwards}
+    body.is-opening::after{visibility:visible;animation:door-right .85s cubic-bezier(.2,.7,.2,1) forwards}
+    body.is-opening .login{opacity:0;transform:scale(.96) translateY(-10px)}
+    @keyframes door-left{to{transform:translateX(-105%)}}
+    @keyframes door-right{to{transform:translateX(105%)}}
+    @media(max-width:480px){body{padding:16px}.login{padding:26px 22px}}
+    @media(prefers-reduced-motion:reduce){.login{transition:none}body.is-opening::before,body.is-opening::after{animation:none;visibility:hidden}}
+  </style>
+</head>
+<body>
+  <main class="login">
+    <img class="logo" src="branding/assets/atsi-plus-dark.svg" alt="ATSI+">
+    <div class="eyebrow">Apresentação do projeto</div>
+    <h1>Bem-vindo</h1>
+    <p class="intro">Entre para conhecer a proposta da plataforma ATSI+.</p>
+    <form id="loginForm">
+      <label for="loginEmail">E-mail</label>
+      <input id="loginEmail" name="username" type="email" autocomplete="username" required spellcheck="false" autocapitalize="none">
+      <label for="loginPassword">Senha</label>
+      <div class="password">
+        <input id="loginPassword" name="password" type="password" autocomplete="current-password" required aria-describedby="loginStatus">
+        <button class="show" id="showPassword" type="button" aria-label="Mostrar senha" aria-pressed="false">Mostrar</button>
+      </div>
+      <button class="submit" id="loginSubmit" type="submit">Entrar na apresentação</button>
+      <p id="loginStatus" role="status" aria-live="polite"></p>
+    </form>
+    <footer>ATSI Brasil · proposta e tecnologia YvyLab</footer>
+  </main>
+  <script>
+    // Barreira visual local. Não autentica, protege ou oculta arquivos públicos.
+    const demoEmail='contato@yvyagro.com';
+    const demoPasswordHash='40da8aef7120c8d1bf108d7fa32f629ba5a68a1cb4de3c7c484880993e8525d0';
+    const form=document.getElementById('loginForm');
+    const password=document.getElementById('loginPassword');
+    const submit=document.getElementById('loginSubmit');
+    const status=document.getElementById('loginStatus');
+    let entering=false;
+    document.getElementById('showPassword').addEventListener('click',event=>{
+      const visible=password.type==='password';
+      password.type=visible?'text':'password';
+      event.currentTarget.textContent=visible?'Ocultar':'Mostrar';
+      event.currentTarget.setAttribute('aria-label',visible?'Ocultar senha':'Mostrar senha');
+      event.currentTarget.setAttribute('aria-pressed',String(visible));
+    });
+    form.addEventListener('submit',async event=>{
+      event.preventDefault();
+      if(entering)return;
+      entering=true;submit.disabled=true;status.textContent='';
+      try{
+        const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(password.value));
+        const hash=Array.from(new Uint8Array(bytes),byte=>byte.toString(16).padStart(2,'0')).join('');
+        if(document.getElementById('loginEmail').value.trim().toLowerCase()!==demoEmail || hash!==demoPasswordHash){
+          status.textContent='E-mail ou senha incorretos.';
+          password.focus();password.select();
+          entering=false;submit.disabled=false;return;
+        }
+        password.value='';
+        status.textContent='Abrindo apresentação…';
+        submit.textContent='Entrando…';
+        document.body.classList.add('is-opening');
+        setTimeout(()=>window.location.replace(new URL('home.html',window.location.href)),
+          matchMedia('(prefers-reduced-motion: reduce)').matches?0:900);
+      }catch(error){
+        status.textContent='Não foi possível abrir a apresentação. Acesse pelo endereço HTTPS do site.';
+        entering=false;submit.disabled=false;
+      }
+    });
+  </script>
+</body>
+</html>
