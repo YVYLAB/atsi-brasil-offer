@@ -421,3 +421,24 @@ Limites importantes permanecem em linguagem de composição da entrega; não
 inventar capacidades nem apresentar mockups como produto já implementado.
 Snapshots financeiros mantêm os títulos originais das specs, separados dos títulos
 comerciais, para não invalidar ofertas por edição de copy. Ver `docs/copy-produto.md`.
+
+Benefício comum: curso de capacitação para administradores, cortesia em todos
+os planos e nas configurações personalizadas. `includedBenefits` mantém o item
+`admin_training` separado das 54 features e dos snapshots financeiros, com
+preço adicional zero e sem inventar carga horária. Mostrar no card e no resumo;
+dados de proposta também incluem o benefício. Conteúdo acompanha os recursos
+contratados; não prometer formato, duração ou treinamentos ilimitados.
+Ver `specs/capacitacao-administradores.md`.
+
+Configurações de oferta agora têm liberação por hash e importação/exportação
+de JSON por solicitação do usuário. `campaign-settings.js` valida o hash fixo,
+formato, versão e campos. Arquivo exportado inclui o hash; importação preenche
+e libera a edição, mas só Salvar aplica e persiste a campanha. Não gravar o hash
+no localStorage ou proposta. Edição/download bloqueados inicialmente; fechar ou
+alterar o hash bloqueia novamente. Isso é barreira local, não autenticação real.
+Não publica no repositório nem sincroniza visitantes. Limite de arquivo 64 KB.
+Teste adicional: `node tests/test_campaign_settings.js`.
+
+O atalho de preço alterna para "Voltar ao início" ao se aproximar do investimento,
+mantém essa ação até chegar ao topo e então volta a "Ver preço". Preservar
+animação interrompível, preferência por movimento reduzido e layout sticky.

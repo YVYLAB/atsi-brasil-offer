@@ -8,6 +8,11 @@ Cada funcionalidade tem título comercial, descrição, benefícios e escopo em
 linguagem de produto. Cards e legendas usam a mesma descrição; o popup apresenta
 os benefícios, a composição da entrega e o investimento vigente.
 
+As tags dos cards mostram os planos que efetivamente incluem o recurso:
+Essencial, Plus e/ou Premium, conforme os presets. Recursos essenciais aparecem
+nos três planos. Opcionais que não pertencem a nenhum plano ficam sem tags;
+informações de escopo e integração permanecem no texto e no popup.
+
 ## Direção editorial
 
 - Mostrar o que o recurso oferece ao aluno, à equipe ou ao negócio da ATSI.

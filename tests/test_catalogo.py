@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 HTML = (ROOT / "home.html").read_text()
+SETTINGS_HASH = re.search(r"const releaseHash='([a-f0-9]{64})'", (ROOT / "campaign-settings.js").read_text()).group(1)
 
 
 class CatalogoTest(unittest.TestCase):
@@ -36,6 +37,10 @@ class CatalogoTest(unittest.TestCase):
         function check(name, ok) { results.push({name, ok}); }
         check('54 features', features.length === 54);
         check('fundação', foundationHours === 522);
+        check('preparação sem detalhamento repetido',!document.getElementById('foundationBreakdown') &&
+          !document.querySelector('[aria-labelledby="predevelopmentTitle"] details') &&
+          document.getElementById('requirementsEstimate').textContent.includes('104 h') &&
+          document.getElementById('designEstimate').textContent.includes('120 h'));
         check('base', features.filter(f=>f.type==='required').reduce((s,f)=>s+f.hours,0) === 340);
         for (const [name, value] of [['essencial',178000],['plus',230000],['premium',389200]]) {
           applyPreset(name);
@@ -47,6 +52,10 @@ class CatalogoTest(unittest.TestCase):
           check(name+' vídeo único',selectedFeatures().filter(f=>f.group==='curso_entrega').length===1);
           check(name+' dependências', selectedFeatures().every(f=>(prerequisites[f.id]||[]).every(id=>isSelected(getFeature(id)))));
           const quote=quoteData();
+          check(name+' curso administrativo de cortesia',quote.includedBenefits.length===1 &&
+            quote.includedBenefits[0].id==='admin_training' && quote.includedBenefits[0].priceCents===0 &&
+            quote.includedBenefits[0].includedIn.includes(name) &&
+            quoteRows().some(row=>row[0]==='Curso de capacitação para administradores'&&row[1]==='Cortesia · sem custo adicional'));
           check(name+' plataformas incluídas',quote.delivery.studentPlatforms.join(',')==='Android,iOS,Web (navegador)' &&
             quote.delivery.administration==='Painel administrativo web');
           check(name+' revisão web pendente',quote.delivery.estimateStatus==='pending_web_review' &&
@@ -69,6 +78,25 @@ class CatalogoTest(unittest.TestCase):
             return copy && f.title===copy.title && f.desc===copy.description &&
               copy.benefits.length>=2 && copy.scope.length>30;
           }));
+        check('tags mostram os planos de cada recurso',features.every(f=>{
+          const expected=Object.keys(presets).filter(key=>f.type==='required'||presets[key].features.includes(f.id));
+          const actual=[...document.querySelectorAll(`[data-feature="${f.id}"] .badge[data-plan]`)];
+          return actual.map(node=>node.dataset.plan).join(',')===expected.join(',') &&
+            actual.every(node=>node.textContent===presets[node.dataset.plan].name);
+        }));
+        check('opcionais fora dos planos ficam sem tags',features.filter(f=>f.type==='optional'&&
+          !Object.values(presets).some(preset=>preset.features.includes(f.id))).every(f=>
+            !document.querySelector(`[data-feature="${f.id}"] .badges`)));
+        check('vídeos identificam o plano correto',featurePlanKeys(getFeature('C01')).join(',')==='essencial' &&
+          featurePlanKeys(getFeature('C02')).join(',')==='plus' &&
+          featurePlanKeys(getFeature('C03')).join(',')==='premium');
+        check('certificados pertencem ao plus e premium',featurePlanKeys(getFeature('C04')).join(',')==='plus,premium');
+        check('base essencial presente nos três planos',featurePlanKeys(getFeature('B01')).join(',')==='essencial,plus,premium');
+        check('tag genérica removida',!el.sections.textContent.includes('Amplie seu plano'));
+        check('curso de cortesia visível e sem seleção',document.getElementById('adminTrainingCard').textContent.includes('Cortesia · sem custo adicional') &&
+          !document.getElementById('adminTrainingCard').querySelector('input') &&
+          document.getElementById('adminTrainingPlans').querySelectorAll('.badge').length===3 &&
+          document.querySelector('#investmentSummary [data-admin-training-courtesy]').textContent==='Cortesia · sem custo adicional');
         check('snapshots financeiros preservam títulos originais',Object.values(pricingSnapshot().packages).every(pack=>
           pack.items.every(item=>item.title===specCatalog[item.id].title)));
         const internalCopy=/specs\\/|docs\\/|\\.md\\b|repositório|pendente de validação|aprovação pendente|cenário mínimo|revisão técnica preliminar|Supabase|Next.js|RBAC|auditoria/i;
@@ -93,12 +121,15 @@ class CatalogoTest(unittest.TestCase):
           return valid;
         }));
         check('investimento sem ressalva comercial',document.querySelector('#investmentSummary > small').textContent==='Investimento de implantação');
-        check('três planos com plataformas visíveis',document.querySelectorAll('.preset-platforms').length===3 &&
-          [...document.querySelectorAll('.preset-platforms')].every(node=>node.textContent.includes('Android · iOS · Web para alunos')));
+        check('plataformas sem repetição nos cards dos planos',!document.querySelector('.preset-platforms') &&
+          !el.presetButtons.textContent.includes('Web para alunos') &&
+          document.querySelector('.delivery-scope [data-delivery-students]').textContent===deliveryScope.studentLabel);
         check('destaque desde o essencial',document.getElementById('deliveryScopeTitle').textContent==='Android, iOS e web desde o Essencial');
         check('resumo distingue aluno e gestão',document.querySelector('#investmentSummary [data-delivery-students]').textContent===deliveryScope.studentLabel &&
           document.querySelector('#investmentSummary [data-delivery-administration]').textContent===deliveryScope.administration);
-        check('aviso web nos planos e resumo',[...document.querySelectorAll('[data-delivery-estimate]')].every(node=>node.textContent===deliveryScope.estimateNote));
+        check('painel de plataformas sem nota de estimativas',!document.querySelector('.delivery-scope [data-delivery-estimate]') &&
+          !document.querySelector('.delivery-scope').textContent.includes(deliveryScope.estimateNote));
+        check('nota de estimativas preservada no resumo',document.querySelector('#investmentSummary [data-delivery-estimate]').textContent===deliveryScope.estimateNote);
         check('proposta descreve web para alunos',quoteRows().some(row=>row[0]==='Entrega para alunos'&&row[1].includes('versão web para alunos')));
         applyPreset('essencial');
         toggleFeature('C02',true);
@@ -113,7 +144,8 @@ class CatalogoTest(unittest.TestCase):
           getFeature('G02').hours===250 && getFeature('G02').price===50000 &&
           getFeature('G02').desc.includes('grupos e canais de diferentes redes'));
         check('G02 ressalva técnica',document.getElementById('scopeWarnings').textContent.includes('até três conectores oficiais viáveis') &&
-          document.querySelector('[data-feature="G02"]').textContent.includes('Redes definidas no planejamento'));
+          ATSIProductCopy.features.G02.scope.includes('APIs e permissões disponíveis') &&
+          !document.querySelector('[data-feature="G02"] .badges'));
         const beforeG02Preview=targetTotal;
         state.activePreview='G02';renderPreview();
         check('G02 configuração administrativa',el.phoneScreen.querySelector('.app-screen').dataset.mockContext==='admin');
@@ -163,7 +195,8 @@ class CatalogoTest(unittest.TestCase):
         }));
         check('título do produto',document.querySelector('h1').textContent==='Plataforma ATSI+');
         check('menu simplificado',document.getElementById('promotionSettings').querySelectorAll('input').length===6 &&
-          !document.getElementById('settingsDialog').querySelector('input[type=file]'));
+          !!document.getElementById('settingsDialog').querySelector('input[type=file]') &&
+          document.getElementById('discountFields').disabled);
         check('menu abre e fecha',(()=>{
           document.getElementById('openSettings').click();
           const open=document.getElementById('settingsDialog').open;
@@ -192,6 +225,8 @@ class CatalogoTest(unittest.TestCase):
         check('exportação identifica oferta',quoteRows().some(row=>row[0]==='Cotação'&&row[1]==='test'));
         toggleFeature('A02',true);
         check('custom sem promoção',quoteData().pricing.discountCents===0);
+        check('personalizado mantém cortesia fora das features',quoteData().includedBenefits[0].priceCents===0 &&
+          !quoteData().selectedIds.includes('admin_training') && !getFeature('admin_training'));
         check('custom mantém plataformas',quoteData().delivery.studentPlatforms.includes('Web (navegador)') &&
           quoteData().delivery.estimateStatus==='pending_web_review');
         const customAverage=selectedFeatures().reduce((sum,f)=>sum+f.complexity,0)/selectedFeatures().length;
@@ -215,6 +250,8 @@ class CatalogoTest(unittest.TestCase):
         document.getElementById('discountPlus').value=15;
         document.getElementById('discountPremium').value=20;
         document.getElementById('discountAdditionalOptional').value=25;
+        document.getElementById('discountReleaseHash').value='TEST_RELEASE_HASH';
+        document.getElementById('discountAccessForm').requestSubmit();
         document.getElementById('promotionSettings').requestSubmit();
         applyPreset('essencial');
         check('salvar campanha e descontar essencial',targetTotal===160200 && campaignConfig.percentages.essencial===10);
@@ -303,8 +340,17 @@ class CatalogoTest(unittest.TestCase):
         window.requestAnimationFrame=nativeRAF;
         const priceRect=el.totalPrice.getBoundingClientRect();
         check('um clique exibe valor',priceRect.top>=0 && priceRect.bottom<=innerHeight);
+        check('perto do investimento oferece voltar ao início',document.getElementById('viewPrice').textContent==='Voltar ao início ↑' &&
+          document.getElementById('viewPrice').getAttribute('aria-controls')==='pageTop');
+        window.requestAnimationFrame=callback=>{scrollFrame=callback;return 999999;};
+        document.getElementById('viewPrice').click();
+        if(scrollFrame)scrollFrame(performance.now()+1000);
+        window.requestAnimationFrame=nativeRAF;
+        check('segundo clique retorna ao topo',window.scrollY===0 && document.getElementById('viewPrice').textContent==='Ver preço ↓' &&
+          document.getElementById('viewPrice').getAttribute('aria-controls')==='investmentSummary');
         document.body.insertAdjacentHTML('beforeend','<pre id="qa-results">'+JSON.stringify(results)+'</pre>');
         """
+        script = script.replace("TEST_RELEASE_HASH", SETTINGS_HASH)
         page = HTML.replace("<head>", f'<head><base href="{ROOT.as_uri()}/">', 1)
         page = page.replace("</body>", f"<script>{script}</script></body>")
         with tempfile.TemporaryDirectory(prefix="atsi-", dir="/tmp/opencode") as directory:
@@ -357,9 +403,33 @@ class CatalogoTest(unittest.TestCase):
             featureDialog.close();
             return fits;
           })});
+          document.getElementById('openSettings').click();
+          document.getElementById('discountReleaseHash').value='TEST_RELEASE_HASH';
+          document.getElementById('discountAccessForm').requestSubmit();
+          const settings=document.getElementById('settingsDialog');
+          const settingsRect=settings.getBoundingClientRect();
+          results.push({id:'settings',fits:settingsRect.left>=0 && settingsRect.right<=innerWidth &&
+            settings.scrollWidth<=settings.clientWidth && !document.getElementById('discountFields').disabled});
+          settings.close();
+          window.scrollTo({top:0,behavior:'instant'});updatePriceShortcut();
+          function clickShortcut(){
+            const native=requestAnimationFrame;let frame=null;
+            window.requestAnimationFrame=callback=>{frame=callback;return 999999;};
+            document.getElementById('viewPrice').click();
+            if(frame)frame(performance.now()+1000);
+            window.requestAnimationFrame=native;
+          }
+          clickShortcut();
+          const priceRect=el.totalPrice.getBoundingClientRect();
+          results.push({id:'shortcut-to-price',fits:priceRect.top>=0 && priceRect.bottom<=innerHeight &&
+            document.getElementById('viewPrice').textContent==='Voltar ao início ↑'});
+          window.scrollBy({top:-30,behavior:'instant'});updatePriceShortcut();
+          results.push({id:'shortcut-latched',fits:document.getElementById('viewPrice').textContent==='Voltar ao início ↑'});
+          clickShortcut();
+          results.push({id:'shortcut-to-top',fits:scrollY===0 && document.getElementById('viewPrice').textContent==='Ver preço ↓'});
           return {width:innerWidth,checks:results};
         })();
-        """
+        """.replace("TEST_RELEASE_HASH", SETTINGS_HASH)
         page = HTML.replace("<head>", f'<head><base href="{ROOT.as_uri()}/">', 1)
         wrapper = """<!doctype html><body><script>
         (async()=>{

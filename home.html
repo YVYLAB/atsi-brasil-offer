@@ -117,11 +117,14 @@
     .preset small{display:block;color:#89b8a0;text-transform:uppercase;letter-spacing:.12em;font-weight:800;font-size:10px;margin-bottom:5px}
     .preset strong{display:block;font-size:16px;letter-spacing:-.3px;margin-bottom:4px}
     .preset span{display:block;color:var(--muted);font-size:12px}
-    .preset .preset-platforms{margin-top:8px;color:#a9d9b3;font-weight:700}
     .delivery-scope{margin:0 0 18px;padding:14px 16px;border:1px solid #59c47888;border-radius:16px;background:#173850}
     .delivery-scope h2{margin:0 0 6px;font-size:15px;color:#eff8f7}
     .delivery-scope p{margin:4px 0;font-size:12px;line-height:1.6;color:#cfe4d7}
-    .delivery-scope .delivery-note{color:#ffe09a}
+    .courtesy-card{margin:18px 0;padding:18px;border:1px solid #59c478;border-radius:18px;background:linear-gradient(135deg,#173850,#15382e)}
+    .courtesy-card h2{margin:12px 0 8px;font-size:18px;line-height:1.4}
+    .courtesy-card p,.courtesy-card li{color:#cfe4d7;font-size:13px;line-height:1.65}
+    .courtesy-card ul{padding-left:20px}
+    .courtesy-card .courtesy-price{color:#a9e9bc;font-weight:800;margin-bottom:0}
 
     .left-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:10px}
     .left-head h2{margin:0;font-size:20px;letter-spacing:-.5px}
@@ -201,6 +204,9 @@
     .badge.req{background:rgba(87,199,133,.12);color:#bfeccc;border-color:rgba(87,199,133,.2)}
     .badge.unique{background:rgba(242,198,107,.12);color:#f3dba6;border-color:rgba(242,198,107,.2)}
     .badge.optional{background:rgba(110,182,255,.12);color:#cce3ff;border-color:rgba(110,182,255,.2)}
+    .badge.plan-essencial{background:rgba(87,199,133,.12);color:#bfeccc;border-color:rgba(87,199,133,.3)}
+    .badge.plan-plus{background:rgba(110,182,255,.12);color:#cce3ff;border-color:rgba(110,182,255,.3)}
+    .badge.plan-premium{background:rgba(159,137,255,.12);color:#e0d6ff;border-color:rgba(159,137,255,.3)}
 
     .fields{
       margin-top:12px;padding-left:30px;display:grid;
@@ -384,9 +390,17 @@
     #settingsDialog .feature-info{margin-left:0}
     #settingsDialog{background:#173850;border:1px solid #6eb6ff;width:min(500px,calc(100% - 28px))}
     #promotionSettings{display:grid;gap:16px;margin-top:20px}
-    #promotionSettings label{display:grid;gap:6px;font-size:14px;font-weight:600}
-    #promotionSettings input{width:100%;min-height:44px;border:1px solid #6a899f;border-radius:9px;background:#0f2430;color:#eff8f7;padding:10px;font:inherit;color-scheme:dark}
-    #promotionSettings button{min-height:46px;border:0;border-radius:10px;background:#59c478;color:#08131d;font:inherit;font-weight:800;cursor:pointer}
+    #promotionSettings label,#discountAccessForm label{display:grid;gap:6px;font-size:14px;font-weight:600}
+    #promotionSettings input,#discountReleaseHash{width:100%;min-width:0;min-height:44px;border:1px solid #6a899f;border-radius:9px;background:#0f2430;color:#eff8f7;padding:10px;font:inherit;color-scheme:dark}
+    #discountFields{display:grid;gap:16px;border:0;margin:0;padding:0;min-width:0}
+    #discountFields:disabled{opacity:.55}
+    #promotionSettings button,.settings-file-tools button,#discountAccessForm button{min-height:46px;border:0;border-radius:10px;background:#59c478;color:#08131d;font:inherit;font-weight:800;cursor:pointer;padding:10px 14px}
+    #settingsDialog button:disabled{cursor:not-allowed;opacity:.5}
+    #discountAccessForm{display:grid;gap:10px;margin-top:18px}
+    #settingsStatus{font-size:13px;line-height:1.6;min-height:1.6em;color:#ffe09a;overflow-wrap:anywhere}
+    .settings-file-tools{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+    .settings-file-tools button{flex:1 1 180px}
+    #settingsDialog .settings-local-note{font-size:12px;line-height:1.6;color:#c5d4d9}
     .offer-box{position:fixed;top:14px;right:18px;z-index:90;display:flex;align-items:center;gap:10px;margin:0;padding:8px 14px;background:rgba(8,19,29,.95);border:1px solid #ffe033;border-radius:12px;color:#ffe033;box-shadow:0 4px 18px #0005}
     .offer-box[hidden]{display:none}
     .offer-box h3{font-size:16px;color:#ffe033;margin:0}
@@ -458,7 +472,7 @@
   </style>
 </head>
 <body>
-  <div class="page">
+  <div class="page" id="pageTop">
     <section class="offer-box" aria-labelledby="offerTitle" hidden>
       <h3 id="offerTitle">Oferta</h3>
       <div class="offer-clock" id="offerClock" hidden aria-hidden="true"></div>
@@ -498,7 +512,6 @@
           <h2 id="deliveryScopeTitle">Android, iOS e web desde o Essencial</h2>
           <p><strong data-delivery-students></strong></p>
           <p><span data-delivery-administration></span> também incluído. Todos os planos oferecem essas plataformas; o que muda são as funcionalidades contratadas.</p>
-          <p class="delivery-note" data-delivery-estimate></p>
         </section>
         <div class="left-head">
           <div>
@@ -531,7 +544,14 @@
             <p id="designEstimate"></p>
           </article>
           <p id="foundationExplanation"></p>
-          <details><summary>Conheça a preparação incluída no seu plano</summary><div id="foundationBreakdown"></div></details>
+        </section>
+        <section class="courtesy-card" id="adminTrainingCard" aria-labelledby="adminTrainingTitle">
+          <div class="badges" id="adminTrainingPlans"></div>
+          <h2 id="adminTrainingTitle"></h2>
+          <p id="adminTrainingDescription"></p>
+          <ul id="adminTrainingTopics"></ul>
+          <p id="adminTrainingScope"></p>
+          <p class="courtesy-price" data-admin-training-courtesy></p>
         </section>
         <div class="sections" id="sections"></div>
       </section>
@@ -573,6 +593,7 @@
           <div class="summary-list">
             <div class="summary-line"><span>Entrega para alunos</span><span data-delivery-students></span></div>
             <div class="summary-line"><span>Gestão da plataforma</span><span data-delivery-administration></span></div>
+            <div class="summary-line"><span>Curso para administradores</span><span data-admin-training-courtesy></span></div>
             <div class="summary-line"><span>Implantação sem oferta</span><span id="regularImplementation">—</span></div>
             <div class="summary-line"><span>Investimento participante da oferta</span><span id="eligibleImplementation">—</span></div>
             <div class="summary-line"><span>Desconto de implantação</span><span id="discountImplementation">—</span></div>
@@ -624,19 +645,34 @@
 
   <dialog class="info-dialog" id="settingsDialog" aria-labelledby="settingsTitle">
     <header><h2 id="settingsTitle">Configurações</h2><button class="info-close" type="button" id="closeSettings">Fechar</button></header>
+    <form id="discountAccessForm">
+      <label for="discountReleaseHash">Hash de liberação<input id="discountReleaseHash" type="password" autocomplete="off" spellcheck="false" autocapitalize="none" maxlength="64" aria-describedby="settingsStatus"></label>
+      <button type="submit">Habilitar edição</button>
+    </form>
+    <p id="settingsStatus" role="status" aria-live="polite">Informe seu hash ou carregue uma configuração para editar os descontos.</p>
+    <div class="settings-file-tools">
+      <button type="button" id="importDiscountSettings">Carregar configuração</button>
+      <button type="button" id="exportDiscountSettings" disabled>Baixar configuração</button>
+      <input id="discountSettingsFile" type="file" accept=".json,application/json" hidden aria-label="Arquivo de configuração de descontos">
+    </div>
     <form id="promotionSettings">
-      <label>Data e hora de início (Brasília)<input id="promotionStart" type="datetime-local" required></label>
-      <label>Data e hora final (Brasília)<input id="promotionEnd" type="datetime-local" required></label>
+      <fieldset id="discountFields" disabled>
+      <legend class="sr-only">Datas e descontos da oferta</legend>
+      <label>Data e hora de início (Brasília)<input id="promotionStart" type="datetime-local" step="0.001" required></label>
+      <label>Data e hora final (Brasília)<input id="promotionEnd" type="datetime-local" step="0.001" required></label>
       <label>Desconto Essencial (%)<input id="discountEssencial" type="number" min="0" max="100" step="0.01" required></label>
       <label>Desconto Plus (%)<input id="discountPlus" type="number" min="0" max="100" step="0.01" required></label>
       <label>Desconto Premium (%)<input id="discountPremium" type="number" min="0" max="100" step="0.01" required></label>
       <label>Desconto por feature opcional adicional (%)<input id="discountAdditionalOptional" type="number" min="0" max="100" step="0.01" value="0" required></label>
       <p>Aplica-se somente aos opcionais que não estejam incluídos em nenhum dos planos Essencial, Plus ou Premium, durante a mesma vigência. O plano escolhido deve permanecer completo. Não acumula dois descontos no mesmo item.</p>
       <button type="submit">Salvar</button>
+      </fieldset>
     </form>
+    <p class="settings-local-note">Salvar aplica a oferta neste navegador. O arquivo permite levar a configuração para outro dispositivo; não publica alterações para os demais visitantes.</p>
   </dialog>
   <script src="branding/product-config.js"></script>
   <script src="pricing-promotion.js"></script>
+  <script src="campaign-settings.js"></script>
   <script src="product-copy.js"></script>
   <script>
     // Escopo comum a todos os planos, sem alterar o catálogo ou snapshots financeiros.
@@ -757,6 +793,11 @@
     Object.assign(presets.essencial, {subtitle:'O começo da sua plataforma',desc:'Acesso, cursos e gestão para conectar a ATSI aos alunos, com vídeos via YouTube.', features:['C01']});
     Object.assign(presets.plus, {subtitle:'Mais valor para o aprendizado',desc:'Vídeos privados, certificados, avaliações, e-books e notificações para enriquecer cada curso.', features:['C02','C04','C05','E01','N01','M01']});
     Object.assign(presets.premium, {subtitle:'Conexões que vão além do curso',desc:'Aprendizado offline, apoio de IA, comunidade e eventos para ampliar o relacionamento.', features:['C03','A01','C04','C05','C06','C07','C08','C09','E01','M01','M02','M03','N01','N02','G03','EV01','EV02','EV03','EV04']});
+    // Benefício comercial incluído, separado das features e dos cálculos de esforço.
+    const includedBenefits=[{
+      id:'admin_training',...ATSIProductCopy.includedBenefits.admin_training,
+      priceCents:0,includedIn:Object.keys(presets)
+    }];
     const prerequisites = {
       C04:['B07'], C06:['C05'], N02:['N01'], N03:['N01'], G06:['G05'],
       EV02:['EV01'], EV03:['EV01'], EV04:['EV01','EV02'],
@@ -909,6 +950,7 @@
       return {schemaVersion:1,exportedAt:new Date().toISOString(),simulation:true,
         project:{product:ATSIProduct.name,client:ATSIProduct.client,developer:ATSIProduct.developer},
         delivery:{...deliveryScope,studentPlatforms:[...deliveryScope.studentPlatforms]},
+        includedBenefits:includedBenefits.map(benefit=>({...benefit,includedIn:[...benefit.includedIn],topics:[...benefit.topics]})),
         complexity:scopeComplexity(),
         packageId:state.activePreset,basePackageId:state.basePreset,priceListSnapshot:pricingSnapshot(),
         selectedIds:selectedFeatures().map(f=>f.id),pricing,
@@ -926,6 +968,7 @@
         ['Início UTC',q.campaign?.startsAt||q.offer?.issuedAt||'Não definido'],
         ['Vencimento UTC',q.campaign?.endsAt||q.offer?.expiresAt||'Não definido'],['Pacote',q.packageId],
         ['Entrega para alunos',q.delivery.studentLabel],['Gestão da plataforma',q.delivery.administration],
+        ...q.includedBenefits.map(benefit=>[benefit.title,benefit.commercialLabel]),
         ['Revisão das estimativas',q.delivery.estimateNote],
         [q.complexity.metric,q.complexity.label],['Critério de complexidade',q.complexity.explanation],
         ['Plano de origem',presets[q.basePackageId].name],
@@ -970,33 +1013,110 @@
       }catch(err){console.warn('Não foi possível restaurar a campanha local.',err);}
       const start=document.getElementById('promotionStart'),end=document.getElementById('promotionEnd');
       const ids={essencial:'discountEssencial',plus:'discountPlus',premium:'discountPremium'};
-      function populate(){
-        if(!campaignConfig)return;
-        // UTC -> horário de Brasília, sem depender do fuso do computador.
-        const local=date=>new Date(Date.parse(date)-3*3600000).toISOString().slice(0,16);
-        start.value=local(campaignConfig.startsAt);end.value=local(campaignConfig.endsAt);
-        for(const key of Object.keys(ids))document.getElementById(ids[key]).value=campaignConfig.percentages[key];
-        document.getElementById('discountAdditionalOptional').value=campaignConfig.additionalOptionalPercentage===undefined?0:campaignConfig.additionalOptionalPercentage;
+      const hash=document.getElementById('discountReleaseHash');
+      const fields=document.getElementById('discountFields');
+      const feedback=document.getElementById('settingsStatus');
+      const exportButton=document.getElementById('exportDiscountSettings');
+      const fileInput=document.getElementById('discountSettingsFile');
+      const form=document.getElementById('promotionSettings');
+      let unlocked=false;
+      let importRevision=0;
+      function lock(){
+        unlocked=false;fields.disabled=true;exportButton.disabled=true;
       }
-      populate();
-      [start,end].forEach(input=>input.addEventListener('input',()=>end.setCustomValidity('')));
-      document.getElementById('promotionSettings').addEventListener('submit',e=>{
-        e.preventDefault();
-        const form=e.currentTarget;
-        end.setCustomValidity('');
-        if(!form.reportValidity())return;
-        const config={schemaVersion:2,
-          startsAt:new Date(start.value+'-03:00').toISOString(),
-          endsAt:new Date(end.value+'-03:00').toISOString(),
-          percentages:Object.fromEntries(Object.entries(ids).map(([key,id])=>[key,Number(document.getElementById(id).value)])),
-          additionalOptionalPercentage:Number(document.getElementById('discountAdditionalOptional').value)};
-        if(!ATSIPromotion.validCampaign(config)){
-          end.setCustomValidity('A data final deve ser posterior à data de início.');end.reportValidity();return;
+      function canEdit(){
+        return unlocked && ATSICampaignSettings.isAuthorized(hash.value);
+      }
+      function unlock(){
+        if(!ATSICampaignSettings.isAuthorized(hash.value)){
+          lock();feedback.textContent='Hash não reconhecido. Confira o código de liberação.';return false;
         }
+        unlocked=true;fields.disabled=false;exportButton.disabled=false;
+        feedback.textContent='Edição habilitada. Ajuste a oferta ou carregue uma configuração.';
+        return true;
+      }
+      function populate(config){
+        if(!config)return;
+        // UTC -> horário de Brasília, sem depender do fuso do computador.
+        const local=date=>new Date(Date.parse(date)-3*3600000).toISOString().slice(0,-1);
+        start.value=local(config.startsAt);end.value=local(config.endsAt);
+        for(const key of Object.keys(ids))document.getElementById(ids[key]).value=config.percentages[key];
+        document.getElementById('discountAdditionalOptional').value=config.additionalOptionalPercentage===undefined?0:config.additionalOptionalPercentage;
+        end.setCustomValidity('');
+      }
+      lock();populate(campaignConfig);
+      document.getElementById('discountAccessForm').addEventListener('submit',event=>{
+        event.preventDefault();unlock();
+      });
+      hash.addEventListener('input',()=>{
+        importRevision++;lock();
+        feedback.textContent='Habilite a edição com o hash informado para continuar.';
+      });
+      form.addEventListener('input',()=>importRevision++);
+      [start,end].forEach(input=>input.addEventListener('input',()=>end.setCustomValidity('')));
+      function readDraft(){
+        if(!canEdit()){
+          lock();feedback.textContent='Informe um hash de liberação válido para editar a oferta.';return null;
+        }
+        end.setCustomValidity('');
+        if(!form.reportValidity()){
+          feedback.textContent='Confira os campos da oferta antes de continuar.';return null;
+        }
+        try{
+          const config={schemaVersion:2,
+            startsAt:new Date(start.value+'-03:00').toISOString(),
+            endsAt:new Date(end.value+'-03:00').toISOString(),
+            percentages:Object.fromEntries(Object.entries(ids).map(([key,id])=>[key,Number(document.getElementById(id).value)])),
+            additionalOptionalPercentage:Number(document.getElementById('discountAdditionalOptional').value)};
+          if(!ATSIPromotion.validCampaign(config)){
+            end.setCustomValidity('A data final deve ser posterior à data de início.');end.reportValidity();
+            feedback.textContent='Escolha uma data final posterior à data de início.';return null;
+          }
+          return ATSICampaignSettings.normalizeCampaign(config);
+        }catch(error){
+          feedback.textContent='Confira as datas e os percentuais da oferta.';return null;
+        }
+      }
+      form.addEventListener('submit',e=>{
+        e.preventDefault();
+        const config=readDraft();
+        if(!config)return;
         try{localStorage.setItem(campaignStorageKey,JSON.stringify(config));}
-        catch(err){end.setCustomValidity('Não foi possível salvar neste navegador.');end.reportValidity();return;}
+        catch(err){feedback.textContent='Não foi possível salvar neste navegador. Tente novamente.';return;}
         campaignConfig=config;currentOffer=null;render();
+        feedback.textContent='Oferta salva neste navegador.';
         document.getElementById('settingsDialog').close();
+      });
+      exportButton.addEventListener('click',()=>{
+        const config=readDraft();
+        if(!config)return;
+        downloadJSON(ATSICampaignSettings.createFile(config,hash.value),'atsi-configuracao-descontos.json');
+        feedback.textContent='Arquivo preparado com o hash e os campos atuais. Baixar não aplica nem publica a oferta.';
+      });
+      document.getElementById('importDiscountSettings').addEventListener('click',()=>fileInput.click());
+      fileInput.addEventListener('change',async()=>{
+        const file=fileInput.files?.[0];
+        if(!file)return;
+        const revision=++importRevision;
+        feedback.textContent='Carregando configuração…';
+        try{
+          if(file.size>ATSICampaignSettings.maxFileBytes)throw new Error('Escolha um arquivo JSON de até 64 KB.');
+          const imported=ATSICampaignSettings.parseFile(await file.text());
+          if(revision!==importRevision)return;
+          // Só alterar os campos depois de validar integralmente o arquivo.
+          hash.value=imported.releaseHash;
+          populate(imported.campaign);
+          unlock();
+          feedback.textContent='Configuração carregada. Confira os campos e clique em Salvar para aplicar neste navegador.';
+        }catch(error){
+          if(revision===importRevision)feedback.textContent=error.message || 'Não foi possível carregar essa configuração.';
+        }finally{
+          if(fileInput.files?.[0]===file)fileInput.value='';
+        }
+      });
+      document.getElementById('settingsDialog').addEventListener('close',()=>{
+        importRevision++;hash.value='';fileInput.value='';lock();
+        feedback.textContent='Informe seu hash ou carregue uma configuração para editar os descontos.';
       });
       let previous=updateOfferDisplay();
       setInterval(()=>{const status=updateOfferDisplay();if(previous!==status){previous=status;render();}},1000);
@@ -1128,7 +1248,6 @@
           <small>${preset.subtitle}</small>
           <strong>${preset.name}</strong>
           <span>${preset.desc}</span>
-          <span class="preset-platforms">Android · iOS · Web para alunos</span>
           <span class="preset-complexity" title="Classificação relativa entre os planos">Complexidade ${planComplexityLabels[key].toLowerCase()}</span>
         </button>
       `).join('');
@@ -1199,16 +1318,16 @@
       });
     }
 
+    function featurePlanKeys(feature){
+      return Object.keys(presets).filter(key=>feature.type==='required' || presets[key].features.includes(feature.id));
+    }
+
     function renderFeatureCard(feature,pricing=configurationPricing()){
       const selected = isSelected(feature);
       const itemPricing=featureAdditionalPricing(feature,pricing);
-      const badges = [
-        feature.type === 'required' ? '<span class="badge req">Incluído em todos os planos</span>' : '',
-        feature.type === 'unique' ? '<span class="badge unique">Sua escolha de vídeo</span>' : '',
-        feature.type === 'optional' ? '<span class="badge optional">Amplie seu plano</span>' : '',
-        feature.unavailable ? '<span class="badge unique">Sob cotação · indisponível</span>' : '',
-        feature.conditionalIntegration ? '<span class="badge unique">Redes definidas no planejamento</span>' : ''
-      ].join('');
+      const badges = featurePlanKeys(feature).map(key=>
+        `<span class="badge plan-${key}" data-plan="${key}" title="Incluído no plano ${presets[key].name}">${presets[key].name}</span>`
+      ).join('');
       return `
         <article class="feature ${selected ? 'selected':''} ${itemPricing.discountCents>0?'has-feature-discount':''}" data-feature="${feature.id}">
           ${itemPricing.discountCents>0 ? `
@@ -1229,7 +1348,7 @@
             <div class="feature-copy">
               <strong>${feature.title}</strong>
               <p>${feature.desc}</p>
-              <div class="badges">${badges}</div>
+              ${badges?`<div class="badges">${badges}</div>`:''}
             </div>
             <button class="feature-info" type="button" aria-label="Mais informações sobre ${feature.title}">Mais informações</button>
           </div>
@@ -1754,6 +1873,7 @@
       renderSections();
       renderSummaryOnly();
       renderPreview();
+      updatePriceShortcut();
     }
 
     // A mesma fonte de dados alimenta os entregáveis e o total obrigatório.
@@ -1766,16 +1886,34 @@
         `${f02.hours} h · ${brl(f02.hours * state.hourRate)}. Jornadas, telas e estrutura desenhadas com a ATSI.`;
       document.getElementById('foundationExplanation').textContent =
         `Planejamento e design fazem parte da preparação de ${foundationHours} h, incluída uma única vez no investimento de qualquer plano.`;
-      document.getElementById('foundationBreakdown').innerHTML = foundationCatalog.map(f =>
-        `<h3>${ATSIProductCopy.foundation[f.id].title} · ${f.hours} h</h3><p>${ATSIProductCopy.foundation[f.id].description}</p>`
-      ).join('');
     }
 
     // init
+    const adminTraining=includedBenefits.find(benefit=>benefit.id==='admin_training');
+    document.getElementById('adminTrainingPlans').innerHTML=adminTraining.includedIn.map(key=>
+      `<span class="badge plan-${key}">${presets[key].name}</span>`
+    ).join('');
+    document.getElementById('adminTrainingTitle').textContent=adminTraining.title;
+    document.getElementById('adminTrainingDescription').textContent=adminTraining.description;
+    document.getElementById('adminTrainingTopics').innerHTML=adminTraining.topics.map(topic=>`<li>${topic}</li>`).join('');
+    document.getElementById('adminTrainingScope').textContent=adminTraining.scope;
+    document.querySelectorAll('[data-admin-training-courtesy]').forEach(node=>node.textContent=adminTraining.commercialLabel);
     document.querySelectorAll('[data-delivery-students]').forEach(node=>node.textContent=deliveryScope.studentLabel);
     document.querySelectorAll('[data-delivery-administration]').forEach(node=>node.textContent=deliveryScope.administration);
     document.querySelectorAll('[data-delivery-estimate]').forEach(node=>node.textContent=deliveryScope.estimateNote);
     let priceScrollAnimation=null;
+    const priceShortcut=document.getElementById('viewPrice');
+    let returnToTop=false;
+    function updatePriceShortcut(){
+      if(window.scrollY<=24)returnToTop=false;
+      else if(el.totalPrice.getBoundingClientRect().top<=window.innerHeight+120)returnToTop=true;
+      priceShortcut.textContent=returnToTop?'Voltar ao início ↑':'Ver preço ↓';
+      priceShortcut.dataset.action=returnToTop?'top':'price';
+      priceShortcut.setAttribute('aria-controls',returnToTop?'pageTop':'investmentSummary');
+    }
+    window.addEventListener('scroll',updatePriceShortcut,{passive:true});
+    window.addEventListener('resize',updatePriceShortcut,{passive:true});
+    window.addEventListener('load',updatePriceShortcut);
     function stopPriceScroll(){
       if(priceScrollAnimation!==null)cancelAnimationFrame(priceScrollAnimation);
       priceScrollAnimation=null;
@@ -1785,12 +1923,15 @@
     window.addEventListener('keydown',event=>{
       if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key))stopPriceScroll();
     });
-    document.getElementById('viewPrice').addEventListener('click',()=>{
+    priceShortcut.addEventListener('click',()=>{
       stopPriceScroll();
+      updatePriceShortcut();
       const startY=window.scrollY;
       const summary=document.getElementById('investmentSummary');
-      summary.focus({preventScroll:true});
-      if(window.matchMedia('(min-width: 1121px)').matches){
+      if(returnToTop){
+        window.scrollTo({top:0,behavior:'instant'});
+      }else if(window.matchMedia('(min-width: 1121px)').matches){
+        summary.focus({preventScroll:true});
         // Primeiro alcançar o fim da coluna longa: o painel sticky passa então
         // a respeitar o limite inferior das features.
         const featuresPane=document.querySelector('.left-pane');
@@ -1803,6 +1944,7 @@
           window.scrollBy({top:price.top-window.innerHeight/3,behavior:'instant'});
         }
       }else{
+        summary.focus({preventScroll:true});
         summary.scrollIntoView({behavior:'instant',block:'start'});
       }
       const targetY=window.scrollY;
@@ -1815,11 +1957,12 @@
           const progress=Math.min(1,(now-startTime)/duration);
           const eased=1-Math.pow(1-progress,4);
           window.scrollTo({top:startY+(targetY-startY)*eased,behavior:'instant'});
+          updatePriceShortcut();
           if(progress<1)priceScrollAnimation=requestAnimationFrame(animatePriceScroll);
           else priceScrollAnimation=null;
         }
         priceScrollAnimation=requestAnimationFrame(animatePriceScroll);
-      }
+      }else updatePriceShortcut();
     });
     document.title=`Configurador da Plataforma ${ATSIProduct.name} — ${ATSIProduct.developer} × ${ATSIProduct.client}`;
     document.querySelector('h1').textContent=`Plataforma ${ATSIProduct.name}`;

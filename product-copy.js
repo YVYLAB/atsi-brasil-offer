@@ -243,5 +243,14 @@
     F06:{title:'Um caminho organizado até a publicação',description:'Preparamos a distribuição das versões e a publicação nos canais definidos, acompanhando as etapas de cada plataforma.'},
     F07:{title:'Uma entrega acompanhada de perto',description:'Percorremos as principais jornadas com sua equipe para conferir a experiência e preparar a entrada em operação.'}
   };
-  root.ATSIProductCopy={features,sections,foundation};
+  const includedBenefits={
+    admin_training:{
+      title:'Curso de capacitação para administradores',
+      description:'Sua equipe pronta para cuidar da ATSI+. Um curso voltado aos administradores ensina a usar o painel e conduzir as rotinas da plataforma com mais autonomia.',
+      topics:['Acesso e navegação pelo painel administrativo.','Organização de cursos, módulos, aulas e destaques.','Uso dos recursos administrativos incluídos no plano escolhido.'],
+      scope:'O conteúdo acompanha as funcionalidades contratadas, para conectar o aprendizado à rotina da sua equipe.',
+      commercialLabel:'Cortesia · sem custo adicional'
+    }
+  };
+  root.ATSIProductCopy={features,sections,foundation,includedBenefits};
 })(globalThis);

@@ -1,5 +1,35 @@
 # Pacotes e ofertas de 24 horas — protótipo local
 
+## Atualização — hash e transporte de configuração
+
+O popup agora tem um campo de hash de liberação e as ações **Carregar
+configuração** e **Baixar configuração**. A edição dos seis campos e o download
+começam bloqueados; a leitura de uma oferta já salva continua funcionando.
+
+- O hash válido habilita a edição. Alterá-lo ou fechar o popup bloqueia novamente.
+- Baixar exporta os campos atuais e o hash, sem aplicar ou salvar a oferta.
+- Carregar valida o arquivo inteiro antes de preencher campos e hash. O hash é
+  conferido contra o valor fixo do sistema, não contra uma chave escolhida pelo arquivo.
+- Somente **Salvar** aplica os valores e persiste a campanha no navegador.
+- Datas de Brasília fazem ida e volta em UTC, preservando também segundos e
+  milissegundos; o carregamento não renova o período da oferta.
+- Arquivos têm tipo e versão próprios, tamanho máximo de 64 KB, percentuais
+  limitados a 0–100 e fim posterior ao início. JSON inválido ou hash diferente
+  não altera os campos, a oferta aplicada ou o armazenamento.
+- Campanhas v2 anteriores continuam sendo restauradas, com edição bloqueada.
+  O hash não é gravado no `localStorage` nem nos dados da proposta.
+
+O arquivo contém o hash legível, por solicitação do usuário. Quem o receber
+também pode liberar a edição. O hash é uma barreira local, não autenticação,
+assinatura de integridade ou autorização de servidor: o código estático e o
+armazenamento podem ser alterados. Compartilhar apenas com os responsáveis.
+Não há envio ao GitHub, backend ou sincronização entre visitantes.
+
+Implementação: `campaign-settings.js` valida e normaliza o formato;
+`home.html` controla os campos, o arquivo e a confirmação de salvamento.
+Teste adicional: `node tests/test_campaign_settings.js`.
+O fluxo anterior sem importação/exportação, descrito abaixo, é histórico.
+
 ## Atualização — painel simplificado
 O fluxo atual substitui os controles de importação/exportação por um popup azul
 acessível pelo menu ☰. Contém somente início e término (data/hora de Brasília),
