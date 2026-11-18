@@ -24,6 +24,12 @@
       logoInstitutional:'assets/companies/yvy-lab/logo-yvylab.png',
       logoDark:'logo-yvy-plus-escura.png',logoLight:'logo-yvy-plus-clara.png',
       favicon:'icon.png',faviconType:'image/png'
+    },
+    grazmec:{
+      slug:'grazmec',client:'Grazmec',shortName:'Grazmec',
+      logoInstitutional:'assets/companies/grazmec/logo-institucional.svg',
+      logoDark:'logo-institucional.svg',logoLight:'logo-institucional.svg',
+      favicon:'logo-institucional.svg'
     }
   });
   // Somente slugs registrados podem determinar caminhos de assets.

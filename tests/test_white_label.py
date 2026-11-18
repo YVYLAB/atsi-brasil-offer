@@ -115,6 +115,19 @@ class WhiteLabelTest(unittest.TestCase):
         jan = self.browser("home.html", "?company=jan", script)
         bocchi = self.browser("home.html", "?company=bocchi-agrobios", script)
         yvy = self.browser("home.html", "?company=yvy-lab", script)
+        grazmec = self.browser("home.html", "?company=grazmec", script)
+        self.assertEqual(atsi["plans"], grazmec["plans"])
+        self.assertEqual(atsi["commonCopy"], grazmec["commonCopy"])
+        self.assertEqual(grazmec["heading"], "Grazmec+")
+        self.assertEqual(grazmec["logoAlt"], "Grazmec")
+        self.assertEqual(grazmec["logo"], "assets/companies/grazmec/logo-institucional.svg")
+        self.assertEqual(grazmec["primary"].lower(), "#f04a51")
+        self.assertEqual(grazmec["project"]["product"], "Grazmec+")
+        self.assertEqual(grazmec["pdfProject"]["institutionalLogo"]["company"], "grazmec")
+        self.assertEqual(grazmec["storageKey"], "atsi-campaign-v2:company:grazmec")
+        self.assertTrue(grazmec["pdfIsValid"])
+        self.assertTrue(grazmec["mockups"])
+        self.assertTrue(grazmec["popups"])
         self.assertEqual(atsi["plans"], yvy["plans"])
         self.assertEqual(yvy["heading"], "YVY+")
         self.assertEqual(yvy["logoAlt"], "YvyLab")
@@ -177,7 +190,7 @@ class WhiteLabelTest(unittest.TestCase):
         self.assertEqual(jan["storageKey"], "atsi-campaign-v2:company:jan")
         self.assertEqual(atsi["isolationTotal"], 160200)
         self.assertEqual(jan["isolationTotal"], 178000)
-        for result in (atsi, jan, bocchi, yvy):
+        for result in (atsi, jan, bocchi, yvy, grazmec):
             self.assertTrue(result["logoLoaded"])
             self.assertFalse(result["overflow"])
             self.assertEqual(result["errors"], [])
@@ -248,6 +261,26 @@ class WhiteLabelTest(unittest.TestCase):
                 self.assertEqual(result["src"], "assets/companies/yvy-lab/logo-yvylab.png")
                 self.assertIn("YVY+", result["intro"])
                 self.assertEqual(result["link"], "yvy-lab")
+                self.assertFalse(result["overflow"])
+                self.assertEqual(result["errors"], [])
+
+    def test_grazmec_entry_responsive(self):
+        script = """
+        const image=document.querySelector('[data-company-logo]');
+        const result={name:ATSIProduct.name,src:image.getAttribute('src'),alt:image.alt,
+          intro:document.querySelector('.intro').textContent,
+          link:CompanyBranding.pageURL('home.html').searchParams.get('company'),
+          overflow:document.documentElement.scrollWidth>window.innerWidth,errors:brandErrors};
+        document.body.insertAdjacentHTML('beforeend','<pre id="brand-result">'+JSON.stringify(result)+'</pre>');
+        """
+        for width in (390, 768, 1440):
+            with self.subTest(width=width):
+                result = self.browser("index.html", "?company=grazmec", script, width)
+                self.assertEqual(result["name"], "Grazmec+")
+                self.assertEqual(result["alt"], "Grazmec")
+                self.assertEqual(result["src"], "assets/companies/grazmec/logo-institucional.svg")
+                self.assertIn("Grazmec+", result["intro"])
+                self.assertEqual(result["link"], "grazmec")
                 self.assertFalse(result["overflow"])
                 self.assertEqual(result["errors"], [])
 

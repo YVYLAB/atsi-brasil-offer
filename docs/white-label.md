@@ -10,6 +10,7 @@ O parâmetro `company` muda somente a apresentação.
 - `index.html?company=jan` — entrada com identidade JAN.
 - `index.html?company=bocchi-agrobios` — entrada com identidade Bocchi+.
 - `index.html?company=yvy-lab` — entrada com identidade YVY+.
+- `index.html?company=grazmec` — entrada com identidade Grazmec+.
 - `home.html?company=jan` — apresentação direta, sem passar pela entrada.
 - Em uma URL que já tenha parâmetros: `home.html?origem=email&company=jan`.
 
@@ -133,6 +134,12 @@ cabeçalho e PDF; as assinaturas YVY+ dos mockups e a paleta são propostas do k
 não marcas ou cores homologadas. O ícone é derivado do símbolo fornecido. Não
 publicar a identidade conceitual sem revisão e aprovação de uso externo.
 O nome YVY+ segue a regra compartilhada de nome curto + `+`.
+
+**Grazmec:** `company=grazmec` utiliza o SVG institucional original obtido em
+`https://www.grazmec.com.br/images/logo/1687184575-logo-grazmec-svg.svg`
+(SHA-256 `7f99d16a8d8001ed6d253180f501256affa95c0f64d6fa8981a234e64257904a`).
+O usuário autorizou seu uso na apresentação. A paleta vermelha e grafite é uma
+aproximação do kit, não um manual homologado. A proposta não implica parceria.
 
 ## Adicionar uma empresa
 

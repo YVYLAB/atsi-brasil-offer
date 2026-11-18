@@ -1,0 +1,32 @@
+/* Vermelho e grafite aproximados do kit; não são tokens oficiais homologados. */
+:root[data-company="grazmec"]{
+  --brand-bg:#15191f;
+  --brand-panel:#20262e;
+  --brand-surface:#30343b;
+  --brand-card:#282e36;
+  --brand-line:#777f8b;
+  --brand-text:#f7f8fa;
+  --brand-muted:#e0e2e7;
+  --brand-primary:#f04a51;
+  --brand-strong:#981827;
+  --brand-soft:#ffc6c9;
+  --brand-button-text:#1a1012;
+  --brand-header-rgb:247,248,250;
+  --brand-accent-rgb:185,30,45;
+  --brand-glow-rgb:240,74,81;
+}
+:root[data-company="grazmec"] .hero,
+:root[data-company="grazmec"] .app-header,
+:root[data-company="grazmec"] .screen-hero{
+  background:linear-gradient(135deg,#15191f,#79202a);
+}
+/* A logo original é escura; preservar a arte sobre uma superfície clara. */
+:root[data-company="grazmec"] [data-company-logo],
+:root[data-company="grazmec"] .app-brand img{
+  background:#f7f8fa;border-radius:8px;padding:4px;
+}
+:root[data-company="grazmec"] .app-badge,
+:root[data-company="grazmec"] .mobile-chip,
+:root[data-company="grazmec"] .tag{
+  background:#fff0f1;color:#981827;
+}
