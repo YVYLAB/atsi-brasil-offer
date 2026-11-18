@@ -74,11 +74,14 @@
       `${downloadMinutes} minutos baixados/mês adicionais à reprodução online; sem nova cobrança por assistir ao arquivo local.`);
     const fmt=n=>n.toLocaleString('pt-BR',{maximumFractionDigits:2});
     const videoLabel={C01:'YouTube incorporado',C02:'Streaming privado',C03:'Streaming privado + offline'}[p.videoStrategy];
+    const billingSummary=`${videoLabel}: ${privateVideo?
+      'adicional estimado conforme usuários e consumo, em qualquer plano.':
+      'adicional por usuários zerado, em qualquer plano.'} A manutenção base do plano é mantida.`;
     const explanation=[
       'A mensalidade reúne o cuidado contínuo com a plataforma e os serviços necessários para seu funcionamento. Esse valor é separado do investimento inicial para desenvolver o projeto.',
       'Manutenção do plano: inclui as horas mensais contratadas para correções, ajustes e melhorias no software. Se precisar de mais horas, um pacote adicional será combinado antes da execução.',
       'Serviços e vídeos: ao escolher vídeos privados ou com opção de baixar para assistir sem internet, há um valor adicional pelos serviços que mantêm a plataforma funcionando e disponibilizam esses conteúdos. Esse custo pode crescer principalmente conforme a quantidade de vídeos armazenados, assistidos e baixados pelos alunos.',
-      'Com vídeos pelo YouTube, esse adicional é zero. Nesse caso, permanece apenas a mensalidade base do plano, que já cobre os serviços de funcionamento considerados nesta simulação.',
+      'Com vídeos pelo YouTube, esse adicional é zero. Essa regra depende da opção de vídeo selecionada, não do plano. Nesse caso, permanece apenas a mensalidade base do plano, que já cobre os serviços de funcionamento considerados nesta simulação.',
       'O controle de usuários ajuda a estimar esse valor conforme o público esperado. Ele não gera cobranças automáticas: mudanças de capacidade ou consumo serão combinadas previamente. O consumo de inteligência artificial é contratado separadamente.'
     ].join('\n\n');
     const assumptions=[
@@ -96,7 +99,7 @@
     return {schemaVersion:1,version,rateDate:'2026-11-17',
       inputs:{...Object.fromEntries(Object.keys(defaults).map(key=>[key,p[key]])),
         videoStrategy:p.videoStrategy,realtimeEnabled:!!p.realtimeEnabled},
-      videoLabel,explanation,billingPolicy:privateVideo?'estimated_surcharge':'youtube_included_in_base',
+      videoLabel,explanation,billingSummary,billingPolicy:privateVideo?'estimated_surcharge':'youtube_included_in_base',
       peakUsers,computeProfile:compute.name,emailCount,realtimeConnections,
       storageMinutes,streamingMinutes,downloadMinutes,lines,
       totalCents:lines.reduce((n,item)=>n+item.priceCents,0),

@@ -3,13 +3,15 @@
   'use strict';
   const companies=Object.freeze({
     'atsi-brasil':{
-      name:'ATSI+',slug:'atsi-plus',client:'ATSI Brasil',shortName:'ATSI',
+      slug:'atsi-plus',client:'ATSI Brasil',shortName:'ATSI',
       logoInstitutional:'branding/assets/atsi-logo-cabecalho.svg',
       logoDark:'logo-dark.svg',logoLight:'logo-light.svg',favicon:'icon.svg'
     },
     jan:{
-      name:'JAN',slug:'jan',client:'JAN',shortName:'JAN',
-      logoDark:'logo-dark.svg',logoLight:'logo-light.svg',favicon:'icon.svg'
+      slug:'jan',client:'JAN',shortName:'JAN',
+      logoInstitutional:'assets/companies/jan/logo-institucional.svg',
+      logoDark:'logo-institucional.svg',logoLight:'logo-institucional.svg',
+      favicon:'icon.png',faviconType:'image/png'
     }
   });
   // Somente slugs registrados podem determinar caminhos de assets.
@@ -22,6 +24,7 @@
   const assets=`assets/companies/${company}/`;
   const product=Object.freeze({
     ...config,company,assets,developer:'YvyLab',
+    name:`${config.shortName}+`,
     slogan:'Conhecimento. Conexões. Oportunidades.',
     logoDark:assets+config.logoDark,logoLight:assets+config.logoLight,
     logoInstitutional:config.logoInstitutional || assets+config.logoDark,
@@ -56,6 +59,9 @@
       image.src=institutional?product.logoInstitutional:product.logoDark;
       image.alt=institutional?product.client:product.name;
     });
+    container.querySelectorAll('[data-company-heading]').forEach(heading=>{
+      heading.textContent=product.name;
+    });
   }
   function pageURL(path){
     const url=new URL(path,root.location.href);
@@ -82,6 +88,7 @@
   const theme=document.createElement('link');
   theme.rel='stylesheet';theme.href=assets+'theme.css';document.head.appendChild(theme);
   document.querySelector('link[rel="icon"]').href=product.favicon;
+  document.querySelector('link[rel="icon"]').type=product.faviconType || 'image/svg+xml';
   document.title=text(document.title);
   document.querySelectorAll('meta[name="description"],meta[property="og:title"]').forEach(meta=>{
     meta.content=text(meta.content);

@@ -2,13 +2,15 @@ const assert=require('node:assert/strict');
 const pdf=require('../offer-pdf.js');
 const operations=require('../operational-pricing.js');
 const {jsPDF}=require('../vendor/jspdf/jspdf.umd.min.js');
+require('../branding/pdf-logos.js');
 const row=(id,hours,regularCents,type='optional')=>({
   id,technicalTitle:`Entrega ${id}`,hours,regularCents,type,
   tasks:[{id:`${id}-T01`,title:'Implementar e conferir a experiência',hours}]
 });
 const fixture=()=>({
   generatedAt:'2026-11-17T13:00:00.000Z',
-  project:{product:'ATSI+',client:'ATSI Brasil',developer:'YvyLab'},
+  project:{product:'ATSI+',client:'ATSI Brasil',developer:'YvyLab',company:'atsi-brasil',
+    institutionalLogo:globalThis.CompanyPDFLogos['atsi-brasil']},
   packageName:'Personalizado',basePackageName:'Essencial',
   delivery:{studentLabel:'Android, iOS e web',administration:'Painel web',estimateNote:'Cronograma detalhado no planejamento.'},
   pricing:{regularCents:1700,discountCents:320,finalCents:1380},
@@ -58,7 +60,7 @@ for(const mutate of [
   const broken=JSON.parse(JSON.stringify(monthly));mutate(broken);
   assert.throws(()=>pdf.buildModel(broken),/operacional/);
 }
-assert.equal(pdf.fileName(model),'ATSI-Oferta-20261117T130000.pdf');
+assert.equal(pdf.fileName(model),'atsi-brasil-Oferta-20261117T130000.pdf');
 const tied=[row('A',1,1),row('B',1,1),row('C',1,1)];
 assert.deepEqual([...pdf.allocateDiscount(tied,1).values()],[1,0,0]);
 assert.deepEqual([...pdf.allocateDiscount(tied,2).values()],[1,1,0]);
@@ -83,9 +85,27 @@ legacy.promotion={...legacy.promotion,planDiscountCents:20,planTargetIds:['B01']
 const legacyModel=pdf.buildModel(legacy);
 assert.equal(legacyModel.foundation[0].discountCents,0);
 assert.equal(legacyModel.features[0].discountCents,20);
-const document=pdf.createDocument(model,jsPDF);
+const imageCalls=[],textCalls=[];
+function RecordingPDF(options){
+  const doc=new jsPDF(options);
+  const addImage=doc.addImage,text=doc.text;
+  doc.addImage=function(...args){imageCalls.push(args);return addImage.apply(this,args);};
+  doc.text=function(...args){textCalls.push(args[0]);return text.apply(this,args);};
+  return doc;
+}
+const document=pdf.createDocument(model,RecordingPDF);
 const bytes=Buffer.from(document.output('arraybuffer'));
 assert(bytes.subarray(0,5).equals(Buffer.from('%PDF-')));
 assert(document.getNumberOfPages()>=3);
+assert.equal(imageCalls.length,document.getNumberOfPages());
+for(const args of imageCalls){
+  assert.equal(args[0],model.project.institutionalLogo.dataURL);
+  assert(args[4]<=48 && args[5]<=12);
+  assert(Math.abs(args[4]/args[5]-model.project.institutionalLogo.width/model.project.institutionalLogo.height)<1e-9);
+}
+assert(!textCalls.includes('ATSI+ | ATSI Brasil'));
+assert.equal(textCalls.filter(text=>typeof text==='string'&&text.includes('ATSI+')).length,1);
+assert.throws(()=>pdf.createDocument({...model,project:{...model.project,institutionalLogo:null}},jsPDF),/logo institucional/);
+assert.throws(()=>pdf.createDocument({...model,project:{...model.project,company:'jan'}},jsPDF),/logo institucional/);
 assert(Buffer.from(pdf.createDocument(monthlyModel,jsPDF).output('arraybuffer')).subarray(0,5).equals(Buffer.from('%PDF-')));
 console.log('PDF: rateio, tarefas, composição e geração binária aprovados.');

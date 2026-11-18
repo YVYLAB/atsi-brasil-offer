@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" role="img" aria-label="Linhas abstratas inspiradas em campos agrícolas, arte da YvyLab">
+<rect width="1200" height="500" fill="#24363F"/>
+<g fill="none" stroke="#43545A" stroke-width="2" opacity="0.65">
+<path d="M-100 510 C240 0 470 870 1300 80"/>
+<path d="M-100 475 C240 -35 470 835 1300 45"/>
+<path d="M-100 440 C240 -70 470 800 1300 10"/>
+<path d="M-100 405 C240 -105 470 765 1300 -25"/>
+<path d="M-100 370 C240 -140 470 730 1300 -60"/>
+<path d="M-100 545 C240 35 470 905 1300 115"/>
+<path d="M-100 580 C240 70 470 940 1300 150"/>
+</g>
+<path d="M900 -35 A360 360 0 0 0 1210 240" stroke="#FF8031" stroke-width="8" fill="none" opacity=".95"/>
+</svg>

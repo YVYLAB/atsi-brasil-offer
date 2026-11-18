@@ -1,0 +1,42 @@
+{
+  "referenceDate": "2026-11-17",
+  "usage": "Demonstração comercial YvyLab; não representa aprovação da JAN.",
+  "kit": {
+    "file": "JAN_Kit_Branding_YvyLab_OpenCode.zip",
+    "sha256": "510025725edf80fba27a33b5db8cc33bde4b78ba05bf338b63752c905f76948d",
+    "referenceDirectory": "branding/jan-kit",
+    "paletteStatus": "Aproximações do kit; não são códigos homologados pela JAN."
+  },
+  "officialAssets": [
+    {
+      "file": "logo-institucional.svg",
+      "source": "https://www.jan.com.br/source/assets/logo/1754503643-logo-(1)-svg.svg",
+      "observedOn": "https://www.jan.com.br/contato",
+      "role": "Logo publicado no cabeçalho do site oficial, original sem edição.",
+      "sha256": "85484b62a21e4db967acfb5927ff8891cacd0be11e603de2c2dbec7321df0e58",
+      "bytes": 65999
+    },
+    {
+      "file": "icon.png",
+      "source": "https://www.jan.com.br/source/assets/icone/icone-1739794077-grupo-284-png.png",
+      "observedOn": "https://www.jan.com.br/contato",
+      "role": "Favicon publicado no site oficial, original sem edição.",
+      "sha256": "f0a7301230271222d94d9e78e264bb24a9b67193a74da9a3a2dc3109ebac2e8f",
+      "bytes": 24593
+    }
+  ],
+  "decorativeAssets": [
+    {
+      "file": "decor/faixa-agro.svg",
+      "source": "Kit fornecido pelo usuário; arte YvyLab, não é logo JAN."
+    },
+    {
+      "file": "decor/linhas-campo.svg",
+      "source": "Kit fornecido pelo usuário; arte YvyLab, não é logo JAN."
+    }
+  ],
+  "campaignReferences": [
+    "https://www.jan.com.br/source/campanha/imagem/logo-campanha-confianca-pt.svg",
+    "https://www.jan.com.br/source/campanha/imagem/logo-presenca-pt.webp"
+  ]
+}

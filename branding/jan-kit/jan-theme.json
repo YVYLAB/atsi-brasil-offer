@@ -1,0 +1,20 @@
+{
+  "status": "proposta-visual-nao-oficial",
+  "reference_date": "2026-11-17",
+  "colors": {
+    "ink": "#2F3A3D",
+    "deep": "#24363F",
+    "slate": "#43545A",
+    "orange": "#FF8031",
+    "surface": "#F5F5F5",
+    "white": "#FFFFFF",
+    "muted": "#718088",
+    "border": "#DCE2E2",
+    "linkAccessible": "#A84600"
+  },
+  "radius": {
+    "cardPx": 16,
+    "panelPx": 24
+  },
+  "disclaimer": "Aproximações e propostas de UI. Confirmar marca e códigos oficiais com a JAN."
+}

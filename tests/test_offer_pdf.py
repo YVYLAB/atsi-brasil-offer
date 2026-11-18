@@ -119,11 +119,21 @@ class OfferPDFTest(unittest.TestCase):
                         self.assertGreater(operations["totalEstimatedCents"], 0)
                         self.assertEqual(support["totalCents"], support["priceCents"])
                     self.assertEqual(model["benefits"][0]["priceCents"], 0)
+                    self.assertEqual(model["project"]["institutionalLogo"]["company"], "atsi-brasil")
+                    self.assertEqual(model["project"]["institutionalLogo"]["source"],
+                                     "branding/assets/atsi-logo-cabecalho.svg")
                     self.assertGreater(item["pages"], 1)
                     pdf = base64.b64decode(item["pdf"])
                     self.assertTrue(pdf.startswith(b"%PDF-"))
                     pdf_file = Path(directory) / f"{name}.pdf"
                     pdf_file.write_bytes(pdf)
+                    if shutil.which("pdfimages"):
+                        listing = subprocess.run(["pdfimages", "-list", str(pdf_file)],
+                                                 capture_output=True, text=True, check=True).stdout
+                        image_pages = {int(line.split()[0]) for line in listing.splitlines()
+                                       if line.split() and line.split()[0].isdigit()}
+                        self.assertEqual(image_pages, set(range(1, item["pages"] + 1)),
+                                         "Cada página deve conter a logo institucional")
                     if shutil.which("pdfinfo"):
                         info = subprocess.run(["pdfinfo", str(pdf_file)], capture_output=True, text=True, check=True).stdout
                         self.assertRegex(info, rf"Pages:\s+{item['pages']}\b")
@@ -132,6 +142,7 @@ class OfferPDFTest(unittest.TestCase):
                     text = subprocess.run(["pdftotext", "-layout", str(pdf_file), "-"], capture_output=True, text=True, check=True).stdout
                     flat = normalized(text)
                     self.assertIn("Oferta técnica e comercial", flat)
+                    self.assertNotIn("ATSI+ | ATSI Brasil", flat)
                     self.assertIn("Curso de capacitação para administradores", flat)
                     self.assertIn("Manutenção e operação mensal", flat)
                     self.assertIn("Serviços e vídeos - valor estimado", flat)
@@ -159,4 +170,6 @@ class OfferPDFTest(unittest.TestCase):
                             self.assertLessEqual(float(word.attrib["xMax"]), 595.5, word.text)
                             self.assertGreaterEqual(float(word.attrib["yMin"]), 0, word.text)
                             self.assertLessEqual(float(word.attrib["yMax"]), 842.5, word.text)
+                            if float(word.attrib["yMin"]) < 55:
+                                self.assertNotIn(word.text, ("ATSI+", "ATSI", "Brasil"))
             print(f"PDF: {len(documents)} documentos gerados e composição verificada")

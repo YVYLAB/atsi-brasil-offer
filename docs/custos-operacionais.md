@@ -33,6 +33,24 @@ Usuários/consumo não alteram features, horas, complexidade, prazo ou implanta�
 Personalizado preserva a base mensal de origem e considera a estratégia de vídeo
 efetivamente selecionada, não o vídeo original do preset.
 
+O plano define **somente a manutenção base e a franquia de horas**, não se o
+adicional será aplicado. Essencial com C02/C03 recebe o adicional; Plus/Premium
+com C01 ficam sem adicional. Trocar o rádio da estratégia de vídeo atualiza
+imediatamente a mensalidade, sem precisar reaplicar o plano.
+
+`billingSummary`, calculado pelo módulo operacional, explicita a regra da
+seleção atual logo abaixo da composição mensal e nas exportações. A explicação
+completa preserva a mesma regra no PDF. Teste de navegador cobre os três planos
+× três volumes (100, 1.000, 10.000) × estratégias de vídeo e retorno ao YouTube,
+usando os controles reais e comparando tela, JSON/CSV e modelo PDF.
+
+Na interface, o corpo do card abre somente a prévia. As estratégias de vídeo
+têm a ação explícita **Usar esta opção de vídeo**, associada ao rádio nativo,
+para contratar a opção e recalcular imediatamente. O estado passa a
+**Configuração personalizada**, identificando o plano de origem como base de
+manutenção, sem exigir reaplicar um preset. O teste de clique cobre
+Essencial → privado → mudança de usuários → offline → YouTube.
+
 ## Premissas iniciais, não dados observados
 
 - Slider: **100–10.000 usuários ativos no mês**, em passos de 100, inicial 100.

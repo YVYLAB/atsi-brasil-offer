@@ -107,6 +107,11 @@
   }
   function createDocument(model,JsPDF=root.jspdf?.jsPDF){
     if(!JsPDF)throw new Error('O gerador de PDF não está disponível. Reabra a página e tente novamente.');
+    const logo=model.project.institutionalLogo;
+    if(!logo || !/^data:image\/png;base64,[A-Za-z0-9+/]+=*$/.test(logo.dataURL) ||
+      ![logo.width,logo.height].every(value=>Number.isInteger(value)&&value>0&&value<=4096) ||
+      (model.project.company && logo.company!==model.project.company))
+      throw new Error('Confira a logo institucional da empresa antes de gerar o PDF.');
     const doc=new JsPDF({unit:'mm',format:'a4',compress:true,putOnlyUsedFonts:true});
     doc.setProperties({title:`Oferta ${model.project.product} - ${model.project.client}`,
       author:model.project.developer,subject:'Escopo, tarefas e investimento da configuração escolhida',
@@ -120,8 +125,10 @@
     let y=29;
     function header(){
       doc.setFillColor(...headerColor);doc.rect(0,0,210,20,'F');
-      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(255,255,255);
-      doc.text(clean(`${model.project.product} | ${model.project.client}`),left,12);
+      const scale=Math.min(48/logo.width,12/logo.height);
+      const logoWidth=logo.width*scale,logoHeight=logo.height*scale;
+      doc.addImage(logo.dataURL,'PNG',left,(20-logoHeight)/2,logoWidth,logoHeight,'company-institutional-logo','FAST');
+      doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
       doc.setFontSize(9);doc.text(clean(model.project.developer),right,12,{align:'right'});
       doc.setDrawColor(...accentColor);doc.setLineWidth(1);doc.line(0,20,210,20);
     }
@@ -285,7 +292,7 @@
     for(let i=1;i<=pages;i++){
       doc.setPage(i);doc.setDrawColor(200,212,218);doc.setLineWidth(.2);doc.line(left,282,right,282);
       doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(83,102,111);
-      doc.text(clean(`${model.project.product} - ${date(model.generatedAt)} (Brasília)`),left,288);
+      doc.text(clean(`${date(model.generatedAt)} (Brasília)`),left,288);
       doc.text(`Página ${i} de ${pages}`,right,288,{align:'right'});
     }
     return doc;

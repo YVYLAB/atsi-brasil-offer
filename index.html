@@ -12,9 +12,7 @@
     body{margin:0;min-height:100svh;display:grid;place-items:center;padding:24px;color:#eff8f7;font:16px/1.6 Montserrat,Arial,sans-serif;background:linear-gradient(135deg,#08131de8,#08131d99),url('branding/assets/parallax.jpg') center/cover fixed,#08131d}
     .login{width:100%;max-width:460px;padding:36px;border:1px solid #59c47888;border-radius:24px;background:#0f2430ed;box-shadow:0 24px 80px #0007,0 0 24px #59c47814;backdrop-filter:blur(10px);transition:opacity .35s,transform .5s}
     .logo{width:130px;height:52px;object-fit:contain;object-position:left;margin-bottom:14px}
-    .eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#a9d9b3}
-    h1{font-size:28px;line-height:1.25;margin:8px 0}
-    .intro{color:#b1c8cf;font-size:14px;margin:0 0 24px}
+    .intro{color:#b1c8cf;font-size:14px;line-height:1.6;font-weight:400;margin:0 0 24px}
     label{display:block;font-size:14px;font-weight:600;margin:16px 0 6px}
     input,button{font:inherit}
     input{width:100%;height:50px;border:1px solid #446578;border-radius:10px;background:#08131d;color:#eff8f7;padding:12px}
@@ -41,10 +39,8 @@
 </head>
 <body>
   <main class="login">
-    <img class="logo" data-company-logo src="assets/companies/atsi-brasil/logo-dark.svg" alt="ATSI+">
-    <div class="eyebrow">Apresentação do projeto</div>
-    <h1>Bem-vindo</h1>
-    <p class="intro">Entre para conhecer a proposta da plataforma ATSI+.</p>
+    <img class="logo" data-company-logo="institutional" src="branding/assets/atsi-logo-cabecalho.svg" alt="ATSI Brasil">
+    <h1 class="intro">Vamos apresentar a plataforma ATSI+.</h1>
     <form id="loginForm">
       <label for="loginEmail">E-mail</label>
       <input id="loginEmail" name="username" type="email" autocomplete="username" required spellcheck="false" autocapitalize="none">

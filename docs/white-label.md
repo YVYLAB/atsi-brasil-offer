@@ -38,10 +38,11 @@ assets/companies/
     icon.svg
     theme.css
   jan/
-    logo-dark.svg
-    logo-light.svg
-    icon.svg
+    logo-institucional.svg
+    icon.png
     theme.css
+    sources.json
+    decor/
 ```
 
 Cada `theme.css` sobrescreve somente a identidade da empresa. **Tudo que não
@@ -80,19 +81,28 @@ como no exemplo, e não em uma variável com URL consumida por outro stylesheet:
 nesse último caso, o navegador resolve o caminho relativo ao arquivo consumidor.
 Para voltar ao fundo padrão, basta remover a regra `background-image`.
 
-O nome da plataforma, nome da empresa e arquivos de identidade ficam no registro
+O nome curto da empresa e arquivos de identidade ficam no registro
 `branding/product-config.js`. A camada visual comum é
 `branding/company-theme.css`. A API `CompanyBranding` resolve identidade, textos,
 links e chaves locais. Os nomes internos `ATSIProduct` e IDs técnicos permanecem
 por compatibilidade; não são um catálogo diferente por empresa.
 
+O nome/título da plataforma é sempre **nome curto da empresa + `+`**:
+`shortName: 'ATSI'` gera **ATSI+** e `shortName: 'JAN'` gera **JAN+**.
+A mesma regra vale para entrada, configurador, mockups e identificação nas
+propostas/PDF. O nome institucional (`client`) e suas logos não recebem o `+`.
+O nome é derivado em um único ponto, sem configurar títulos divergentes por página.
+
+No login, o cabeçalho é simplificado: logo institucional seguida apenas da frase
+**“Vamos apresentar a plataforma NOME+.”**, sem título grande ou chamada extra.
+
 ### Logo institucional e logo da plataforma
 
 São aplicações distintas:
 
-- `logoDark` / `logoLight`: marca da plataforma, usada na entrada e nos mockups
+- `logoDark` / `logoLight`: marca da plataforma, usada nos mockups
   (ATSI+ no caso da ATSI).
-- `logoInstitutional`: marca da empresa, usada no cabeçalho da apresentação
+- `logoInstitutional`: marca da empresa, usada na entrada e no cabeçalho da apresentação
   (ATSI Brasil, preservando `branding/assets/atsi-logo-cabecalho.svg` sem edição).
   Campo opcional do registro, com caminho relativo à raiz do site. Para outra
   empresa, pode apontar para `assets/companies/<slug>/logo-institucional.svg`.
@@ -102,16 +112,27 @@ São aplicações distintas:
 `data-company-logo="institutional"` identifica a aplicação institucional;
 `data-company-logo` sem valor identifica a marca da plataforma.
 
-**JAN é um exemplo provisório:** identificação tipográfica e paleta não
-homologadas. Substituir pelos arquivos e cores oficiais antes de enviar.
+**JAN usa o kit visual fornecido pelo usuário**, com azul-petróleo e laranja
+aproximados, Montserrat local e logo/ícone originais obtidos no site da JAN.
+A identificação da plataforma é **JAN+**, sem avisos de falta de aprovação
+na apresentação comercial ou PDF. A paleta não é um brandbook
+homologado; fontes e hashes estão em `assets/companies/jan/sources.json`.
+Ver `docs/branding-jan.md` para aplicação, limites e referências do kit.
 Os assets ATSI+ também preservam o caráter de proposta de identidade existente.
 
 ## Adicionar uma empresa
 
-1. Criar `assets/companies/nome-da-empresa/` com os quatro arquivos acima.
+1. Criar `assets/companies/nome-da-empresa/` com tema e arquivos de identidade.
 2. Registrar o slug em `companies`, em `branding/product-config.js`, com
-   `name` (plataforma), `client`, `shortName`, `slug` e nomes dos arquivos.
+   `client`, `shortName`, `slug` e nomes dos arquivos.
+   O nome da plataforma é gerado automaticamente como `shortName` + `+`,
+   sem mudar o catálogo ou os valores das features.
+   `faviconType` permite ícone PNG; o padrão continua `image/svg+xml`.
 3. Revisar contraste, nome, mockups e PDF.
+   Incluir a logo institucional em `SOURCES` de
+   `branding/scripts/gerar_logos_pdf.py` e regenerar `branding/pdf-logos.js`.
+   Esse pacote local coloca a marca no cabeçalho de todas as páginas do PDF,
+   sem depender de rede e sem repetir o título.
 4. Compartilhar `index.html?company=nome-da-empresa`.
 
 Não copiar `home.html`, catálogo ou tabelas de preço. Não colocar valores,

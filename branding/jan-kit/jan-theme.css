@@ -1,0 +1,19 @@
+/* JAN — tokens aproximados para mockups; NÃO são brandbook oficial. */
+:root {
+  --jan-ink: #2F3A3D;
+  --jan-deep: #24363F;
+  --jan-slate: #43545A;
+  --jan-orange: #FF8031;
+  --jan-surface: #F5F5F5;
+  --jan-white: #FFFFFF;
+  --jan-muted: #718088;
+  --jan-border: #DCE2E2;
+  --jan-link-accessible: #A84600; /* proposta para contraste em texto pequeno */
+  --jan-radius-card: 16px;
+  --jan-radius-panel: 24px;
+  --jan-space-unit: 8px;
+}
+.jan-demo { background: var(--jan-deep); color:var(--jan-white); }
+.jan-demo .cta { background:var(--jan-orange); color:#1B2629; }
+.jan-demo .panel { background:var(--jan-ink); border:1px solid var(--jan-slate); }
+.jan-demo .accent { color:var(--jan-orange); }

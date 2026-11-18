@@ -496,8 +496,9 @@ Assets e cores ficam em `assets/companies/<slug>/`; camada compartilhada em
 `branding/company-theme.css`. `company` válido é obrigatório: ausente, vazio ou
 desconhecido redireciona para `404.html`, sem fallback visual para a ATSI. Trata-se
 de página de erro no navegador, não de status HTTP 404 sem regra no hosting.
-`jan` tem identidade
-textual/paleta provisórias, não homologadas. Catálogo, IDs, valores, horas,
+`jan` usa o kit fornecido pelo usuário: azul-petróleo/laranja de referência,
+logo institucional e ícone originais obtidos no site da empresa; paleta não
+homologada. Catálogo, IDs, valores, horas,
 presets e cálculos são únicos para todas as empresas. Não duplicar ofertas por
 branding. Campanhas locais de outras empresas usam sufixo `:company:<slug>`,
 preservando a chave histórica da ATSI. A entrada mantém o parâmetro ao navegar;
@@ -516,8 +517,51 @@ de uma empresa só por alterar sua paleta. Testar herança parcial e carregament
 real da imagem nas páginas de entrada, configurador e emissor interno.
 
 Logos white label têm papéis separados: `logoInstitutional` (opcional, caminho
-relativo à raiz) identifica a instituição no cabeçalho de `home.html`, com
+relativo à raiz) identifica a instituição na entrada `index.html` e no cabeçalho de `home.html`, com
 `data-company-logo="institutional"`. ATSI reutiliza o SVG original
 `branding/assets/atsi-logo-cabecalho.svg`, sem edição. `logoDark` continua sendo
-ATSI+ na entrada e nos mockups. Sem logo institucional própria, usar a logo da
+ATSI+ nos mockups. Sem logo institucional própria, usar a logo da
 plataforma da empresa selecionada, sem vazar a marca ATSI para outras empresas.
+
+JAN: guia de aplicação em `docs/branding-jan.md`, referências originais do kit
+em `branding/jan-kit/`, arte local e hashes em `assets/companies/jan/sources.json`.
+Por decisão posterior explícita do vendedor, todo projeto tem nome/título
+derivado de `shortName` + `+`: ATSI+, JAN+ e assim por diante. Essa regra
+substitui a restrição de naming do kit JAN e o antigo “Proposta para JAN”.
+Não alterar logos institucionais, IDs, preços, slug ou chaves financeiras por
+causa do título. A derivação fica centralizada em `branding/product-config.js`,
+incluindo entrada, configurador, mockups e identificação nas propostas/PDF.
+Por decisão posterior explícita do vendedor,
+não exibir avisos de falta de aprovação da JAN na entrada, apresentação,
+exports ou PDF. As ressalvas do kit são documentação interna, não copy de venda.
+Esta decisão substitui a instrução do kit sobre esse aviso. Favicon PNG mantém MIME
+correto via `faviconType`. Não recolorir a logo original nem substituir a logo
+institucional por campanha. Sem publicação automática; validar uso da marca.
+
+Login padronizado: logo institucional e apenas a frase “Vamos apresentar a
+plataforma NOME+.” em texto discreto. Sem título grande separado, sem
+“Apresentação do projeto”. Isso substitui a exibição do nome isolado no login;
+o nome do projeto continua derivado de `shortName` + `+`.
+
+PDF: cabeçalho de todas as páginas usa a logo institucional da empresa,
+preservando proporção, sem repetir produto/cliente como título. Rodapé com
+data e paginação, sem repetir produto. `branding/pdf-logos.js` é gerado por
+`branding/scripts/gerar_logos_pdf.py` a partir dos SVGs originais; empacota PNGs
+transparentes para uso offline via file:// sem fetch/CORS. Incluir novas empresas
+no gerador. O modelo do PDF recebe a imagem, mas JSON/CSV e snapshots não recebem
+os bytes. Falta ou divergência da marca impede gerar documento incorreto.
+
+Adicional por usuários é condicionado exclusivamente pela estratégia de vídeo
+efetivamente selecionada, não pelo plano ativo/de origem. C01 zera todo o
+adicional em Essencial/Plus/Premium/Personalizado; C02/C03 aplicam a estimativa
+por usuários/consumo em qualquer plano. A manutenção base e sua franquia continuam
+as do plano de origem. `operations.billingSummary` explicita a regra atual
+no resumo e exports. Testar combinações cruzadas, inclusive Essencial privado
+e Premium YouTube, com atualização imediata de tela e coerência no PDF.
+
+Seleção de vídeo: corpo do card continua sendo só prévia; o label visível
+“Usar esta opção de vídeo” aciona o rádio nativo (`select-<ID>`) e atualiza
+o escopo/mensalidade. Não confundir borda de prévia com contratação. Ao editar,
+mostrar “Configuração personalizada” e o plano de origem como base de manutenção,
+sem exigir trocar/reaplicar preset. Testes devem usar cliques em rádios/labels,
+não apenas atribuir checked ou chamar toggleFeature diretamente.

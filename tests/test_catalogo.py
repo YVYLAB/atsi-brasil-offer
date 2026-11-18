@@ -223,7 +223,7 @@ class CatalogoTest(unittest.TestCase):
           state.activePreview=f.id;renderPreview();
           return el.phoneScreen.querySelector('.app-brand img')?.alt==='ATSI+';
         }));
-        check('título do produto',document.querySelector('h1').textContent==='Plataforma ATSI+');
+        check('título do produto',document.querySelector('h1').textContent==='ATSI+');
         check('menu simplificado',document.getElementById('promotionSettings').querySelectorAll('input').length===6 &&
           !!document.getElementById('settingsDialog').querySelector('input[type=file]') &&
           document.getElementById('discountFields').disabled);

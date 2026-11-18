@@ -1,0 +1,21 @@
+{
+  "site": "https://www.jan.com.br/contato",
+  "checked_at": "2026-11-17",
+  "assets": [
+    {
+      "id": "jan-campanha-confianca",
+      "name": "logo-campanha-confianca-pt.svg",
+      "url": "https://www.jan.com.br/source/campanha/imagem/logo-campanha-confianca-pt.svg",
+      "asset_type": "image/svg+xml",
+      "description": "Logo de campanha Confiança, exibido no rodapé da página oficial"
+    },
+    {
+      "id": "jan-presenca",
+      "name": "logo-presenca-pt.webp",
+      "url": "https://www.jan.com.br/source/campanha/imagem/logo-presenca-pt.webp",
+      "asset_type": "image/webp",
+      "description": "Arte gráfica da campanha Presença, exibida na home oficial"
+    }
+  ],
+  "note": "URLs verificadas; download ainda não efetuado nesta sessão."
+}

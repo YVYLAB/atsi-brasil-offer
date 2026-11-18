@@ -166,6 +166,88 @@ class OperationalPricingTest(unittest.TestCase):
         check('sem persistência escondida',!localStorage.getItem('atsi-operations-v1'));
         """)
 
+    def test_video_controls_surcharge_independently_of_plan(self):
+        self.run_browser("""
+        for(const plan of ['essencial','plus','premium']){
+          for(const activeUsers of [100,1000,10000]){
+            applyPreset(plan);
+            const slider=document.getElementById('monthlyActiveUsers');
+            slider.value=activeUsers;slider.dispatchEvent(new Event('input',{bubbles:true}));
+            for(const strategy of ['C01','C02','C03','C01']){
+              const radio=document.querySelector(`[data-feature="${strategy}"] .feature-toggle`);
+              radio.click();
+              const q=quoteData(),pdf=buildOfferPDFModel();
+              const base=ATSIOperations.plans[plan].priceCents;
+              const expected=ATSIOperations.calculate({...state.operations,
+                videoStrategy:strategy,realtimeEnabled:state.selected.has('G04')});
+              const label=plan+' / '+activeUsers+' usuários / '+strategy;
+              check(label+' usa seleção de vídeo, não preset',
+                q.operations.inputs.videoStrategy===strategy &&
+                q.monthlyOperationalBRL*100===expected.totalCents &&
+                selectedFeatures().filter(f=>f.group==='curso_entrega').length===1);
+              check(label+' preserva manutenção base',
+                q.monthlyMaintenanceBRL*100===base && state.maintenancePlan===plan &&
+                q.monthlyTotalBRL*100===base+expected.totalCents);
+              check(label+' política por estratégia',
+                strategy==='C01'?
+                  q.operations.billingPolicy==='youtube_included_in_base' &&
+                  q.monthlyOperationalBRL===0 && q.operations.totalEstimatedCents>0:
+                  q.operations.billingPolicy==='estimated_surcharge' && q.monthlyOperationalBRL>0);
+              check(label+' tela atualiza imediatamente',
+                document.getElementById('operationalPrice').textContent===brl(expected.totalCents/100) &&
+                document.getElementById('maintenancePrice').textContent===brl((base+expected.totalCents)/100) &&
+                document.getElementById('operationalBillingRule').textContent===q.operations.billingSummary &&
+                q.operations.billingSummary.includes('em qualquer plano'));
+              check(label+' PDF e exportações coerentes',
+                pdf.support.operations.totalCents===expected.totalCents &&
+                pdf.support.totalCents===base+expected.totalCents &&
+                quoteRows().some(row=>row[0]==='Regra do adicional por usuários'&&row[1]===q.operations.billingSummary));
+            }
+          }
+        }
+        """)
+
+    def test_essential_custom_video_selection_and_slider_by_click(self):
+        self.run_browser("""
+        applyPreset('essencial');
+        const startingPrice=quoteData().monthlyTotalBRL;
+        document.querySelector('[data-feature="C02"] .feature-copy').click();
+        check('prévia não contrata vídeo nem altera mensalidade',
+          state.activePreview==='C02' && state.selected.has('C01') &&
+          !state.selected.has('C02') && quoteData().monthlyTotalBRL===startingPrice);
+        document.querySelector('[data-feature="C02"] .video-selection-action').click();
+        check('ação visível seleciona vídeo privado e personaliza',
+          document.getElementById('select-C02').checked && state.selected.has('C02') &&
+          !state.selected.has('C01') && state.activePreset==='custom' &&
+          !document.getElementById('customConfigurationStatus').hidden &&
+          document.getElementById('customConfigurationStatus').textContent.includes('baseada no Essencial'));
+        const slider=document.getElementById('monthlyActiveUsers');
+        const totals=[];
+        for(const count of [100,1000,10000]){
+          slider.value=count;slider.dispatchEvent(new Event('input',{bubbles:true}));
+          const q=quoteData(),pdf=buildOfferPDFModel();
+          totals.push(q.monthlyTotalBRL);
+          check(count+' usuários atualizam tela, proposta e PDF sem trocar plano',
+            state.maintenancePlan==='essencial' && state.activePreset==='custom' &&
+            q.monthlyMaintenanceBRL===3000 && q.operations.inputs.videoStrategy==='C02' &&
+            document.getElementById('maintenancePrice').textContent===brl(q.monthlyTotalBRL) &&
+            pdf.support.totalCents===Math.round(q.monthlyTotalBRL*100));
+        }
+        check('mensalidade personalizada aumenta com usuários',
+          totals[0]===3738 && totals[1]===4710 && totals[2]===15030);
+        document.querySelector('[data-feature="C03"] .video-selection-action').click();
+        check('offline mantém base Essencial e recalcula imediatamente',
+          quoteData().monthlyMaintenanceBRL===3000 && quoteData().monthlyTotalBRL===18630 &&
+          document.getElementById('maintenancePrice').textContent===brl(18630));
+        document.querySelector('[data-feature="C01"] .video-selection-action').click();
+        check('voltar ao YouTube zera adicional sem reaplicar Essencial',
+          state.activePreset==='custom' && quoteData().monthlyOperationalBRL===0 &&
+          document.getElementById('maintenancePrice').textContent===brl(3000));
+        applyPreset('essencial');
+        check('reaplicar plano retira indicação personalizada',
+          document.getElementById('customConfigurationStatus').hidden);
+        """)
+
     def test_responsive_controls(self):
         for width in [320, 375, 768, 1121, 1440]:
             with self.subTest(width=width):

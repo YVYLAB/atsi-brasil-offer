@@ -1,18 +1,62 @@
-/* Paleta demonstrativa, não homologada pela JAN. Substituir pelos valores oficiais. */
-:root{
-  --brand-bg:#180d10;
-  --brand-panel:#28171c;
-  --brand-surface:#42232c;
-  --brand-card:#342027;
-  --brand-line:#71444f;
-  --brand-text:#fff5f6;
-  --brand-muted:#dfc0c7;
-  --brand-primary:#ff8897;
-  --brand-strong:#ae2341;
-  --brand-soft:#ffd2da;
-  --brand-button-text:#250b12;
-  --brand-header-rgb:66,35,44;
-  --brand-accent-rgb:174,35,65;
-  --brand-glow-rgb:255,136,151;
+/* Kit JAN/YvyLab: referências aproximadas, não um brandbook homologado.
+   Arte institucional original não é recolorida. Ver sources.json e docs/branding-jan.md. */
+:root[data-company="jan"]{
+  --jan-ink:#2F3A3D;
+  --jan-deep:#24363F;
+  --jan-slate:#43545A;
+  --jan-orange:#FF8031;
+  --jan-surface:#F5F5F5;
+  --jan-white:#FFFFFF;
+  --jan-muted:#718088;
+  --jan-border:#DCE2E2;
+  --jan-link-accessible:#A84600;
+  --brand-bg:var(--jan-deep);
+  --brand-panel:var(--jan-deep);
+  --brand-surface:var(--jan-ink);
+  --brand-card:var(--jan-slate);
+  --brand-line:#718088;
+  --brand-text:var(--jan-white);
+  --brand-muted:var(--jan-border);
+  --brand-primary:var(--jan-orange);
+  --brand-strong:var(--jan-link-accessible);
+  --brand-soft:#FFC49F;
+  --brand-button-text:#1B2629;
+  --brand-header-rgb:36,54,63;
+  --brand-accent-rgb:255,128,49;
+  --brand-glow-rgb:255,128,49;
+  /* Montserrat observada no site público; usamos o arquivo local compartilhado. */
+  --brand-font-family:Montserrat,Arial,sans-serif;
 }
-/* Fundo, fonte e demais itens não sobrescritos vêm da base compartilhada. */
+/* Preserva o fundo fotográfico compartilhado. Os decorativos não são logos. */
+:root[data-company="jan"] .hero,
+:root[data-company="jan"] .app-header,
+:root[data-company="jan"] .screen-hero{
+  background:linear-gradient(135deg,var(--jan-deep),var(--jan-ink));
+}
+:root[data-company="jan"] .hero-art{display:none}
+:root[data-company="jan"] .hero::before{
+  content:"";position:absolute;inset:auto 0 0 auto;width:42%;height:100%;
+  background:url('./decor/faixa-agro.svg') right bottom/contain no-repeat;
+  opacity:.12;pointer-events:none;
+}
+:root[data-company="jan"] .login{
+  background:linear-gradient(145deg,#24363ff5,#2f3a3df5);
+}
+:root[data-company="jan"] .app-video,
+:root[data-company="jan"] .app-cover{
+  background:linear-gradient(135deg,var(--jan-deep),var(--jan-slate));
+}
+:root[data-company="jan"] .app-screen{background:var(--jan-surface)}
+:root[data-company="jan"] .app-card,
+:root[data-company="jan"] .app-nav{background:var(--jan-white)}
+:root[data-company="jan"] .app-muted,
+:root[data-company="jan"] .app-label,
+:root[data-company="jan"] .app-nav{color:var(--jan-slate)}
+:root[data-company="jan"] .app-badge,
+:root[data-company="jan"] .mobile-chip,
+:root[data-company="jan"] .tag{
+  background:#FFF2E9;color:var(--jan-link-accessible);
+}
+:root[data-company="jan"] .cta{
+  background:var(--jan-orange);color:var(--brand-button-text);
+}

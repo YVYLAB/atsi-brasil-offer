@@ -6,6 +6,10 @@ jsPDF 4.2.1 (MIT) acompanha o projeto em `vendor/jspdf/`.
 
 ## Conteúdo
 
+- Cabeçalho de todas as páginas com a **logo institucional da empresa**, sem
+  repetir o título da plataforma ou juntar nome da plataforma e nome do cliente.
+  A proporção original é preservada; a desenvolvedora aparece à direita.
+  O rodapé mantém data e paginação, sem repetir o nome da plataforma.
 - Cliente, produto, desenvolvedora, data/hora em Brasília e configuração escolhida.
 - Plataformas incluídas, total comercial, descontos e esforço total.
 - Período da campanha e situação no momento da geração, sem renovar a validade.
@@ -73,3 +77,28 @@ e-books com biblioteca, configuração ampla e oferta legada. Quando disponívei
 `pdfinfo` e `pdftotext` verificam estrutura, paginação, nomes, todas as tarefas,
 horas e limites da página. O teste do botão confirma a chamada de download.
 O comportamento de salvamento do sistema operacional ainda depende do navegador.
+
+## Logos institucionais offline
+
+`branding/pdf-logos.js` empacota PNGs transparentes das logos institucionais,
+rasterizadas dos SVGs originais sem recorte nem recoloração. É carregado como
+script local, sem fetch, rede, canvas no navegador ou dependência de CORS ao
+abrir `home.html` por `file://`.
+
+O modelo do PDF recebe a imagem da empresa selecionada em
+`project.institutionalLogo`; os dados JSON/CSV da proposta e snapshots de preços
+não incorporam os bytes da imagem. A logo é reutilizada pelo PDF em cada página,
+limitada a 48 × 12 mm com proporção preservada. O gerador recusa uma logo ausente
+ou de outra empresa em vez de produzir documento sem marca ou com marca errada.
+
+Para adicionar/trocar uma logo, atualizar as fontes no dicionário `SOURCES` de
+`branding/scripts/gerar_logos_pdf.py` e executar:
+
+```sh
+python3 branding/scripts/gerar_logos_pdf.py
+```
+
+Chrome/Chromium é necessário só para essa regeneração. O artefato gerado contém
+origem, hash SHA-256 do SVG e dimensões da imagem; preservá-lo junto ao HTML.
+Os testes verificam inserção da logo em todas as páginas, proporção e ausência
+do título repetido no cabeçalho.

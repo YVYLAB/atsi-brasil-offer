@@ -466,6 +466,8 @@
     .badge{font-size:12px}
     .feature-info,.info-dialog .info-close{font-size:13px;min-height:44px;padding:10px 12px}
     .feature-check{width:24px;height:24px;cursor:pointer}
+    .video-selection-action{display:inline-flex;align-items:center;min-height:44px;margin:14px 0 0 30px;padding:9px 12px;border:1px solid var(--green);border-radius:10px;background:var(--card-2);color:var(--text);font-size:13px;font-weight:700;cursor:pointer}
+    .feature.selected .video-selection-action{color:var(--green)}
     .fields{grid-template-columns:repeat(3,minmax(0,1fr))}
     .field label,.kpi small,.total-box small{font-size:11px}
     .field strong{font-size:14px}
@@ -521,7 +523,7 @@
           <div class="logo"><img data-company-logo="institutional" src="branding/assets/atsi-logo-cabecalho.svg" alt="ATSI Brasil" /></div>
         <div>
           <div class="eyebrow">ATSI Brasil · desenvolvido por YvyLab</div>
-           <h1>Plataforma ATSI+</h1>
+           <h1 data-company-heading>ATSI+</h1>
            <p>Conhecimento que aproxima a ATSI dos seus clientes. Escolha a experiência que faz sentido para o seu negócio e acompanhe o investimento em cada etapa.</p>
         </div>
       </div>
@@ -535,6 +537,7 @@
     <div class="split">
       <section class="panel left-pane">
         <div class="presets" id="presetButtons"></div>
+        <p id="customConfigurationStatus" class="footer-note" role="status" aria-live="polite" hidden></p>
         <section class="delivery-scope" aria-labelledby="deliveryScopeTitle">
           <h2 id="deliveryScopeTitle">Android, iOS e web desde o Essencial</h2>
           <p><strong data-delivery-students></strong></p>
@@ -671,6 +674,7 @@
             <div><span>Serviços e vídeos — valor estimado</span><strong id="operationalPrice"></strong></div>
             <div><span>Total mensal estimado</span><strong id="monthlyTotalPrice"></strong></div>
           </div>
+          <p id="operationalBillingRule" class="operation-assumptions" role="status" aria-live="polite"></p>
           <p class="operation-assumptions">Seu plano inclui até <strong id="maintenanceHours">10 horas por mês</strong> para correções, ajustes e melhorias no software.</p>
           <details>
             <summary>Entenda o valor dos serviços e vídeos</summary>
@@ -750,6 +754,7 @@
   <script src="product-copy.js"></script>
   <script src="operational-pricing.js"></script>
   <script src="vendor/jspdf/jspdf.umd.min.js"></script>
+  <script src="branding/pdf-logos.js"></script>
   <script src="offer-pdf.js"></script>
   <script>
     // Escopo comum a todos os planos, sem alterar o catálogo ou snapshots financeiros.
@@ -1070,6 +1075,7 @@
         ['Usuários ativos/mês',String(q.operations.inputs.activeUsers)],
         ['Pico simultâneo hipotético',String(q.operations.peakUsers)],
         ['Modelo operacional',q.operations.version],['Data das tarifas',q.operations.rateDate],
+        ['Regra do adicional por usuários',q.operations.billingSummary],
         ['Custo estimado dos fornecedores (não somar novamente)',brl(q.operations.totalEstimatedCents/100)],
         ...q.operations.assumptions.map(text=>['Premissa operacional',text]),
         ...q.operations.lines.map(line=>[line.label,`${brl(line.priceCents/100)} · ${line.basis}`]),
@@ -1086,6 +1092,8 @@
           (prerequisites[feature.id]||[]).some(id=>!isSelected(getFeature(id)))))
         throw new Error('Confira a escolha de vídeo e os recursos que completam a sua configuração.');
       const q=quoteData(now);
+      const institutionalLogo=globalThis.CompanyPDFLogos?.[ATSIProduct.company];
+      if(!institutionalLogo)throw new Error('A logo da empresa não está disponível para o PDF. Recarregue a página e tente novamente.');
       const foundation=foundationCatalog.map(item=>({
         id:item.id,technicalTitle:item.title.replace(new RegExp(`^${item.id}\\s+[—–-]\\s*`),''),
         hours:item.hours,regularCents:Math.round(item.hours*state.hourRate*100),tasks:item.taskDetails,
@@ -1109,7 +1117,7 @@
         invalid:'Valores de tabela',cancelled:'Condição encerrada - valores de tabela',
         catalog_changed:'Valores de tabela da configuração atual'};
       return ATSIOfferPDF.buildModel({
-        generatedAt:q.exportedAt,project:q.project,delivery:q.delivery,
+        generatedAt:q.exportedAt,project:{...q.project,institutionalLogo},delivery:q.delivery,
         packageId:q.packageId,packageName:q.packageId==='custom'?'Personalizado':presets[q.packageId].name,
         basePackageName:presets[q.basePackageId].name,pricing:q.pricing,
         foundation:CompanyBranding.copy(foundation),features:CompanyBranding.copy(featuresForPDF),
@@ -1417,6 +1425,10 @@
         </button>
       `;}).join('');
       el.presetButtons.querySelectorAll('[data-preset]').forEach(btn => btn.addEventListener('click', () => applyPreset(btn.dataset.preset)));
+      const status=document.getElementById('customConfigurationStatus');
+      status.hidden=state.activePreset!=='custom';
+      status.textContent=state.activePreset==='custom'?
+        `Configuração personalizada · baseada no ${presets[state.basePreset].name}. A mensalidade considera as opções selecionadas abaixo.`:'';
     }
 
     function renderSections(now=Date.now()){
@@ -1509,7 +1521,7 @@
           <div class="feature-head">
             ${feature.type === 'required'
               ? '<div class="feature-lock">🔒</div>'
-              : `<input class="feature-check feature-toggle" type="${feature.type==='unique' ? 'radio':'checkbox'}" name="${feature.group || feature.id}" aria-label="Selecionar ${feature.title}" ${selected ? 'checked':''} ${feature.unavailable || dependents.length ? 'disabled' : ''} ${dependents.length?`aria-describedby="dependency-${feature.id}"`:''} />`
+              : `<input id="select-${feature.id}" class="feature-check feature-toggle" type="${feature.type==='unique' ? 'radio':'checkbox'}" name="${feature.group || feature.id}" aria-label="Selecionar ${feature.title}" ${selected ? 'checked':''} ${feature.unavailable || dependents.length ? 'disabled' : ''} ${dependents.length?`aria-describedby="dependency-${feature.id}"`:''} />`
             }
             <div class="feature-copy">
               <strong>${feature.title}</strong>
@@ -1533,6 +1545,7 @@
               <strong>${feature.complexity} · ${complexityLabel(feature.complexity)}</strong>
             </div>
           </div>
+          ${feature.group==='curso_entrega'?`<label class="video-selection-action" for="select-${feature.id}">${selected?'✓ Opção de vídeo selecionada':'Usar esta opção de vídeo'}</label>`:''}
         </article>
       `;
     }
@@ -1553,6 +1566,7 @@
         `Pico hipotético: ${fmt(operations.peakUsers)} usuários simultâneos (${operations.inputs.peakPercentage}%). Cenário de planejamento, não capacidade garantida.`;
       document.getElementById('maintenanceBasePrice').textContent=brl(base/100);
       document.getElementById('operationalPrice').textContent=brl(operations.totalCents/100);
+      document.getElementById('operationalBillingRule').textContent=operations.billingSummary;
       document.getElementById('monthlyTotalPrice').textContent=brl((base+operations.totalCents)/100);
       document.getElementById('maintenancePrice').textContent=brl((base+operations.totalCents)/100);
       const explanation=document.getElementById('maintenanceExplanationCopy');
@@ -1621,7 +1635,9 @@
       renderOperations();
       document.getElementById('maintenanceHours').textContent = `${maintenance.hours} horas por mês`;
       document.getElementById('maintenancePlanLabel').textContent =
-        `Manutenção ${presets[state.maintenancePlan].name}${state.activePreset === 'custom' ? ' · acompanhando o plano escolhido' : ''}`;
+        state.activePreset==='custom'?
+          `Configuração personalizada · manutenção base do ${presets[state.maintenancePlan].name}`:
+          `Manutenção ${presets[state.maintenancePlan].name}`;
       const chosen = selectedFeatures();
       const totalHours = foundationHours + chosen.reduce((sum, f) => sum + (Number(f.hours) || 0), 0);
       const totalPrice = foundationHours * state.hourRate + chosen.reduce((sum, f) => sum + (Number(f.price) || 0), 0);
@@ -2231,8 +2247,8 @@
         priceScrollAnimation=requestAnimationFrame(animatePriceScroll);
       }else updatePriceShortcut();
     });
-    document.title=`Configurador da Plataforma ${ATSIProduct.name} — ${ATSIProduct.developer} × ${ATSIProduct.client}`;
-    document.querySelector('h1').textContent=`Plataforma ${ATSIProduct.name}`;
+    document.title=`${ATSIProduct.name} — Configurador da Plataforma — ${ATSIProduct.developer} × ${ATSIProduct.client}`;
+    document.querySelector('h1').textContent=ATSIProduct.name;
     const settingsDialog=document.getElementById('settingsDialog');
     document.getElementById('openSettings').addEventListener('click',()=>settingsDialog.showModal());
     document.getElementById('closeSettings').addEventListener('click',()=>settingsDialog.close());

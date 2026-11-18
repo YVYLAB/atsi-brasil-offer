@@ -1,4 +1,5 @@
 """Uma única oferta/catálogo, com identidade escolhida por URL."""
+import hashlib
 import json
 import re
 import shutil
@@ -105,19 +106,30 @@ class WhiteLabelTest(unittest.TestCase):
         self.assertEqual([p["pricing"]["finalCents"] for p in jan["plans"].values()],
                          [17800000, 23000000, 38920000])
         self.assertEqual(jan["company"], "jan")
-        self.assertEqual(jan["heading"], "Plataforma JAN")
+        self.assertEqual(jan["heading"], "JAN+")
+        self.assertEqual(atsi["heading"], "ATSI+")
         self.assertNotIn("ATSI", jan["title"])
         self.assertNotIn("ATSI", jan["metadata"])
-        self.assertEqual(jan["primary"], "#ff8897")
+        self.assertEqual(jan["primary"].lower(), "#ff8031")
         self.assertNotEqual(atsi["headerBackground"], jan["headerBackground"])
-        self.assertEqual(jan["logo"], "assets/companies/jan/logo-dark.svg")
+        self.assertEqual(jan["logo"], "assets/companies/jan/logo-institucional.svg")
         self.assertEqual(jan["logoAlt"], "JAN")
         self.assertEqual(atsi["logo"], "branding/assets/atsi-logo-cabecalho.svg")
         self.assertEqual(atsi["logoAlt"], "ATSI Brasil")
-        self.assertEqual(jan["favicon"], "assets/companies/jan/icon.svg")
+        self.assertEqual(jan["favicon"], "assets/companies/jan/icon.png")
         self.assertEqual(jan["project"]["company"], "jan")
-        self.assertEqual(jan["pdfProject"], jan["project"])
-        self.assertEqual(jan["pdfProject"]["branding"]["header"], [66, 35, 44])
+        self.assertEqual(jan["project"]["product"], "JAN+")
+        self.assertEqual(atsi["project"]["product"], "ATSI+")
+        pdf_project = dict(jan["pdfProject"])
+        logo = pdf_project.pop("institutionalLogo")
+        self.assertEqual(logo["company"], "jan")
+        self.assertEqual(logo["source"], "assets/companies/jan/logo-institucional.svg")
+        self.assertTrue(logo["dataURL"].startswith("data:image/png;base64,"))
+        self.assertEqual(pdf_project, jan["project"])
+        self.assertEqual(jan["pdfProject"]["branding"]["header"], [36, 54, 63])
+        self.assertEqual(jan["pdfProject"]["branding"]["accent"], [255, 128, 49])
+        self.assertNotIn("brandingNotice", jan["pdfProject"])
+        self.assertNotIn("brandingNotice", atsi["project"])
         self.assertTrue(jan["pdfName"].startswith("jan-Oferta-"))
         self.assertTrue(jan["pdfIsValid"])
         self.assertFalse(jan["pdfHasATSI"])
@@ -133,15 +145,15 @@ class WhiteLabelTest(unittest.TestCase):
             self.assertEqual(result["errors"], [])
             self.assertEqual(result["link"], result["company"])
 
-    def test_atsi_product_logo_preserved_in_entry_and_mockups(self):
+    def test_institutional_entry_logo_and_product_mockups(self):
         entry_script = """
         const image=document.querySelector('[data-company-logo]');
         const result={src:image.getAttribute('src'),alt:image.alt};
         document.body.insertAdjacentHTML('beforeend','<pre id="brand-result">'+JSON.stringify(result)+'</pre>');
         """
         entry = self.browser("index.html", "?company=atsi-brasil", entry_script)
-        self.assertEqual(entry["src"], "assets/companies/atsi-brasil/logo-dark.svg")
-        self.assertEqual(entry["alt"], "ATSI+")
+        self.assertEqual(entry["src"], "branding/assets/atsi-logo-cabecalho.svg")
+        self.assertEqual(entry["alt"], "ATSI Brasil")
         mock_script = """
         const result={correct:features.every(feature=>{
           state.activePreview=feature.id;renderPreview();
@@ -165,6 +177,9 @@ class WhiteLabelTest(unittest.TestCase):
     def test_valid_mobile_entry(self):
         script = """
         const result={company:ATSIProduct.company,title:document.title,
+          heading:document.querySelector('h1').textContent,product:ATSIProduct.name,
+          headingSize:parseFloat(getComputedStyle(document.querySelector('h1')).fontSize),
+          hasEyebrow:!!document.querySelector('.eyebrow'),
           logo:document.querySelector('[data-company-logo]').getAttribute('src'),
           intro:document.querySelector('.intro').textContent,
           destination:CompanyBranding.pageURL('home.html').searchParams.get('company'),
@@ -177,7 +192,15 @@ class WhiteLabelTest(unittest.TestCase):
             expected = company
             self.assertEqual(result["company"], expected)
             self.assertEqual(result["destination"], expected)
-            self.assertIn(f"/{expected}/", result["logo"])
+            product_name = "ATSI+" if company == "atsi-brasil" else "JAN+"
+            self.assertEqual(result["heading"], f"Vamos apresentar a plataforma {product_name}.")
+            self.assertLessEqual(result["headingSize"], 16)
+            self.assertFalse(result["hasEyebrow"])
+            self.assertEqual(result["product"], product_name)
+            self.assertIn(product_name, result["title"])
+            expected_logo = ("branding/assets/atsi-logo-cabecalho.svg" if company == "atsi-brasil"
+                             else "assets/companies/jan/logo-institucional.svg")
+            self.assertEqual(result["logo"], expected_logo)
             self.assertEqual(result["errors"], [])
             self.assertFalse(result["overflow"])
             if expected == "jan":
@@ -246,7 +269,7 @@ class WhiteLabelTest(unittest.TestCase):
         self.assertIn("Georgia", result["customFont"])
         self.assertEqual(result["buttonFont"], result["customFont"])
         self.assertEqual(result["primary"], "#ffaa00")
-        self.assertEqual(result["title"], "Plataforma JAN")
+        self.assertEqual(result["title"], "JAN+")
         self.assertTrue(result["copyUnchanged"])
         self.assertTrue(result["pricingUnchanged"])
         self.assertEqual(result["errors"], [])
@@ -261,6 +284,55 @@ class WhiteLabelTest(unittest.TestCase):
         self.assertFalse(result["overflow"])
         self.assertEqual(result["errors"], [])
         self.assertEqual(result["total"], 178000)
+
+    def test_jan_original_assets_integrity(self):
+        folder = ROOT / "assets/companies/jan"
+        manifest = json.loads((folder / "sources.json").read_text())
+        for asset in manifest["officialAssets"]:
+            with self.subTest(asset=asset["file"]):
+                content = (folder / asset["file"]).read_bytes()
+                self.assertEqual(len(content), asset["bytes"])
+                self.assertEqual(hashlib.sha256(content).hexdigest(), asset["sha256"])
+                self.assertTrue(asset["source"].startswith("https://www.jan.com.br/source/"))
+        self.assertTrue((folder / "icon.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n"))
+        for asset in manifest["decorativeAssets"]:
+            self.assertTrue((folder / asset["file"]).is_file())
+
+    def test_jan_kit_visual_identity_and_responsive_layout(self):
+        script = """
+        (async()=>{
+          if(document.readyState!=='complete'){
+            await new Promise(resolve=>window.addEventListener('load',resolve,{once:true}));
+          }
+          const content=document.querySelector('.page') || document.querySelector('.login');
+          const images=[...document.querySelectorAll('[data-company-logo],.app-brand img')];
+          const loaded=await Promise.all(images.map(image=>image.decode().then(()=>image.naturalWidth>0,()=>false)));
+          const primary=getComputedStyle(document.documentElement).getPropertyValue('--brand-primary').trim();
+          const model=typeof buildOfferPDFModel==='function'?buildOfferPDFModel():null;
+          const doc=model?ATSIOfferPDF.createDocument(model).output():null;
+          const result={heading:document.querySelector('h1').textContent,
+            noPublicNotice:!document.querySelector('[data-company-disclaimer]') &&
+              !/não aprovad[ao]/i.test(content.textContent),
+            overflow:document.documentElement.scrollWidth>innerWidth,
+            primary,imagesLoaded:loaded.every(Boolean),errors:brandErrors,
+            iconType:document.querySelector('link[rel=icon]').type,
+            pdfCommercial:doc===null || (doc.startsWith('%PDF') && !('brandingNotice' in model.project))};
+          document.body.insertAdjacentHTML('beforeend','<pre id="brand-result">'+JSON.stringify(result)+'</pre>');
+        })();
+        """
+        for page in ("index.html", "home.html"):
+            for width in (390, 768, 1440):
+                with self.subTest(page=page, width=width):
+                    result = self.browser(page, "?company=jan", script, width=width)
+                    expected_heading = "Vamos apresentar a plataforma JAN+." if page == "index.html" else "JAN+"
+                    self.assertEqual(result["heading"], expected_heading)
+                    self.assertTrue(result["noPublicNotice"])
+                    self.assertEqual(result["primary"].lower(), "#ff8031")
+                    self.assertEqual(result["iconType"], "image/png")
+                    self.assertTrue(result["imagesLoaded"])
+                    self.assertTrue(result["pdfCommercial"])
+                    self.assertFalse(result["overflow"])
+                    self.assertEqual(result["errors"], [])
 
 
 if __name__ == "__main__":
