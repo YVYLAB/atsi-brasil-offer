@@ -100,6 +100,19 @@ class WhiteLabelTest(unittest.TestCase):
         """
         atsi = self.browser("home.html", "?company=atsi-brasil", script)
         jan = self.browser("home.html", "?company=jan", script)
+        bocchi = self.browser("home.html", "?company=bocchi-agrobios", script)
+        self.assertEqual(atsi["plans"], bocchi["plans"])
+        self.assertEqual(atsi["commonCopy"], bocchi["commonCopy"])
+        self.assertEqual(bocchi["heading"], "Bocchi+")
+        self.assertEqual(bocchi["logoAlt"], "Bocchi Agrobios")
+        self.assertEqual(bocchi["logo"], "assets/companies/bocchi-agrobios/logo-institucional.svg")
+        self.assertEqual(bocchi["primary"].lower(), "#d3a449")
+        self.assertEqual(bocchi["project"]["product"], "Bocchi+")
+        self.assertEqual(bocchi["pdfProject"]["institutionalLogo"]["company"], "bocchi-agrobios")
+        self.assertEqual(bocchi["storageKey"], "atsi-campaign-v2:company:bocchi-agrobios")
+        self.assertTrue(bocchi["pdfIsValid"])
+        self.assertTrue(bocchi["mockups"])
+        self.assertTrue(bocchi["popups"])
         self.assertEqual(atsi["plans"], jan["plans"], "Catálogo e cálculos devem ser idênticos")
         self.assertEqual(atsi["commonCopy"], jan["commonCopy"],
                          "Textos devem ser os mesmos, alterando apenas os nomes da identidade")
@@ -139,7 +152,7 @@ class WhiteLabelTest(unittest.TestCase):
         self.assertEqual(jan["storageKey"], "atsi-campaign-v2:company:jan")
         self.assertEqual(atsi["isolationTotal"], 160200)
         self.assertEqual(jan["isolationTotal"], 178000)
-        for result in (atsi, jan):
+        for result in (atsi, jan, bocchi):
             self.assertTrue(result["logoLoaded"])
             self.assertFalse(result["overflow"])
             self.assertEqual(result["errors"], [])
@@ -165,6 +178,32 @@ class WhiteLabelTest(unittest.TestCase):
         """
         mockups = self.browser("home.html", "?company=atsi-brasil", mock_script)
         self.assertTrue(mockups["correct"])
+
+    def test_bocchi_entry_and_mobile(self):
+        script = """
+        (async()=>{
+          const image=document.querySelector('[data-company-logo]');
+          await image.decode();
+          const result={name:ATSIProduct.name,src:image.getAttribute('src'),
+            alt:image.alt,loaded:image.naturalWidth>0,
+            intro:document.querySelector('.intro').textContent,
+            link:CompanyBranding.pageURL('home.html').searchParams.get('company'),
+            overflow:document.documentElement.scrollWidth>window.innerWidth,
+            errors:brandErrors};
+          document.body.insertAdjacentHTML('beforeend','<pre id="brand-result">'+JSON.stringify(result)+'</pre>');
+        })();
+        """
+        for width in (390, 1440):
+            with self.subTest(width=width):
+                result = self.browser("index.html", "?company=bocchi-agrobios", script, width)
+                self.assertEqual(result["name"], "Bocchi+")
+                self.assertEqual(result["alt"], "Bocchi Agrobios")
+                self.assertEqual(result["src"], "assets/companies/bocchi-agrobios/logo-institucional.svg")
+                self.assertIn("Bocchi+", result["intro"])
+                self.assertEqual(result["link"], "bocchi-agrobios")
+                self.assertTrue(result["loaded"])
+                self.assertFalse(result["overflow"])
+                self.assertEqual(result["errors"], [])
 
     def test_missing_empty_and_unknown_company_not_found(self):
         for page in ("index.html", "home.html", "ofertas-admin.html"):

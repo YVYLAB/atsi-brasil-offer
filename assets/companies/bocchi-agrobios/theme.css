@@ -1,0 +1,34 @@
+/* Paleta conceitual do kit YvyLab; logo institucional original sem alteração. */
+:root[data-company="bocchi-agrobios"]{
+  --brand-bg:#102c24;
+  --brand-panel:#18382f;
+  --brand-surface:#234c3f;
+  --brand-card:#19543b;
+  --brand-line:#477766;
+  --brand-text:#f6f8f3;
+  --brand-muted:#dce6de;
+  --brand-primary:#d3a449;
+  --brand-strong:#236748;
+  --brand-soft:#f1d9a0;
+  --brand-button-text:#172b23;
+  --brand-header-rgb:244,246,241;
+  --brand-accent-rgb:25,84,59;
+  --brand-glow-rgb:211,164,73;
+}
+:root[data-company="bocchi-agrobios"] .hero,
+:root[data-company="bocchi-agrobios"] .app-header,
+:root[data-company="bocchi-agrobios"] .screen-hero{
+  background:linear-gradient(135deg,#102c24,#19543b);
+}
+/* A arte original possui lettering escuro; uma placa clara preserva contraste. */
+:root[data-company="bocchi-agrobios"] [data-company-logo],
+:root[data-company="bocchi-agrobios"] .app-brand img{
+  background:#f4f6f1;
+  border-radius:8px;
+  padding:4px;
+}
+:root[data-company="bocchi-agrobios"] .app-badge,
+:root[data-company="bocchi-agrobios"] .mobile-chip,
+:root[data-company="bocchi-agrobios"] .tag{
+  background:#e8efe7;color:#19543b;
+}

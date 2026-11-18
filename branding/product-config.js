@@ -12,6 +12,12 @@
       logoInstitutional:'assets/companies/jan/logo-institucional.svg',
       logoDark:'logo-institucional.svg',logoLight:'logo-institucional.svg',
       favicon:'icon.png',faviconType:'image/png'
+    },
+    'bocchi-agrobios':{
+      slug:'bocchi-agrobios',client:'Bocchi Agrobios',shortName:'Bocchi',
+      logoInstitutional:'assets/companies/bocchi-agrobios/logo-institucional.svg',
+      logoDark:'logo-institucional.svg',logoLight:'logo-institucional.svg',
+      favicon:'logo-institucional.svg'
     }
   });
   // Somente slugs registrados podem determinar caminhos de assets.

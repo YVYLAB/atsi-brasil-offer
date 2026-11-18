@@ -8,6 +8,7 @@ O parâmetro `company` muda somente a apresentação.
 
 - `index.html?company=atsi-brasil` — entrada com identidade ATSI+.
 - `index.html?company=jan` — entrada com identidade JAN.
+- `index.html?company=bocchi-agrobios` — entrada com identidade Bocchi+.
 - `home.html?company=jan` — apresentação direta, sem passar pela entrada.
 - Em uma URL que já tenha parâmetros: `home.html?origem=email&company=jan`.
 
@@ -119,6 +120,12 @@ na apresentação comercial ou PDF. A paleta não é um brandbook
 homologado; fontes e hashes estão em `assets/companies/jan/sources.json`.
 Ver `docs/branding-jan.md` para aplicação, limites e referências do kit.
 Os assets ATSI+ também preservam o caráter de proposta de identidade existente.
+
+**Bocchi Agrobios:** `company=bocchi-agrobios` usa a logo institucional obtida
+em `https://bocchiagrobios.com.br/assets/svg/logo-rodape.svg` e o nome Bocchi+.
+A paleta verde e dourada é uma proposta do kit YvyLab, não um brandbook
+homologado. A logo original é preservada e apresentada sobre fundo claro para
+manter legibilidade. O usuário autorizou seu uso nesta apresentação.
 
 ## Adicionar uma empresa
 

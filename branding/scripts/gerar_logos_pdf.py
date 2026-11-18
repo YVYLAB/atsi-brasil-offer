@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCES = {
     "atsi-brasil": "branding/assets/atsi-logo-cabecalho.svg",
     "jan": "assets/companies/jan/logo-institucional.svg",
+    "bocchi-agrobios": "assets/companies/bocchi-agrobios/logo-institucional.svg",
 }
 
 
