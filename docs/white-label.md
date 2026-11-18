@@ -11,6 +11,7 @@ O parâmetro `company` muda somente a apresentação.
 - `index.html?company=bocchi-agrobios` — entrada com identidade Bocchi+.
 - `index.html?company=yvy-lab` — entrada com identidade YVY+.
 - `index.html?company=grazmec` — entrada com identidade Grazmec+.
+- `index.html?company=kuhn` — entrada com identidade KUHN+.
 - `home.html?company=jan` — apresentação direta, sem passar pela entrada.
 - Em uma URL que já tenha parâmetros: `home.html?origem=email&company=jan`.
 
@@ -140,6 +141,13 @@ O nome YVY+ segue a regra compartilhada de nome curto + `+`.
 (SHA-256 `7f99d16a8d8001ed6d253180f501256affa95c0f64d6fa8981a234e64257904a`).
 O usuário autorizou seu uso na apresentação. A paleta vermelha e grafite é uma
 aproximação do kit, não um manual homologado. A proposta não implica parceria.
+
+**KUHN Brasil:** `company=kuhn` usa a logo institucional original do cabeçalho
+em `https://www.kuhnbrasil.com.br/themes/custom/kuhn/images/kuhn_logotype.svg`
+(SHA-256 `ab19889b883899d237efd43c53fe33d65894215b596f94edecba139683e08845`).
+O usuário informou ter autorização para utilizá-la em proposta à empresa.
+As cores são aproximações do kit; a apresentação é conceitual, não um produto
+KUHN em funcionamento nem indicação de parceria.
 
 ## Adicionar uma empresa
 

@@ -116,6 +116,19 @@ class WhiteLabelTest(unittest.TestCase):
         bocchi = self.browser("home.html", "?company=bocchi-agrobios", script)
         yvy = self.browser("home.html", "?company=yvy-lab", script)
         grazmec = self.browser("home.html", "?company=grazmec", script)
+        kuhn = self.browser("home.html", "?company=kuhn", script)
+        self.assertEqual(atsi["plans"], kuhn["plans"])
+        self.assertEqual(atsi["commonCopy"], kuhn["commonCopy"])
+        self.assertEqual(kuhn["heading"], "KUHN+")
+        self.assertEqual(kuhn["logoAlt"], "KUHN Brasil")
+        self.assertEqual(kuhn["logo"], "assets/companies/kuhn/logo-institucional.svg")
+        self.assertEqual(kuhn["primary"].lower(), "#ee5148")
+        self.assertEqual(kuhn["project"]["product"], "KUHN+")
+        self.assertEqual(kuhn["pdfProject"]["institutionalLogo"]["company"], "kuhn")
+        self.assertEqual(kuhn["storageKey"], "atsi-campaign-v2:company:kuhn")
+        self.assertTrue(kuhn["pdfIsValid"])
+        self.assertTrue(kuhn["mockups"])
+        self.assertTrue(kuhn["popups"])
         self.assertEqual(atsi["plans"], grazmec["plans"])
         self.assertEqual(atsi["commonCopy"], grazmec["commonCopy"])
         self.assertEqual(grazmec["heading"], "Grazmec+")
@@ -190,7 +203,7 @@ class WhiteLabelTest(unittest.TestCase):
         self.assertEqual(jan["storageKey"], "atsi-campaign-v2:company:jan")
         self.assertEqual(atsi["isolationTotal"], 160200)
         self.assertEqual(jan["isolationTotal"], 178000)
-        for result in (atsi, jan, bocchi, yvy, grazmec):
+        for result in (atsi, jan, bocchi, yvy, grazmec, kuhn):
             self.assertTrue(result["logoLoaded"])
             self.assertFalse(result["overflow"])
             self.assertEqual(result["errors"], [])
@@ -261,6 +274,29 @@ class WhiteLabelTest(unittest.TestCase):
                 self.assertEqual(result["src"], "assets/companies/yvy-lab/logo-yvylab.png")
                 self.assertIn("YVY+", result["intro"])
                 self.assertEqual(result["link"], "yvy-lab")
+                self.assertFalse(result["overflow"])
+                self.assertEqual(result["errors"], [])
+
+    def test_kuhn_entry_and_notice_responsive(self):
+        script = """
+        const image=document.querySelector('[data-company-logo]');
+        const notice=document.querySelector('.company-demo-notice');
+        const result={name:ATSIProduct.name,src:image.getAttribute('src'),alt:image.alt,
+          intro:document.querySelector('.intro').textContent,
+          notice:getComputedStyle(notice).display,
+          link:CompanyBranding.pageURL('home.html').searchParams.get('company'),
+          overflow:document.documentElement.scrollWidth>window.innerWidth,errors:brandErrors};
+        document.body.insertAdjacentHTML('beforeend','<pre id="brand-result">'+JSON.stringify(result)+'</pre>');
+        """
+        for width in (390, 768, 1440):
+            with self.subTest(width=width):
+                result = self.browser("index.html", "?company=kuhn", script, width)
+                self.assertEqual(result["name"], "KUHN+")
+                self.assertEqual(result["alt"], "KUHN Brasil")
+                self.assertEqual(result["src"], "assets/companies/kuhn/logo-institucional.svg")
+                self.assertIn("KUHN+", result["intro"])
+                self.assertEqual(result["notice"], "block")
+                self.assertEqual(result["link"], "kuhn")
                 self.assertFalse(result["overflow"])
                 self.assertEqual(result["errors"], [])
 

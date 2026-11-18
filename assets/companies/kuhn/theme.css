@@ -1,0 +1,31 @@
+/* Identidade conceitual baseada no kit; cores não são tokens homologados. */
+:root[data-company="kuhn"]{
+  --brand-bg:#141719;
+  --brand-panel:#202429;
+  --brand-surface:#30353b;
+  --brand-card:#292e34;
+  --brand-line:#79818a;
+  --brand-text:#f6f7f9;
+  --brand-muted:#dce0e5;
+  --brand-primary:#ee5148;
+  --brand-strong:#a8211b;
+  --brand-soft:#ffc8c3;
+  --brand-button-text:#1b1e22;
+  --brand-header-rgb:245,246,247;
+  --brand-accent-rgb:168,33,27;
+  --brand-glow-rgb:238,49,38;
+}
+:root[data-company="kuhn"] .hero,
+:root[data-company="kuhn"] .app-header,
+:root[data-company="kuhn"] .screen-hero{
+  background:linear-gradient(135deg,#141719,#7e201c);
+}
+:root[data-company="kuhn"] [data-company-logo],
+:root[data-company="kuhn"] .app-brand img{
+  background:#f5f6f7;border-radius:8px;padding:4px;
+}
+:root[data-company="kuhn"] .app-badge,
+:root[data-company="kuhn"] .mobile-chip,
+:root[data-company="kuhn"] .tag{
+  background:#fff0ef;color:#a8211b;
+}

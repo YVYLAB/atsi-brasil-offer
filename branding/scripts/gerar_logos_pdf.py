@@ -21,6 +21,7 @@ SOURCES = {
     "bocchi-agrobios": "assets/companies/bocchi-agrobios/logo-institucional.svg",
     "yvy-lab": "assets/companies/yvy-lab/logo-yvylab.png",
     "grazmec": "assets/companies/grazmec/logo-institucional.svg",
+    "kuhn": "assets/companies/kuhn/logo-institucional.svg",
 }
 
 

@@ -30,6 +30,12 @@
       logoInstitutional:'assets/companies/grazmec/logo-institucional.svg',
       logoDark:'logo-institucional.svg',logoLight:'logo-institucional.svg',
       favicon:'logo-institucional.svg'
+    },
+    kuhn:{
+      slug:'kuhn',client:'KUHN Brasil',shortName:'KUHN',
+      logoInstitutional:'assets/companies/kuhn/logo-institucional.svg',
+      logoDark:'logo-institucional.svg',logoLight:'logo-institucional.svg',
+      favicon:'logo-institucional.svg'
     }
   });
   // Somente slugs registrados podem determinar caminhos de assets.
