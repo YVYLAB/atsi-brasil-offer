@@ -159,8 +159,10 @@ credenciais ou regras de acesso nos assets de identidade.
   automaticamente aplicada a outra empresa. As regras e valores de tabela
   continuam os mesmos. Importar explicitamente um JSON ainda permite reutilizar
   suas condições; isso não representa autorização comercial no servidor.
-- Metadados são alterados com JavaScript. Robôs que não executem JavaScript
-  podem continuar exibindo a prévia padrão ATSI ao compartilhar um link.
+- Título e descrição de compartilhamento são genéricos e constam no HTML:
+  **YvyLab Community Platform**. Assim, robôs que não executam JavaScript não
+  exibem a identidade ATSI na prévia de links de outras empresas. Plataformas
+  de compartilhamento podem manter prévias antigas em cache.
 - Funciona em hospedagem estática e abrindo os HTMLs localmente. As limitações
   anteriores de login/HTTPS e persistência local continuam existindo.
 

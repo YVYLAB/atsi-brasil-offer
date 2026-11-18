@@ -13,6 +13,19 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class WhiteLabelTest(unittest.TestCase):
+    def test_shared_link_metadata_is_generic_without_javascript(self):
+        for page in ("index.html", "home.html"):
+            with self.subTest(page=page):
+                source = (ROOT / page).read_text().split("</head>", 1)[0]
+                self.assertIn("<title>YvyLab Community Platform</title>", source)
+                self.assertIn('<meta property="og:title" content="YvyLab Community Platform">', source)
+                self.assertIn('<meta name="twitter:title" content="YvyLab Community Platform">', source)
+                for name in ("description", "og:description", "twitter:description"):
+                    pattern = rf'<meta (?:name|property)="{name}" content="([^"]+)">'
+                    content = re.search(pattern, source)
+                    self.assertIsNotNone(content)
+                    self.assertNotIn("ATSI", content.group(1))
+
     def browser(self, page, query="", script="", width=1440, expect_not_found=False):
         chrome = shutil.which("google-chrome")
         if not chrome:
@@ -236,7 +249,7 @@ class WhiteLabelTest(unittest.TestCase):
             self.assertLessEqual(result["headingSize"], 16)
             self.assertFalse(result["hasEyebrow"])
             self.assertEqual(result["product"], product_name)
-            self.assertIn(product_name, result["title"])
+            self.assertEqual(result["title"], "YvyLab Community Platform")
             expected_logo = ("branding/assets/atsi-logo-cabecalho.svg" if company == "atsi-brasil"
                              else "assets/companies/jan/logo-institucional.svg")
             self.assertEqual(result["logo"], expected_logo)
@@ -244,7 +257,6 @@ class WhiteLabelTest(unittest.TestCase):
             self.assertFalse(result["overflow"])
             if expected == "jan":
                 self.assertNotIn("ATSI", result["intro"])
-                self.assertIn("JAN", result["title"])
 
     def test_shared_background_and_font_load_for_all_companies(self):
         script = """
