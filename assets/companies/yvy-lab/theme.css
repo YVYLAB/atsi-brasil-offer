@@ -1,0 +1,30 @@
+/* YVY+: tokens propostos a partir do kit; não alteram as demais empresas. */
+:root[data-company="yvy-lab"]{
+  --brand-bg:#110828;
+  --brand-panel:#1c103a;
+  --brand-surface:#291555;
+  --brand-card:#351c60;
+  --brand-line:#76549e;
+  --brand-text:#f9f6ff;
+  --brand-muted:#ded2ed;
+  --brand-primary:#c152fb;
+  --brand-strong:#5802dd;
+  --brand-soft:#e9c9ff;
+  --brand-button-text:#110828;
+  --brand-header-rgb:249,246,255;
+  --brand-accent-rgb:88,2,221;
+  --brand-glow-rgb:193,82,251;
+}
+:root[data-company="yvy-lab"] .hero,
+:root[data-company="yvy-lab"] .app-header,
+:root[data-company="yvy-lab"] .screen-hero{
+  background:linear-gradient(135deg,#110828,#5802dd);
+}
+:root[data-company="yvy-lab"] [data-company-logo="institutional"]{
+  background:#fff;border-radius:8px;padding:3px;
+}
+:root[data-company="yvy-lab"] .app-badge,
+:root[data-company="yvy-lab"] .mobile-chip,
+:root[data-company="yvy-lab"] .tag{
+  background:#f0e7ff;color:#4701b5;
+}

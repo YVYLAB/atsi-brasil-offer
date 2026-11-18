@@ -114,6 +114,18 @@ class WhiteLabelTest(unittest.TestCase):
         atsi = self.browser("home.html", "?company=atsi-brasil", script)
         jan = self.browser("home.html", "?company=jan", script)
         bocchi = self.browser("home.html", "?company=bocchi-agrobios", script)
+        yvy = self.browser("home.html", "?company=yvy-lab", script)
+        self.assertEqual(atsi["plans"], yvy["plans"])
+        self.assertEqual(yvy["heading"], "YVY+")
+        self.assertEqual(yvy["logoAlt"], "YvyLab")
+        self.assertEqual(yvy["logo"], "assets/companies/yvy-lab/logo-yvylab.png")
+        self.assertEqual(yvy["primary"].lower(), "#c152fb")
+        self.assertEqual(yvy["project"]["product"], "YVY+")
+        self.assertEqual(yvy["pdfProject"]["institutionalLogo"]["company"], "yvy-lab")
+        self.assertEqual(yvy["storageKey"], "atsi-campaign-v2:company:yvy-lab")
+        self.assertTrue(yvy["pdfIsValid"])
+        self.assertTrue(yvy["mockups"])
+        self.assertTrue(yvy["popups"])
         self.assertEqual(atsi["plans"], bocchi["plans"])
         self.assertEqual(atsi["commonCopy"], bocchi["commonCopy"])
         self.assertEqual(bocchi["heading"], "Bocchi+")
@@ -165,7 +177,7 @@ class WhiteLabelTest(unittest.TestCase):
         self.assertEqual(jan["storageKey"], "atsi-campaign-v2:company:jan")
         self.assertEqual(atsi["isolationTotal"], 160200)
         self.assertEqual(jan["isolationTotal"], 178000)
-        for result in (atsi, jan, bocchi):
+        for result in (atsi, jan, bocchi, yvy):
             self.assertTrue(result["logoLoaded"])
             self.assertFalse(result["overflow"])
             self.assertEqual(result["errors"], [])
@@ -215,6 +227,27 @@ class WhiteLabelTest(unittest.TestCase):
                 self.assertIn("Bocchi+", result["intro"])
                 self.assertEqual(result["link"], "bocchi-agrobios")
                 self.assertTrue(result["loaded"])
+                self.assertFalse(result["overflow"])
+                self.assertEqual(result["errors"], [])
+
+    def test_yvy_entry_responsive(self):
+        script = """
+          const image=document.querySelector('[data-company-logo]');
+          const result={name:ATSIProduct.name,src:image.getAttribute('src'),
+            alt:image.alt,
+            intro:document.querySelector('.intro').textContent,
+            link:CompanyBranding.pageURL('home.html').searchParams.get('company'),
+            overflow:document.documentElement.scrollWidth>window.innerWidth,errors:brandErrors};
+          document.body.insertAdjacentHTML('beforeend','<pre id="brand-result">'+JSON.stringify(result)+'</pre>');
+        """
+        for width in (390, 768, 1440):
+            with self.subTest(width=width):
+                result = self.browser("index.html", "?company=yvy-lab", script, width)
+                self.assertEqual(result["name"], "YVY+")
+                self.assertEqual(result["alt"], "YvyLab")
+                self.assertEqual(result["src"], "assets/companies/yvy-lab/logo-yvylab.png")
+                self.assertIn("YVY+", result["intro"])
+                self.assertEqual(result["link"], "yvy-lab")
                 self.assertFalse(result["overflow"])
                 self.assertEqual(result["errors"], [])
 

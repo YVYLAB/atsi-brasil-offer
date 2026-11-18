@@ -9,6 +9,7 @@ O parâmetro `company` muda somente a apresentação.
 - `index.html?company=atsi-brasil` — entrada com identidade ATSI+.
 - `index.html?company=jan` — entrada com identidade JAN.
 - `index.html?company=bocchi-agrobios` — entrada com identidade Bocchi+.
+- `index.html?company=yvy-lab` — entrada com identidade YVY+.
 - `home.html?company=jan` — apresentação direta, sem passar pela entrada.
 - Em uma URL que já tenha parâmetros: `home.html?origem=email&company=jan`.
 
@@ -126,6 +127,12 @@ em `https://bocchiagrobios.com.br/assets/svg/logo-rodape.svg` e o nome Bocchi+.
 A paleta verde e dourada é uma proposta do kit YvyLab, não um brandbook
 homologado. A logo original é preservada e apresentada sobre fundo claro para
 manter legibilidade. O usuário autorizou seu uso nesta apresentação.
+
+**YVY+:** `company=yvy-lab` utiliza a logo YvyLab original do kit na entrada,
+cabeçalho e PDF; as assinaturas YVY+ dos mockups e a paleta são propostas do kit,
+não marcas ou cores homologadas. O ícone é derivado do símbolo fornecido. Não
+publicar a identidade conceitual sem revisão e aprovação de uso externo.
+O nome YVY+ segue a regra compartilhada de nome curto + `+`.
 
 ## Adicionar uma empresa
 

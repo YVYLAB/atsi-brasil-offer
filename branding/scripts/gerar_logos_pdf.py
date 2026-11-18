@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Empacota as logos institucionais para PDF offline, sem dependências Python.
 
-Rasteriza os SVGs originais com Chrome, sem recorte/recoloração. O JavaScript
+Rasteriza os originais SVG/PNG com Chrome, sem recorte/recoloração. O JavaScript
 gerado permite abrir home.html via file:// sem fetch, CORS ou rede no PDF.
 """
 import base64
@@ -19,6 +19,7 @@ SOURCES = {
     "atsi-brasil": "branding/assets/atsi-logo-cabecalho.svg",
     "jan": "assets/companies/jan/logo-institucional.svg",
     "bocchi-agrobios": "assets/companies/bocchi-agrobios/logo-institucional.svg",
+    "yvy-lab": "assets/companies/yvy-lab/logo-yvylab.png",
 }
 
 
@@ -31,9 +32,16 @@ def main():
         temp = Path(directory)
         for company, source in SOURCES.items():
             original = ROOT / source
-            viewbox = list(map(float, ET.parse(original).getroot().attrib["viewBox"].split()))
+            if original.suffix.lower() == ".png":
+                raw = original.read_bytes()
+                if not raw.startswith(b"\x89PNG\r\n\x1a\n"):
+                    raise ValueError(f"PNG inválido: {source}")
+                source_width, source_height = struct.unpack(">II", raw[16:24])
+            else:
+                viewbox = list(map(float, ET.parse(original).getroot().attrib["viewBox"].split()))
+                source_width, source_height = viewbox[2:4]
             width = 1024
-            height = round(width * viewbox[3] / viewbox[2])
+            height = round(width * source_height / source_width)
             page, image = temp / f"{company}.html", temp / f"{company}.png"
             page.write_text(
                 '<!doctype html><style>html,body{margin:0;background:transparent}'
