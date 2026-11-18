@@ -277,13 +277,12 @@ class WhiteLabelTest(unittest.TestCase):
                 self.assertFalse(result["overflow"])
                 self.assertEqual(result["errors"], [])
 
-    def test_kuhn_entry_and_notice_responsive(self):
+    def test_kuhn_entry_responsive(self):
         script = """
         const image=document.querySelector('[data-company-logo]');
-        const notice=document.querySelector('.company-demo-notice');
         const result={name:ATSIProduct.name,src:image.getAttribute('src'),alt:image.alt,
           intro:document.querySelector('.intro').textContent,
-          notice:getComputedStyle(notice).display,
+          copy:document.querySelector('.login').textContent,
           link:CompanyBranding.pageURL('home.html').searchParams.get('company'),
           overflow:document.documentElement.scrollWidth>window.innerWidth,errors:brandErrors};
         document.body.insertAdjacentHTML('beforeend','<pre id="brand-result">'+JSON.stringify(result)+'</pre>');
@@ -295,7 +294,7 @@ class WhiteLabelTest(unittest.TestCase):
                 self.assertEqual(result["alt"], "KUHN Brasil")
                 self.assertEqual(result["src"], "assets/companies/kuhn/logo-institucional.svg")
                 self.assertIn("KUHN+", result["intro"])
-                self.assertEqual(result["notice"], "block")
+                self.assertNotIn("não oficial", result["copy"].lower())
                 self.assertEqual(result["link"], "kuhn")
                 self.assertFalse(result["overflow"])
                 self.assertEqual(result["errors"], [])

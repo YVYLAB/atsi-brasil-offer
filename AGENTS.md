@@ -565,3 +565,9 @@ o escopo/mensalidade. Não confundir borda de prévia com contratação. Ao edit
 mostrar “Configuração personalizada” e o plano de origem como base de manutenção,
 sem exigir trocar/reaplicar preset. Testes devem usar cliques em rádios/labels,
 não apenas atribuir checked ou chamar toggleFeature diretamente.
+
+Comunicação comercial: não usar “não oficial” nem linguagem de auditoria,
+pendências de validação ou ressalvas equivalentes na interface comercial,
+login, apresentações ou propostas. É uma experiência de venda; manter contexto
+e verificações internas na documentação. Não inventar funcionalidades, parcerias
+ou entregas realizadas, e preservar as ressalvas técnicas pertinentes.

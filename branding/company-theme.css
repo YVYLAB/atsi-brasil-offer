@@ -1,6 +1,4 @@
 /* Camada visual white label. O catálogo e os cálculos não dependem deste CSS. */
-.company-demo-notice{display:none}
-:root[data-company="kuhn"] .company-demo-notice{display:block;color:#f6f7f9;font-size:12px;line-height:1.5}
 /* Baixa especificidade: toda empresa herda a base e sobrescreve só o necessário.
    Não colocar URLs relativas em variáveis consumidas por outro arquivo CSS. */
 :where(:root){
