@@ -1,0 +1,31 @@
+/* Paleta de interface baseada no kit 3tentos; a logo original permanece intacta. */
+:root[data-company="3tentos"]{
+  --brand-bg:#101b31;
+  --brand-panel:#192b4d;
+  --brand-surface:#283c60;
+  --brand-card:#223655;
+  --brand-line:#73829a;
+  --brand-text:#f6f7fa;
+  --brand-muted:#dfe3ec;
+  --brand-primary:#ed7278;
+  --brand-strong:#bf2530;
+  --brand-soft:#ffc9cb;
+  --brand-button-text:#1b1520;
+  --brand-header-rgb:246,247,250;
+  --brand-accent-rgb:191,37,48;
+  --brand-glow-rgb:209,58,64;
+}
+:root[data-company="3tentos"] .hero,
+:root[data-company="3tentos"] .app-header,
+:root[data-company="3tentos"] .screen-hero{
+  background:linear-gradient(135deg,#101b31,#192b4d);
+}
+:root[data-company="3tentos"] [data-company-logo],
+:root[data-company="3tentos"] .app-brand img{
+  background:#f6f7fa;border-radius:8px;padding:4px;
+}
+:root[data-company="3tentos"] .app-badge,
+:root[data-company="3tentos"] .mobile-chip,
+:root[data-company="3tentos"] .tag{
+  background:#fff0f1;color:#a71e29;
+}

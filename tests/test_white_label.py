@@ -118,6 +118,19 @@ class WhiteLabelTest(unittest.TestCase):
         grazmec = self.browser("home.html", "?company=grazmec", script)
         kuhn = self.browser("home.html", "?company=kuhn", script)
         cotrijal = self.browser("home.html", "?company=cotrijal", script)
+        tentos = self.browser("home.html", "?company=3tentos", script)
+        self.assertEqual(atsi["plans"], tentos["plans"])
+        self.assertEqual(atsi["commonCopy"], tentos["commonCopy"])
+        self.assertEqual(tentos["heading"], "3tentos+")
+        self.assertEqual(tentos["logoAlt"], "3tentos")
+        self.assertEqual(tentos["logo"], "assets/companies/3tentos/logo-institucional.svg")
+        self.assertEqual(tentos["primary"].lower(), "#ed7278")
+        self.assertEqual(tentos["project"]["product"], "3tentos+")
+        self.assertEqual(tentos["pdfProject"]["institutionalLogo"]["company"], "3tentos")
+        self.assertEqual(tentos["storageKey"], "atsi-campaign-v2:company:3tentos")
+        self.assertTrue(tentos["pdfIsValid"])
+        self.assertTrue(tentos["mockups"])
+        self.assertTrue(tentos["popups"])
         self.assertEqual(atsi["plans"], cotrijal["plans"])
         self.assertEqual(atsi["commonCopy"], cotrijal["commonCopy"])
         self.assertEqual(cotrijal["heading"], "Cotrijal+")
@@ -216,7 +229,7 @@ class WhiteLabelTest(unittest.TestCase):
         self.assertEqual(jan["storageKey"], "atsi-campaign-v2:company:jan")
         self.assertEqual(atsi["isolationTotal"], 160200)
         self.assertEqual(jan["isolationTotal"], 178000)
-        for result in (atsi, jan, bocchi, yvy, grazmec, kuhn, cotrijal):
+        for result in (atsi, jan, bocchi, yvy, grazmec, kuhn, cotrijal, tentos):
             self.assertTrue(result["logoLoaded"])
             self.assertFalse(result["overflow"])
             self.assertEqual(result["errors"], [])
@@ -287,6 +300,26 @@ class WhiteLabelTest(unittest.TestCase):
                 self.assertEqual(result["src"], "assets/companies/yvy-lab/logo-yvylab.png")
                 self.assertIn("YVY+", result["intro"])
                 self.assertEqual(result["link"], "yvy-lab")
+                self.assertFalse(result["overflow"])
+                self.assertEqual(result["errors"], [])
+
+    def test_3tentos_entry_responsive(self):
+        script = """
+        const image=document.querySelector('[data-company-logo]');
+        const result={name:ATSIProduct.name,src:image.getAttribute('src'),alt:image.alt,
+          intro:document.querySelector('.intro').textContent,
+          link:CompanyBranding.pageURL('home.html').searchParams.get('company'),
+          overflow:document.documentElement.scrollWidth>window.innerWidth,errors:brandErrors};
+        document.body.insertAdjacentHTML('beforeend','<pre id="brand-result">'+JSON.stringify(result)+'</pre>');
+        """
+        for width in (390, 768, 1440):
+            with self.subTest(width=width):
+                result = self.browser("index.html", "?company=3tentos", script, width)
+                self.assertEqual(result["name"], "3tentos+")
+                self.assertEqual(result["alt"], "3tentos")
+                self.assertEqual(result["src"], "assets/companies/3tentos/logo-institucional.svg")
+                self.assertIn("3tentos+", result["intro"])
+                self.assertEqual(result["link"], "3tentos")
                 self.assertFalse(result["overflow"])
                 self.assertEqual(result["errors"], [])
 

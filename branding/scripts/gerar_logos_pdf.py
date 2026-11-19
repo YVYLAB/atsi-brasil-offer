@@ -23,6 +23,7 @@ SOURCES = {
     "grazmec": "assets/companies/grazmec/logo-institucional.svg",
     "kuhn": "assets/companies/kuhn/logo-institucional.svg",
     "cotrijal": "assets/companies/cotrijal/logo-institucional.svg",
+    "3tentos": "assets/companies/3tentos/logo-institucional.svg",
 }
 
 

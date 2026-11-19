@@ -42,6 +42,12 @@
       logoInstitutional:'assets/companies/cotrijal/logo-institucional.svg',
       logoDark:'logo-institucional.svg',logoLight:'logo-institucional.svg',
       favicon:'logo-institucional.svg'
+    },
+    '3tentos':{
+      slug:'3tentos',client:'3tentos',shortName:'3tentos',
+      logoInstitutional:'assets/companies/3tentos/logo-institucional.svg',
+      logoDark:'logo-institucional.svg',logoLight:'logo-institucional.svg',
+      favicon:'logo-institucional.svg'
     }
   });
   // Somente slugs registrados podem determinar caminhos de assets.
