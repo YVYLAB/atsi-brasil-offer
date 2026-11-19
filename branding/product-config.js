@@ -36,6 +36,12 @@
       logoInstitutional:'assets/companies/kuhn/logo-institucional.svg',
       logoDark:'logo-institucional.svg',logoLight:'logo-institucional.svg',
       favicon:'logo-institucional.svg'
+    },
+    cotrijal:{
+      slug:'cotrijal',client:'Cotrijal',shortName:'Cotrijal',
+      logoInstitutional:'assets/companies/cotrijal/logo-institucional.svg',
+      logoDark:'logo-institucional.svg',logoLight:'logo-institucional.svg',
+      favicon:'logo-institucional.svg'
     }
   });
   // Somente slugs registrados podem determinar caminhos de assets.

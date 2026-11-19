@@ -1,0 +1,31 @@
+/* Paleta derivada do kit Cotrijal; preserva a logo branca fornecida. */
+:root[data-company="cotrijal"]{
+  --brand-bg:#15161a;
+  --brand-panel:#212329;
+  --brand-surface:#35252c;
+  --brand-card:#30242a;
+  --brand-line:#81616a;
+  --brand-text:#f4f2f2;
+  --brand-muted:#e3d9dc;
+  --brand-primary:#f16a7b;
+  --brand-strong:#b7223a;
+  --brand-soft:#ffcbd2;
+  --brand-button-text:#25151a;
+  --brand-header-rgb:151,27,47;
+  --brand-accent-rgb:183,34,58;
+  --brand-glow-rgb:241,106,123;
+}
+:root[data-company="cotrijal"] .hero,
+:root[data-company="cotrijal"] .app-header,
+:root[data-company="cotrijal"] .screen-hero{
+  background:linear-gradient(135deg,#212329,#971b2f);
+}
+:root[data-company="cotrijal"] [data-company-logo],
+:root[data-company="cotrijal"] .app-brand img{
+  background:#971b2f;border-radius:8px;padding:4px;
+}
+:root[data-company="cotrijal"] .app-badge,
+:root[data-company="cotrijal"] .mobile-chip,
+:root[data-company="cotrijal"] .tag{
+  background:#fff0f2;color:#a51e34;
+}

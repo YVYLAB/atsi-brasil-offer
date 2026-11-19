@@ -12,6 +12,7 @@ O parâmetro `company` muda somente a apresentação.
 - `index.html?company=yvy-lab` — entrada com identidade YVY+.
 - `index.html?company=grazmec` — entrada com identidade Grazmec+.
 - `index.html?company=kuhn` — entrada com identidade KUHN+.
+- `index.html?company=cotrijal` — entrada com identidade Cotrijal+.
 - `home.html?company=jan` — apresentação direta, sem passar pela entrada.
 - Em uma URL que já tenha parâmetros: `home.html?origem=email&company=jan`.
 
@@ -148,6 +149,9 @@ em `https://www.kuhnbrasil.com.br/themes/custom/kuhn/images/kuhn_logotype.svg`
 O usuário informou ter autorização para utilizá-la em proposta à empresa.
 As cores são aproximações do kit; a apresentação é conceitual, não um produto
 KUHN em funcionamento nem indicação de parceria.
+
+**Cotrijal:** `company=cotrijal` usa a logo branca SVG fornecida pelo usuário
+e a paleta vermelha e grafite derivada do kit, aplicada apenas à empresa.
 
 ## Adicionar uma empresa
 

@@ -117,6 +117,19 @@ class WhiteLabelTest(unittest.TestCase):
         yvy = self.browser("home.html", "?company=yvy-lab", script)
         grazmec = self.browser("home.html", "?company=grazmec", script)
         kuhn = self.browser("home.html", "?company=kuhn", script)
+        cotrijal = self.browser("home.html", "?company=cotrijal", script)
+        self.assertEqual(atsi["plans"], cotrijal["plans"])
+        self.assertEqual(atsi["commonCopy"], cotrijal["commonCopy"])
+        self.assertEqual(cotrijal["heading"], "Cotrijal+")
+        self.assertEqual(cotrijal["logoAlt"], "Cotrijal")
+        self.assertEqual(cotrijal["logo"], "assets/companies/cotrijal/logo-institucional.svg")
+        self.assertEqual(cotrijal["primary"].lower(), "#f16a7b")
+        self.assertEqual(cotrijal["project"]["product"], "Cotrijal+")
+        self.assertEqual(cotrijal["pdfProject"]["institutionalLogo"]["company"], "cotrijal")
+        self.assertEqual(cotrijal["storageKey"], "atsi-campaign-v2:company:cotrijal")
+        self.assertTrue(cotrijal["pdfIsValid"])
+        self.assertTrue(cotrijal["mockups"])
+        self.assertTrue(cotrijal["popups"])
         self.assertEqual(atsi["plans"], kuhn["plans"])
         self.assertEqual(atsi["commonCopy"], kuhn["commonCopy"])
         self.assertEqual(kuhn["heading"], "KUHN+")
@@ -203,7 +216,7 @@ class WhiteLabelTest(unittest.TestCase):
         self.assertEqual(jan["storageKey"], "atsi-campaign-v2:company:jan")
         self.assertEqual(atsi["isolationTotal"], 160200)
         self.assertEqual(jan["isolationTotal"], 178000)
-        for result in (atsi, jan, bocchi, yvy, grazmec, kuhn):
+        for result in (atsi, jan, bocchi, yvy, grazmec, kuhn, cotrijal):
             self.assertTrue(result["logoLoaded"])
             self.assertFalse(result["overflow"])
             self.assertEqual(result["errors"], [])
@@ -274,6 +287,26 @@ class WhiteLabelTest(unittest.TestCase):
                 self.assertEqual(result["src"], "assets/companies/yvy-lab/logo-yvylab.png")
                 self.assertIn("YVY+", result["intro"])
                 self.assertEqual(result["link"], "yvy-lab")
+                self.assertFalse(result["overflow"])
+                self.assertEqual(result["errors"], [])
+
+    def test_cotrijal_entry_responsive(self):
+        script = """
+        const image=document.querySelector('[data-company-logo]');
+        const result={name:ATSIProduct.name,src:image.getAttribute('src'),alt:image.alt,
+          intro:document.querySelector('.intro').textContent,
+          link:CompanyBranding.pageURL('home.html').searchParams.get('company'),
+          overflow:document.documentElement.scrollWidth>window.innerWidth,errors:brandErrors};
+        document.body.insertAdjacentHTML('beforeend','<pre id="brand-result">'+JSON.stringify(result)+'</pre>');
+        """
+        for width in (390, 768, 1440):
+            with self.subTest(width=width):
+                result = self.browser("index.html", "?company=cotrijal", script, width)
+                self.assertEqual(result["name"], "Cotrijal+")
+                self.assertEqual(result["alt"], "Cotrijal")
+                self.assertEqual(result["src"], "assets/companies/cotrijal/logo-institucional.svg")
+                self.assertIn("Cotrijal+", result["intro"])
+                self.assertEqual(result["link"], "cotrijal")
                 self.assertFalse(result["overflow"])
                 self.assertEqual(result["errors"], [])
 

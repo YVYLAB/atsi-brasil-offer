@@ -22,6 +22,7 @@ SOURCES = {
     "yvy-lab": "assets/companies/yvy-lab/logo-yvylab.png",
     "grazmec": "assets/companies/grazmec/logo-institucional.svg",
     "kuhn": "assets/companies/kuhn/logo-institucional.svg",
+    "cotrijal": "assets/companies/cotrijal/logo-institucional.svg",
 }
 
 
@@ -40,8 +41,12 @@ def main():
                     raise ValueError(f"PNG inválido: {source}")
                 source_width, source_height = struct.unpack(">II", raw[16:24])
             else:
-                viewbox = list(map(float, ET.parse(original).getroot().attrib["viewBox"].split()))
-                source_width, source_height = viewbox[2:4]
+                attributes = ET.parse(original).getroot().attrib
+                if "viewBox" in attributes:
+                    viewbox = list(map(float, attributes["viewBox"].split()))
+                    source_width, source_height = viewbox[2:4]
+                else:
+                    source_width, source_height = float(attributes["width"]), float(attributes["height"])
             width = 1024
             height = round(width * source_height / source_width)
             page, image = temp / f"{company}.html", temp / f"{company}.png"
