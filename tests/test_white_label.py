@@ -119,6 +119,19 @@ class WhiteLabelTest(unittest.TestCase):
         kuhn = self.browser("home.html", "?company=kuhn", script)
         cotrijal = self.browser("home.html", "?company=cotrijal", script)
         tentos = self.browser("home.html", "?company=3tentos", script)
+        slc = self.browser("home.html", "?company=slc-maquinas", script)
+        self.assertEqual(atsi["plans"], slc["plans"])
+        self.assertEqual(atsi["commonCopy"], slc["commonCopy"])
+        self.assertEqual(slc["heading"], "SLC+")
+        self.assertEqual(slc["logoAlt"], "SLC Máquinas")
+        self.assertEqual(slc["logo"], "assets/companies/slc-maquinas/logo-institucional.png")
+        self.assertEqual(slc["primary"].lower(), "#ffde00")
+        self.assertEqual(slc["project"]["product"], "SLC+")
+        self.assertEqual(slc["pdfProject"]["institutionalLogo"]["company"], "slc-maquinas")
+        self.assertEqual(slc["storageKey"], "atsi-campaign-v2:company:slc-maquinas")
+        self.assertTrue(slc["pdfIsValid"])
+        self.assertTrue(slc["mockups"])
+        self.assertTrue(slc["popups"])
         self.assertEqual(atsi["plans"], tentos["plans"])
         self.assertEqual(atsi["commonCopy"], tentos["commonCopy"])
         self.assertEqual(tentos["heading"], "3tentos+")
@@ -229,7 +242,7 @@ class WhiteLabelTest(unittest.TestCase):
         self.assertEqual(jan["storageKey"], "atsi-campaign-v2:company:jan")
         self.assertEqual(atsi["isolationTotal"], 160200)
         self.assertEqual(jan["isolationTotal"], 178000)
-        for result in (atsi, jan, bocchi, yvy, grazmec, kuhn, cotrijal, tentos):
+        for result in (atsi, jan, bocchi, yvy, grazmec, kuhn, cotrijal, tentos, slc):
             self.assertTrue(result["logoLoaded"])
             self.assertFalse(result["overflow"])
             self.assertEqual(result["errors"], [])
@@ -300,6 +313,26 @@ class WhiteLabelTest(unittest.TestCase):
                 self.assertEqual(result["src"], "assets/companies/yvy-lab/logo-yvylab.png")
                 self.assertIn("YVY+", result["intro"])
                 self.assertEqual(result["link"], "yvy-lab")
+                self.assertFalse(result["overflow"])
+                self.assertEqual(result["errors"], [])
+
+    def test_slc_entry_responsive(self):
+        script = """
+        const image=document.querySelector('[data-company-logo]');
+        const result={name:ATSIProduct.name,src:image.getAttribute('src'),alt:image.alt,
+          intro:document.querySelector('.intro').textContent,
+          link:CompanyBranding.pageURL('home.html').searchParams.get('company'),
+          overflow:document.documentElement.scrollWidth>window.innerWidth,errors:brandErrors};
+        document.body.insertAdjacentHTML('beforeend','<pre id="brand-result">'+JSON.stringify(result)+'</pre>');
+        """
+        for width in (390, 768, 1440):
+            with self.subTest(width=width):
+                result = self.browser("index.html", "?company=slc-maquinas", script, width)
+                self.assertEqual(result["name"], "SLC+")
+                self.assertEqual(result["alt"], "SLC Máquinas")
+                self.assertEqual(result["src"], "assets/companies/slc-maquinas/logo-institucional.png")
+                self.assertIn("SLC+", result["intro"])
+                self.assertEqual(result["link"], "slc-maquinas")
                 self.assertFalse(result["overflow"])
                 self.assertEqual(result["errors"], [])
 

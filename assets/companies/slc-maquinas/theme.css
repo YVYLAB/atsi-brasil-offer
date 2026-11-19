@@ -1,0 +1,31 @@
+/* Verde e amarelo do kit, ajustados para a interface escura compartilhada. */
+:root[data-company="slc-maquinas"]{
+  --brand-bg:#09291b;
+  --brand-panel:#063e29;
+  --brand-surface:#176d38;
+  --brand-card:#14512e;
+  --brand-line:#71967b;
+  --brand-text:#f7faf7;
+  --brand-muted:#dce7de;
+  --brand-primary:#ffde00;
+  --brand-strong:#176d38;
+  --brand-soft:#fff0a0;
+  --brand-button-text:#14281e;
+  --brand-header-rgb:247,250,247;
+  --brand-accent-rgb:23,109,56;
+  --brand-glow-rgb:255,222,0;
+}
+:root[data-company="slc-maquinas"] .hero,
+:root[data-company="slc-maquinas"] .app-header,
+:root[data-company="slc-maquinas"] .screen-hero{
+  background:linear-gradient(135deg,#063e29,#176d38);
+}
+:root[data-company="slc-maquinas"] [data-company-logo],
+:root[data-company="slc-maquinas"] .app-brand img{
+  background:#fff;border-radius:8px;padding:4px;
+}
+:root[data-company="slc-maquinas"] .app-badge,
+:root[data-company="slc-maquinas"] .mobile-chip,
+:root[data-company="slc-maquinas"] .tag{
+  background:#e6f3e8;color:#14512e;
+}

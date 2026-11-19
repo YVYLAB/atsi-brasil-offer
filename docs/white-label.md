@@ -14,6 +14,7 @@ O parâmetro `company` muda somente a apresentação.
 - `index.html?company=kuhn` — entrada com identidade KUHN+.
 - `index.html?company=cotrijal` — entrada com identidade Cotrijal+.
 - `index.html?company=3tentos` — entrada com identidade 3tentos+.
+- `index.html?company=slc-maquinas` — entrada com identidade SLC+.
 - `home.html?company=jan` — apresentação direta, sem passar pela entrada.
 - Em uma URL que já tenha parâmetros: `home.html?origem=email&company=jan`.
 
@@ -158,6 +159,11 @@ e a paleta vermelha e grafite derivada do kit, aplicada apenas à empresa.
 `https://3tentos.com.br/assets/svg/logo/3tentos-new-color.svg` (SHA-256
 `4c23e41788b178bdf0b65f058d57dd4eeca045a9d1917b5a3fdc6a0dea319ac5`)
 e paleta azul e vermelha derivada do kit. O fundo compartilhado é preservado.
+
+**SLC Máquinas:** `company=slc-maquinas` usa a imagem do cabeçalho do site da
+empresa (`https://cdn.dealerspace.ai/slc-maquinas/logo/Logo_SLC.webp`),
+convertida sem recorte em PNG para uso local e PDF. A paleta verde e amarela
+segue o kit; o fundo compartilhado permanece inalterado.
 
 ## Adicionar uma empresa
 

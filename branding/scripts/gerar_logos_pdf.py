@@ -24,6 +24,7 @@ SOURCES = {
     "kuhn": "assets/companies/kuhn/logo-institucional.svg",
     "cotrijal": "assets/companies/cotrijal/logo-institucional.svg",
     "3tentos": "assets/companies/3tentos/logo-institucional.svg",
+    "slc-maquinas": "assets/companies/slc-maquinas/logo-institucional.png",
 }
 
 

@@ -48,6 +48,12 @@
       logoInstitutional:'assets/companies/3tentos/logo-institucional.svg',
       logoDark:'logo-institucional.svg',logoLight:'logo-institucional.svg',
       favicon:'logo-institucional.svg'
+    },
+    'slc-maquinas':{
+      slug:'slc-maquinas',client:'SLC Máquinas',shortName:'SLC',
+      logoInstitutional:'assets/companies/slc-maquinas/logo-institucional.png',
+      logoDark:'logo-institucional.png',logoLight:'logo-institucional.png',
+      favicon:'logo-institucional.png',faviconType:'image/png'
     }
   });
   // Somente slugs registrados podem determinar caminhos de assets.
