@@ -23,7 +23,8 @@ class DependenciesTest(unittest.TestCase):
           M01:['E01'],N02:['N01'],N03:['N01'],C06:['C05'],G06:['G05'],
           EV02:['EV01'],EV03:['EV01'],EV04:['EV01','EV02'],
           P02:['P01','P05'],P03:['P01','P05'],P04:['EV01','P01'],
-          P07:['E01'],R03:['C09'],GM02:['GM01','EV04','EV01','EV02'],GM04:['GM01','GM03']
+          P07:['E01'],R03:['C09'],GM02:['GM01','EV04','EV01','EV02'],GM04:['GM01','GM03'],
+          GT02:['GT01'],GT03:['GT01'],GT04:['GT01'],GT05:['GT01'],GT06:['GT01'],GT07:['GT04','GT01']
         };
         for(const [id,required] of Object.entries(cases)){
           applyPreset('essencial');
@@ -64,6 +65,29 @@ class DependenciesTest(unittest.TestCase):
           check(key+' já inclui biblioteca sem duplicidade',!dependencyDialog.open && !state.autoSelected.has('E01') &&
             selectedFeatures().filter(f=>f.id==='E01').length===1);
         }
+        applyPreset('essencial');
+        for(const id of ['GT01','GT02','GT03','GT04','GT05','GT06','GT07']){
+          const f=getFeature(id);
+          document.querySelector(`[data-feature="${id}"] .feature-copy`).click();
+          check(id+' prévia própria sem contratação',state.activePreview===id &&
+            !!el.phoneScreen.querySelector(`[data-mock-feature="${id}"]`) && !state.selected.has(id));
+          check(id+' fora dos presets',featurePlanKeys(f).length===0);
+        }
+        document.querySelector('[data-feature="GT02"] .feature-copy').click();
+        check('Kanban mostra três colunas e cartões',
+          el.phoneScreen.querySelectorAll('.mock-kanban-column').length===3 &&
+          el.phoneScreen.querySelectorAll('.mock-kanban .mock-task-card').length===3);
+        document.querySelector('[data-feature="GT03"] .feature-copy').click();
+        check('calendário mostra tarefa dentro de um dia',
+          el.phoneScreen.querySelectorAll('.mock-calendar-day').length===5 &&
+          !!el.phoneScreen.querySelector('.mock-calendar-day .mock-task-card'));
+        document.querySelector('[data-feature="GT07"] .feature-toggle').click();
+        check('aprovação inclui planejamento e tarefas',state.selected.has('GT07') &&
+          state.selected.has('GT04') && state.selected.has('GT01') && targetTotal===203600);
+        document.getElementById('confirmDependencies').click();
+        const pdf=buildOfferPDFModel();
+        check('aprovação consta da proposta e PDF',quoteData().selectedIds.includes('GT07') &&
+          pdf.features.some(item=>item.id==='GT07'));
         document.body.insertAdjacentHTML('beforeend','<pre id="qa-dependencies">'+JSON.stringify(checks)+'</pre>');
         """
         page = (ROOT / "home.html").read_text()

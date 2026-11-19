@@ -37,6 +37,8 @@ dependencies = {
     "GM01": "B07 e regras de pontuação compatíveis com o provedor de vídeo",
     "GM02": "GM01 e check-in confirmado EV04", "GM03": "GM01",
     "GM04": "GM01 e GM03",
+    "GT02": "GT01", "GT03": "GT01", "GT04": "GT01 e B06",
+    "GT05": "GT01", "GT06": "GT01", "GT07": "GT04 e GT01",
 }
 legacy = {
     "mfa": "A01", "login_google": "A02", "login_microsoft": "A03",
@@ -53,8 +55,8 @@ def slug(text):
 
 
 rows = pattern.findall(SOURCE.read_text(encoding="utf-8"))
-if len(rows) != 55 or len({row[0] for row in rows}) != 55:
-    raise SystemExit("Catálogo inválido: esperados 55 IDs únicos.")
+if len(rows) != 62 or len({row[0] for row in rows}) != 62:
+    raise SystemExit("Catálogo inválido: esperados 62 IDs únicos.")
 catalog = {}
 created = 0
 for code, module, title, description, kind, hours, price, complexity, operation in rows:
@@ -119,13 +121,13 @@ Fonte: `docs/features-iniciais-custo.md`, data-base 16/11/2026.
         files = [path]
     spec_text = files[0].read_text(encoding="utf-8")
     tasks = re.findall(r"^\| (?!\*\*Total)([^|\n]+) \| ([^|\n]+) \| Pendente \|$", spec_text, re.M)
-    task_details = re.findall(r"^\| ([A-Z]+\d+-T\d+[A-Z]?) \| ([^|\n]+) \| (\d+) \| Revisão técnica preliminar \|$", spec_text, re.M)
+    task_details = re.findall(r"^\| ([A-Z]+\d+-T\d+[A-Z]?) \| ([^|\n]+) \| (\d+(?:\.\d+)?) \| Revisão técnica preliminar \|$", spec_text, re.M)
     reviewed = [(title, hours) for _, title, hours in task_details]
     if reviewed:
-        n = sum(int(estimate) for _, estimate in reviewed)
+        n = sum(float(estimate) for _, estimate in reviewed)
         tasks = reviewed
-        declared = re.search(r"\| \*\*Total\*\* \| \| \*\*(\d+) h\*\*", spec_text)
-        if not declared or int(declared.group(1)) != n:
+        declared = re.search(r"\| \*\*Total\*\* \| \| \*\*(\d+(?:\.\d+)?) h\*\*", spec_text)
+        if not declared or float(declared.group(1)) != n:
             raise SystemExit(f"Soma de tarefas divergente em {code}")
     criterion = re.search(r"## Cenário mínimo específico de aceite\n(.*?)(?=\n## |\Z)", spec_text, re.S)
     scope = re.search(r"## Escopo e (?:exclusões|funcionamento)\n(.*?)(?=\n## |\Z)", spec_text, re.S)
@@ -136,7 +138,7 @@ Fonte: `docs/features-iniciais-custo.md`, data-base 16/11/2026.
                      "kind": kind.strip(), "complexity": int(complexity.strip()),
                      "dependencies": dep, "operation": operation.strip(),
                       "tasks": [f"{task.strip()} — {estimate.strip()}" for task, estimate in tasks],
-                      "taskDetails": [{"id": task_id, "title": task.strip(), "hours": int(hours)}
+                       "taskDetails": [{"id": task_id, "title": task.strip(), "hours": float(hours)}
                                       for task_id, task, hours in task_details],
                       "scope": scope.group(1).strip() if scope else "",
                       "risks": risks.group(1).strip() if risks else "",

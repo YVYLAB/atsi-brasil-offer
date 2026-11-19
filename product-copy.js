@@ -221,7 +221,21 @@
     GM04:{title:'Conquistas sempre à vista',
       description:'Leve a pontuação e a posição no ranking para o perfil do aluno. Um resumo pessoal ajuda cada participante a acompanhar sua trajetória.',
       benefits:['Reúna saldo de pontos e posição em um mesmo lugar.','Facilite o acesso ao ranking a partir do perfil.'],
-      scope:'Exibição dos pontos e da posição utilizando as regras e os dados do motor de pontuação e do ranking.'}
+      scope:'Exibição dos pontos e da posição utilizando as regras e os dados do motor de pontuação e do ranking.'},
+    GT01:{title:'Gestão de tarefas',description:'Organize a produção da equipe com tarefas, responsáveis, prazos e prioridades.',
+      benefits:['Centralize as atividades da equipe.','Acompanhe responsáveis e datas de entrega.'],scope:'Criação e edição de tarefas, atribuição de responsáveis, prazo e prioridade no painel administrativo.'},
+    GT02:{title:'Kanban interativo',description:'Acompanhe a evolução do trabalho em um quadro com etapas e cartões de tarefas.',
+      benefits:['Visualize o andamento em cada etapa.','Movimente tarefas conforme o trabalho avança.'],scope:'Quadros, colunas e movimentação de tarefas. A gestão de tarefas é incluída automaticamente.'},
+    GT03:{title:'Calendário de tarefas',description:'Veja os prazos da equipe em um calendário semanal ou mensal.',
+      benefits:['Enxergue entregas próximas.','Organize a semana e o mês de produção.'],scope:'Visualizações semanal e mensal dos prazos. Não inclui sincronização com calendários externos.'},
+    GT04:{title:'Planejamento de conteúdo',description:'Conecte as tarefas da equipe aos cursos e demais conteúdos da plataforma.',
+      benefits:['Associe o trabalho ao conteúdo de destino.','Acompanhe a produção em um contexto comum.'],scope:'Vínculo com cursos e, quando contratados, e-books, notícias e eventos. Inclui a gestão de tarefas.'},
+    GT05:{title:'Comentários e anexos nas tarefas',description:'Reúna conversas e arquivos junto a cada atividade de produção.',
+      benefits:['Mantenha decisões próximas da tarefa.','Compartilhe documentos com a equipe responsável.'],scope:'Comentários e anexos com acesso controlado. O armazenamento acompanha o volume de arquivos.'},
+    GT06:{title:'Notificações de tarefas',description:'Mantenha a equipe informada sobre atribuições, prazos e alterações.',
+      benefits:['Avise responsáveis sobre novas atividades.','Dê visibilidade a prazos e mudanças.'],scope:'Avisos internos da plataforma. Push, e-mail e outros canais são recursos distintos.'},
+    GT07:{title:'Aprovação de conteúdo',description:'Organize a revisão antes da publicação e devolva conteúdos que precisam de ajustes.',
+      benefits:['Conecte revisão e produção em uma só jornada.','A aprovação publica o conteúdo no curso vinculado.'],scope:'Envio para revisão, aprovação ou devolução para ajustes. Ao aprovar, publica o conteúdo no curso vinculado; outros destinos dependem dos módulos contratados. Inclui planejamento e gestão de tarefas.'}
   };
   const sections={
     'Base obrigatória':{title:'O essencial para começar',description:'Uma experiência completa de acesso, conteúdo e gestão.'},
@@ -236,7 +250,8 @@
     'Pagamentos e controle de acesso':{title:'Novas possibilidades de negócio',description:'Combine ofertas, pagamentos e conteúdo para cada público.'},
     'Auditoria':{title:'Gestão com clareza',description:'Contexto e organização para acompanhar as ações da equipe.'},
     'Relatórios administrativos':{title:'Informação para decidir melhor',description:'Acompanhe interesse, aprendizagem e participação.'},
-    'Gamificação':{title:'Reconheça cada conquista',description:'Pontos e rankings para valorizar a participação.'}
+    'Gamificação':{title:'Reconheça cada conquista',description:'Pontos e rankings para valorizar a participação.'},
+    'Gestão de tarefas e conteúdo':{title:'Gestão de tarefas e produção de conteúdo',description:'Da organização do trabalho à aprovação e publicação de conteúdos.'}
   };
   const foundation={
     F01:{title:'Planejamento conectado ao seu negócio',description:'Traduzimos os objetivos da ATSI em jornadas, prioridades e um plano de entrega compartilhado com sua equipe.'},

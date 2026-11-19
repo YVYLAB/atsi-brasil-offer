@@ -571,3 +571,12 @@ pendências de validação ou ressalvas equivalentes na interface comercial,
 login, apresentações ou propostas. É uma experiência de venda; manter contexto
 e verificações internas na documentação. Não inventar funcionalidades, parcerias
 ou entregas realizadas, e preservar as ressalvas técnicas pertinentes.
+
+Gestão de tarefas e produção de conteúdo: sete opcionais GT01–GT07, fora dos
+presets, ampliam o catálogo para 62 features. Gestão de tarefas GT01 é
+pré-requisito dos complementos; aprovação GT07 inclui GT04 e GT01. Aprovar
+publica no curso vinculado; outros destinos exigem seus módulos contratados.
+Notificações GT06 são internas, sem pressupor push ou e-mail. As telas são
+mockups, não implementação do produto. Horas são pontos médios das faixas
+informadas, inclusive 37,5 h em GT02, com R$ 200/h como referência inicial
+autorizada; não muda os planos ou os valores anteriores. Consultar specs GT.

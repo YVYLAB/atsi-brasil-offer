@@ -17,19 +17,19 @@ class CatalogoTest(unittest.TestCase):
         catalog = json.loads(re.search(r"const specCatalog = (.*?);\n", HTML).group(1))
         foundation = {item["id"]: item for item in json.loads(re.search(r"const foundationCatalog = (.*?);\n", HTML).group(1))}
         specs = [p for p in (ROOT / "specs").glob("*.md") if re.match(r"^[A-Z]+\d+-", p.name)]
-        self.assertEqual(len(specs), 62)
+        self.assertEqual(len(specs), 69)
         reviewed = 0
         for path in specs:
             text = path.read_text()
-            rows = re.findall(r"^\| [A-Z]+\d+-T\d+[A-Z]? \| [^|\n]+ \| (\d+) \| Revisão técnica preliminar \|$", text, re.M)
-            declared = re.search(r"\| \*\*Total\*\* \| \| \*\*(\d+) h\*\*", text)
+            rows = re.findall(r"^\| [A-Z]+\d+-T\d+[A-Z]? \| [^|\n]+ \| (\d+(?:\.\d+)?) \| Revisão técnica preliminar \|$", text, re.M)
+            declared = re.search(r"\| \*\*Total\*\* \| \| \*\*(\d+(?:\.\d+)?) h\*\*", text)
             self.assertTrue(rows, path.name)
-            self.assertEqual(sum(map(int, rows)), int(declared.group(1)), path.name)
+            self.assertEqual(sum(map(float, rows)), float(declared.group(1)), path.name)
             code = path.name.split("-")[0]
             generated = foundation[code] if code.startswith("F") else catalog[code]
-            tasks = re.findall(r"^\| ([A-Z]+\d+-T\d+[A-Z]?) \| ([^|\n]+) \| (\d+) \| Revisão técnica preliminar \|$", text, re.M)
+            tasks = re.findall(r"^\| ([A-Z]+\d+-T\d+[A-Z]?) \| ([^|\n]+) \| (\d+(?:\.\d+)?) \| Revisão técnica preliminar \|$", text, re.M)
             self.assertEqual(generated["taskDetails"], [
-                {"id": task_id, "title": title, "hours": int(hours)} for task_id, title, hours in tasks
+                {"id": task_id, "title": title, "hours": float(hours)} for task_id, title, hours in tasks
             ], path.name)
             self.assertTrue(generated["scope"], path.name)
             self.assertTrue(generated["risks"], path.name)
@@ -39,7 +39,7 @@ class CatalogoTest(unittest.TestCase):
                 self.assertEqual(generated["technicalTitle"], title, path.name)
             self.assertIn("## Cenário mínimo específico de aceite", text)
             reviewed += 1
-        self.assertEqual(reviewed, 62)
+        self.assertEqual(reviewed, 69)
 
     def test_browser(self):
         chrome = shutil.which("google-chrome")
@@ -49,7 +49,7 @@ class CatalogoTest(unittest.TestCase):
         window.confirm = () => true;
         const results = [];
         function check(name, ok) { results.push({name, ok}); }
-        check('55 features', features.length === 55);
+        check('62 features', features.length === 62);
         check('fundação', foundationHours === 522);
         check('preparação sem detalhamento repetido',!document.getElementById('foundationBreakdown') &&
           !document.querySelector('[aria-labelledby="predevelopmentTitle"] details') &&
@@ -86,7 +86,7 @@ class CatalogoTest(unittest.TestCase):
           'Complexidade baixa|Complexidade média|Complexidade alta');
         check('escala técnica preservada',complexityLabel(3)==='Média-alta' && complexityLabel(5)==='Muito alta' &&
           features.every(f=>f.complexity===specCatalog[f.id].complexity));
-        check('copy comercial cobre as 55 features',Object.keys(ATSIProductCopy.features).length===55 &&
+        check('copy comercial cobre as 62 features',Object.keys(ATSIProductCopy.features).length===62 &&
           features.every(f=>{
             const copy=ATSIProductCopy.features[f.id];
             return copy && f.title===copy.title && f.desc===copy.description &&

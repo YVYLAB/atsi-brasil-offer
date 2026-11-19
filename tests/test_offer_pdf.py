@@ -99,7 +99,7 @@ class OfferPDFTest(unittest.TestCase):
             self.assertEqual(documents["legada"]["model"]["foundationTotals"]["discountCents"], 0)
             ebook_ids = {item["id"] for item in documents["ebooks-dependentes"]["model"]["features"]}
             self.assertTrue({"M01", "E01"}.issubset(ebook_ids))
-            self.assertEqual(len(documents["escopo-completo"]["model"]["features"]), 53)
+            self.assertEqual(len(documents["escopo-completo"]["model"]["features"]), 60)
             hash_value = re.search(r"const releaseHash='([a-f0-9]{64})'", (ROOT / "campaign-settings.js").read_text()).group(1)
             for name, item in documents.items():
                 with self.subTest(document=name):
